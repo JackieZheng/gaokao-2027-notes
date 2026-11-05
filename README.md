@@ -41,3 +41,11 @@
 
                                     雪人
                           二〇二六年十一月  于天津
+
+---
+
+## 赞赏
+
+若这本小书对您有帮助，欢迎扫码赞助一杯咖啡。
+
+<p align="center"><img src="assets/sponsor.jpg" alt="雪人 的赞赏码" width="300"></p>
