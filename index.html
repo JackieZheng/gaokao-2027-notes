@@ -196,15 +196,17 @@ figcaption {
 a { color: #1F6FB2; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ==== 关键词荧光下划线 ==== */
+/* ==== 关键词荧光下划线 ====
+   姊妹篇区分：《指南》= 暖黄荧光 + 1.5px 金色实线；本书 = 亮青蓝荧光 + 2px 亮蓝实线。
+   同为「高亮荧光笔 + 实线下划线」，亮度接近、清晰易识别，但冷色系与暖黄一眼可分。 */
 mark.kw {
-  background: linear-gradient(180deg, rgba(255,233,77,0.0) 0%, rgba(255,233,77,0.0) 55%, rgba(255,233,77,0.65) 55%, rgba(255,233,77,0.65) 92%, rgba(255,233,77,0.0) 92%);
+  background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
   color: #33414A;
   padding: 0 2px;
-  border-bottom: 1.5px solid #D9A400;
+  border-bottom: 2px solid #1F6FB2;
   border-radius: 2px;
   font-weight: 600;
-  /* Chrome 打印默认丢背景色，显式保留荧光笔效果（下划线本就会打印） */
+  /* Chrome 打印默认丢背景色，显式保留荧光笔效果（实线下划线本就会打印） */
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
