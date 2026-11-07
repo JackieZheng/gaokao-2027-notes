@@ -231,6 +231,21 @@ mark.kw {
 /* 命中《高报词条》的词条：鼠标变问号，悬停弹释义 */
 mark.kw[data-term] { cursor: help; }
 
+/* ==== 院校 / 专业名称高亮 ====
+   沿用与重点词完全相同的青蓝荧光笔 + 亮蓝实线（用户口径「沿用青蓝荧光」）。
+   独立类名 ent 只为统计与日后单独调整留口，上面的 kw 规则保持原样，
+   重点词计数与词条悬停逻辑不受影响。注释里不写完整标签字面串，避免内联后被计数误抓。 */
+mark.ent {
+  background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
+  color: #33414A;
+  padding: 0 2px;
+  border-bottom: 2px solid #1F6FB2;
+  border-radius: 2px;
+  font-weight: 600;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
 /* ==== 封面 / 编撰说明的统计数字重点 ====
    与正文关键词同一套「荧光笔 + 亮蓝实线」视觉，但用独立类名 stat：
    verify 以 kw 类的标签前缀统计正文词条标注数，封面/前言的 stat 类标注
