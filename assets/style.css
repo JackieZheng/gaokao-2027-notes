@@ -231,6 +231,22 @@ mark.kw {
 /* 命中《高报词条》的词条：鼠标变问号，悬停弹释义 */
 mark.kw[data-term] { cursor: help; }
 
+/* ==== 封面 / 编撰说明的统计数字重点 ====
+   与正文关键词同一套「荧光笔 + 亮蓝实线」视觉，但用独立类名 stat：
+   verify 以 kw 类的标签前缀统计正文词条标注数，封面/前言的 stat 类标注
+   不会被计入，避免污染「重点荧光标注」的清单一致性。
+   注意：本注释不要写出完整标签字面串，否则内联进 HTML 后会被计数误抓。 */
+mark.stat {
+  background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
+  color: #12304A;
+  padding: 0 2px;
+  border-bottom: 2px solid #1F6FB2;
+  border-radius: 2px;
+  font-weight: 700;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
 /* ==== 词条悬停提示气泡（参考 disk-analyzer 富信息 tooltip） ==== */
 .gtip {
   position: fixed; z-index: 9999; max-width: 320px; padding: 10px 12px;
@@ -277,24 +293,18 @@ mark.kw[data-term] { cursor: help; }
   letter-spacing: 1pt;
 }
 
-/* ==== 文末赞赏码（正文末尾，屏幕与 A4 打印均可见） ==== */
-.sponsor-wrap {
-  /* 与上方线上二维码块靠留白区隔，不再用横线（用户要求去掉横线、
-     并适当拉开两块距离）；打印态另有更紧凑的间距覆盖。 */
-  margin: 36pt auto 0;
-  padding-top: 12pt;
-  text-align: center;
-  page-break-inside: avoid;
-}
+/* ==== 文末赞赏码（正文末尾，屏幕与 A4 打印均可见） ====
+   卡片外观统一由 .bm-card 提供（见「尾页」段），此处只留块间距与内部排版。 */
+.sponsor-wrap { margin: 30pt auto 0; }
 .sponsor-wrap .sponsor-lead {
-  font-size: 11pt;
+  font-size: 10.5pt;
   color: #12304A;
-  margin-bottom: 10pt;
-  line-height: 1.8;
+  margin-bottom: 8pt;
+  line-height: 1.7;
 }
 .sponsor-wrap .sponsor-img {
   display: block;
-  width: 62mm;
+  width: 58mm;
   max-width: 70%;
   height: auto;
   /* 与 HTML width/height 属性一起保证 1:1 占位：图片解码失败也不会塌陷成零高度 */
@@ -304,9 +314,9 @@ mark.kw[data-term] { cursor: help; }
   border-radius: 8px;
 }
 .sponsor-wrap .sponsor-note {
-  font-size: 9pt;
+  font-size: 8.5pt;
   color: #6B7280;
-  margin-top: 8pt;
+  margin-top: 6pt;
   letter-spacing: 1pt;
 }
 
@@ -673,20 +683,38 @@ p, li, td, .callout {
   }
 }
 
-/* ==== 尾页：线上版二维码（上）→ 赞赏码（下）→ 许可协议贴最后一页底部 ====
-   二维码用内联 SVG（矢量、无 base64），指向 GitHub Pages；赞赏码保留原有
-   上分隔线与上边距，天然形成两段式与适当间距。二维码采用「图左文右」的
-   横向紧凑块（比竖排矮约 80pt），保证尾页仍是一页、不额外多出一页。
-   ★ 不要改用整页容器 + absolute / flex：Chrome 打印对跨页容器内的绝对定位
-     与 flex auto-margin 不可靠，实测会把尾页撕成两页、协议跑到页面中部。 */
+/* ==== 尾页：线上版二维码卡片（上）→ 赞赏码卡片（下）→ 许可协议贴底 ====
+   两块用同一个 .bm-card：同宽、同圆角边框、同深蓝顶条、同内边距，让原本
+   散落的两组内容各自成卡、整页重心居中。二维码仍用内联 SVG（矢量、无
+   base64），保持「图左文右」横向紧凑（比竖排矮约 80pt），保证尾页仍是一页。
+   ★ 不要改用整页容器 + absolute / flex auto-margin / min-height：Chrome 打印
+     对跨页容器内的这些定位不可靠，实测会把尾页撕成两页、协议跑到页面中部。 */
+.bm-card {
+  /* 顶条用边框而非背景色：Chrome 打印不保证输出背景，边框一定可见 */
+  width: 124mm;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 12pt 16pt 11pt;
+  border: 1px solid #B9CCDE;
+  border-top: 3px solid #1F4E79;
+  border-radius: 10px;
+  background: #FAFCFE;
+  text-align: center;
+  page-break-inside: avoid;
+}
+/* 流式卡片内容：默认图左文右；容器变窄时 .online-text 整块换行到二维码
+   下方（上下布局），二维码由 justify-content:center 自动居中。判断阈值由
+   .online-text 的 flex-basis/min-width 决定，不需要 JS 或容器查询。 */
 .online-wrap {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 14pt;
-  margin: 18pt auto 0;
+  gap: 12pt 16pt;
+  margin: 36pt auto 0;
   text-align: left;
-  page-break-inside: avoid;
 }
 .online-wrap .online-qr-box {
   flex: 0 0 26mm;
@@ -696,34 +724,53 @@ p, li, td, .callout {
   padding: 3pt;
   border: 1px solid #C6D6E8;
   border-radius: 8px;
+  background: #fff;
   box-sizing: content-box;
 }
 .online-wrap .online-qr-box svg { display: block; width: 100%; height: 100%; }
-.online-wrap .online-text { min-width: 0; }
-.online-wrap .online-lead {
-  font-size: 11pt; color: #12304A; line-height: 1.8; margin-bottom: 5pt;
+/* 横向时占据二维码右侧剩余宽度；一旦「二维码 + 间距 + 200pt」放不下，
+   整块自动换到下一行。min() 保证窄屏下文字块不溢出卡片。 */
+.online-wrap .online-text {
+  flex: 1 1 200pt;
+  min-width: min(200pt, 100%);
+  text-align: left;
 }
-.online-wrap .online-url { font-size: 9pt; margin-top: 4pt; word-break: break-all; }
+.online-wrap .online-lead {
+  font-size: 10.5pt; color: #12304A; line-height: 1.7; margin-bottom: 5pt;
+}
+.online-wrap .online-url {
+  font-size: 8.5pt; margin-top: 4pt;
+  /* 卡片变窄（上下布局）时允许网址在任意字符处折行，绝不溢出卡片边框；
+     宽屏 / 打印横向布局下文字区足够，网址仍自然保持一行。 */
+  overflow-wrap: anywhere;
+}
 .online-wrap .online-url a {
   color: #164E8A; text-decoration: none; border-bottom: 1px dotted #164E8A;
 }
 .online-wrap .online-note {
   font-size: 8.5pt; color: #6B7280; margin-top: 3pt; letter-spacing: .5pt;
 }
-/* 打印态：保持纯流式。压缩结束语原有的 40pt+24pt 大留白与块间距，
-   再给许可协议一段上边距把它推到最后一页底部（仅打印态，网页版不变）。 */
+/* 打印态：保持纯流式。★ 三个 margin 是联动的：增大上方两段留白，必须等量
+   减小 .license-wrap 的 margin-top，否则协议会被推到下一页 / 偏离贴底位置。
+   实测基准（正式 PDF，pt）：署名末 225.6 → 卡片1 244.4（留白 18.8），
+   卡片1底 320.4 → 卡片2 329.2（9.6），卡片2底 468.0 → 协议标题 652.9（185.1），
+   即「上挤下空」。用户要求拉开前两段，故把下方留白匀 65.6pt 给上方：
+   署名→卡片1 ≈60pt、卡片间 ≈34pt、卡片2→协议 ≈119pt，卡片组重心落在页面中
+   部 y≈422（页高 841.9 的中线 421）。换算：ΔCSS = ΔPDF ÷ 0.733（Chrome 打印
+   正文整体按 内容区宽/页宽=154/210≈0.733 缩放；快速尾页预览没有这个缩放，
+   量出的 y 会偏大约 1.36 倍，切勿拿来直接调打印 margin）。
+   ★ 大 margin 是唯一稳定方案，勿改回容器定位 / min-height。 */
 @media print {
   .end-wrap { margin-top: 10pt; padding-top: 6pt; }
-  .online-wrap { margin-top: 8pt; gap: 10pt; }
-  .online-qr-box { flex-basis: 24mm; width: 24mm; height: 24mm; }
-  .sponsor-wrap { margin-top: 28pt; padding-top: 6pt; }
-  .sponsor-wrap .sponsor-img { width: 56mm; }
+  .bm-card { background: #fff; padding: 10pt 16pt 9pt; }
+  .online-wrap { margin-top: 68pt; gap: 12pt 14pt; }   /* +56pt CSS ≈ +41pt PDF */
+  .online-qr-box { flex-basis: 22mm; width: 22mm; height: 22mm; }
+  .sponsor-wrap { margin-top: 45pt; }                   /* +33pt CSS ≈ +24pt PDF */
+  .sponsor-wrap .sponsor-img { width: 42mm; }
   .sponsor-wrap .sponsor-note { margin-top: 4pt; }
-  /* 许可协议推到最后一页下部。实测：50pt 时协议结束在 y=549（大片空白），
-     230pt 时结束在 y=682（距内容区底约 61pt），且仍是一页、校验全过。
-     ★ 不要改用整页容器 + absolute / min-height：Chrome 打印会忽略/压缩
-       容器的 min-height，协议反而上移到 y=593；大 margin 更稳定。 */
-  .license-wrap { margin-top: 230pt; }
+  /* 协议仍贴最后一页下部：249pt − (56+33)pt = 160pt，保持协议末行 y≈686。
+     若以后再调上方间距，这里必须同步等量反向调整并重新用正式 PDF 实测。 */
+  .license-wrap { margin-top: 160pt; }
   .license-wrap .license-line { line-height: 1.5; }
   /* 尾页四块总高已小于 A4 内容区；解除 avoid 链式约束，否则 Chrome 会
      保守地把「赞赏码 + 许可协议」整组推到下一页（实测会多出一页）。
