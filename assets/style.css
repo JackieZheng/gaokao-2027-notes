@@ -1,0 +1,654 @@
+
+@page {
+    size: A4;
+    margin: 2.4cm 2.8cm 3.5cm;
+    @top-right {
+        content: "2027高考志愿填报指北";
+        font-family: 'SimSun', 'STSong', serif;
+        font-size: 9pt;
+        color: #6B7280;
+        text-align: right;
+    }
+    @bottom-center {
+        content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
+        font-family: 'SimSun', 'STSong', serif;
+        font-size: 10pt;
+        color: #6B7280;
+    }
+}
+@page cover {
+    margin: 0;
+    @top-right { content: none; }
+    @bottom-center { content: none; }
+}
+html {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', 'SimSun', sans-serif;
+    font-size: 11pt;
+    line-height: 2.0;
+    color: #33414A;
+}
+body { margin: 0; }
+.cover-page {
+    width: 100%;
+    max-width: 21cm;
+    aspect-ratio: 210 / 297;
+    margin: 0 auto;
+    position: relative; overflow: hidden;
+    page-break-after: always;
+    display: flex; justify-content: center; align-items: center;
+    container-type: inline-size;
+}
+@media screen {
+    body { padding: 5% 10%; }
+}
+@media print {
+    .cover-page { width: 21cm; max-width: none; }
+}
+.cover-page .bg-img {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.cover-page .cover-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 12.4cqw 10.5cqw;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.88) 0%,
+        rgba(255,255,255,0.80) 30%,
+        rgba(255,255,255,0.55) 55%,
+        rgba(255,255,255,0.60) 80%,
+        rgba(255,255,255,0.80) 100%);
+}
+/* 封面文字全部按容器宽度 cqw 等比缩放（沿用《指南》的 container-type: inline-size）：
+   ① clamp 只保留极小的可读下限，避免窄屏被 px 下限钳住而不再缩小；
+   ② padding / margin / 边框 / 阴影同步改 cqw，容器变窄时留白也等比收缩；
+   ③ 保留原 px 上限，A4 打印（21cm ≈ 793.7px）时数值与《指南》一致、版面不变。 */
+.cover-page h1 {
+    font-family: 'SimHei', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    font-size: clamp(2px, 5.7cqw, 45px);
+    color: #12304A; font-weight: 900;
+    margin: 0 0 1cqw 0; letter-spacing: 0; text-align: center;
+    text-shadow: 0 0.13cqw 0.25cqw rgba(255,255,255,0.9);
+}
+.cover-page .sub {
+    font-size: clamp(2px, 2.35cqw, 19px);
+    color: #164E8A; text-align: center;
+    font-weight: 700; margin-bottom: 0.76cqw;
+    text-shadow: 0 0.13cqw 0.25cqw rgba(255,255,255,0.9);
+}
+.cover-page .sub2 {
+    font-size: clamp(2px, 1.85cqw, 15px);
+    color: #2E4A5F; text-align: center;
+    margin-bottom: 3.02cqw;
+}
+.cover-page .cover-callout {
+    border-left: 0.5cqw solid #164E8A;
+    background: rgba(255,255,255,0.92);
+    padding: 1.76cqw 2.27cqw;
+    box-shadow: 0 0.25cqw 1cqw rgba(0,0,0,0.08);
+    border-radius: 0.5cqw;
+}
+.cover-page .cover-callout-title {
+    font-size: clamp(2px, 2.18cqw, 17px);
+    color: #12304A; font-weight: 700;
+    display: block; margin-bottom: 0.76cqw;
+}
+.cover-page .cover-callout-body {
+    font-size: clamp(2px, 1.85cqw, 15px);
+    color: #2E3E48; line-height: 2.0;
+    padding-left: 0.5cqw;
+    overflow-wrap: anywhere;
+}
+.cover-page .cover-meta-wrap {
+    text-align: center;
+    font-size: clamp(2px, 1.76cqw, 14px);
+    color: #2E4A5F; line-height: 1.9;
+}
+.cover-page .cover-meta-box {
+    background: rgba(255,255,255,0.85);
+    padding: 1.26cqw 1.76cqw; border-radius: 0.5cqw;
+    display: inline-block;
+    max-width: 100%; overflow-wrap: anywhere;
+}
+.cover-page .cover-note {
+    font-size: clamp(2px, 1.34cqw, 11px);
+    color: #4A5A6A;
+}
+/* 通用图片约束：任何插图最大宽度 100%（手机上不会溢出） */
+img { max-width: 100%; height: auto; }
+img.bg-img { max-width: 100%; height: 100%; }
+h1 {
+    font-family: 'SimHei', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+    color: #1F4E79; font-size: 16pt; font-weight: 700;
+    border-bottom: 2px solid #1F4E79;
+    padding-bottom: 6pt; margin: 12pt 0 8pt 0;
+    page-break-after: avoid;
+}
+h2 {
+    font-family: 'SimHei', 'Microsoft YaHei', sans-serif;
+    color: #1F6FB2; font-size: 13.5pt; font-weight: 700;
+    margin: 10pt 0 6pt 0;
+    page-break-after: avoid;
+}
+h3 {
+    font-family: 'SimHei', 'Microsoft YaHei', sans-serif;
+    color: #33414A; font-size: 12pt; font-weight: 700;
+    margin: 8pt 0 4pt 0;
+    page-break-after: avoid;
+}
+p { margin: 4pt 0; }
+ul, ol { margin: 4pt 0 6pt 20pt; padding: 0; }
+li { margin: 2pt 0; }
+/* 表格容器：手机窄屏下可横向滚动，避免撑破容器 */
+.table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 6px 0;
+    max-width: 100%;
+}
+table { width: 100%; max-width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+table th {
+    background: #33414A; color: white;
+    padding: 6pt 8pt; font-weight: 700;
+    font-family: 'SimHei', 'Microsoft YaHei', sans-serif;
+    text-align: center; border: 1px solid #33414A;
+    word-break: break-word; overflow-wrap: anywhere;
+}
+table td {
+    padding: 5pt 8pt; border: 1px solid #C8D0D6;
+    vertical-align: top; color: #33414A;
+    word-break: break-word; overflow-wrap: anywhere;
+}
+table tr.zebra td { background: #F5F7F8; }
+figure { text-align: center; margin: 10pt 0; page-break-inside: avoid; }
+figcaption {
+    font-size: 9.5pt; color: #6B7280;
+    margin-top: 4pt; font-style: italic;
+}
+.callout {
+    border-left: 4pt solid #1F4E79;
+    background: #EAF1F8;
+    padding: 10pt 14pt;
+    margin: 6pt 0;
+    page-break-inside: avoid;
+    border-radius: 4pt;
+    line-height: 1.9;
+}
+.callout strong { display: block; margin-bottom: 4pt; }
+.toc-list { list-style: none; padding: 0; margin: 6pt 0; }
+.toc-list li { position: relative; margin: 2pt 0; padding: 4pt 0 4pt 1.15em; }
+.toc-list li.toc-parent { padding-left: 0; }
+.toc-list li:not(.toc-parent)::before { content: "\2022"; position: absolute; left: .1em; top: 50%; transform: translateY(-50%); color: inherit; font-size: 1em; line-height: 1; }
+.toc-list li.toc-1 { font-weight: 700; color: #1F4E79; font-size: 11.5pt; margin-top: 8pt; }
+.toc-list li.toc-1:first-child { margin-top: 0; }
+.toc-list li.toc-2 { color: #1F6FB2; font-size: 10.5pt; font-weight: 600; }
+.toc-list li.toc-3 { color: #33414A; font-size: 10pt; }
+.toc-list li.toc-4 { color: #4A5A6A; font-size: 9.5pt; }
+.toc-list a { color: inherit; text-decoration: none; }
+.toc-list a:hover { text-decoration: underline; color: #0d47a1; }
+/* 目录章节：各级可折叠树；标题行右侧放「展开/折叠」合并按钮；圆点分级参考指南样式 */
+.toc-head { display: flex; align-items: center; justify-content: space-between; }
+.toc-toggle-btn { font-size: 10pt; padding: 2pt 10pt; border: 1px solid #C8D0D6;
+  background: #F4F8FC; color: #1F4E79; border-radius: 4px; cursor: pointer; }
+.toc-toggle-btn:hover { background: #E1ECF7; }
+.toc-list ul { list-style: none; padding: 0; margin: 0; }
+.toc-list li > ul { margin-left: 1.3em; }
+.toc-list li.toc-parent > ul { display: none; }
+.toc-list li.toc-parent.open > ul { display: block; }
+.toc-list .toc-row { display: flex; align-items: center; border-radius: 4px; border-bottom: 1px solid #E7ECF0; }
+.toc-list .toc-row:hover { background: #EEF4FB; }
+.toc-list li.toc-parent > .toc-row { cursor: pointer; }
+.toc-caret { cursor: pointer; background: none; border: none; color: #1F6FB2;
+  font-size: .9em; line-height: 1; width: 1.4em; padding: 0; margin-right: .15em;
+  vertical-align: middle; transition: transform .12s ease; }
+.toc-caret:hover { color: #0d47a1; }
+.toc-list li.toc-parent.open > .toc-caret { transform: rotate(90deg); }
+.toc-list a.current { background: #DCE9F6; color: #12304A; font-weight: 700; border-radius: 3px; }
+@media print {
+  .toc-toggle-btn { display: none !important; }
+  .toc-caret { display: none !important; }
+  .toc-list li.toc-parent > ul { display: block !important; }
+}
+a { color: #1F6FB2; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ==== 关键词荧光下划线 ====
+   姊妹篇区分：《指南》= 暖黄荧光 + 1.5px 金色实线；本书 = 亮青蓝荧光 + 2px 亮蓝实线。
+   同为「高亮荧光笔 + 实线下划线」，亮度接近、清晰易识别，但冷色系与暖黄一眼可分。 */
+mark.kw {
+  background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
+  color: #33414A;
+  padding: 0 2px;
+  border-bottom: 2px solid #1F6FB2;
+  border-radius: 2px;
+  font-weight: 600;
+  /* Chrome 打印默认丢背景色，显式保留荧光笔效果（实线下划线本就会打印） */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* 命中《高报词条》的词条：鼠标变问号，悬停弹释义 */
+mark.kw[data-term] { cursor: help; }
+
+/* ==== 词条悬停提示气泡（参考 disk-analyzer 富信息 tooltip） ==== */
+.gtip {
+  position: fixed; z-index: 9999; max-width: 320px; padding: 10px 12px;
+  background: #1f2933; color: #e8eef3; border: 1px solid #43607c; border-radius: 8px;
+  font-size: 13px; line-height: 1.6; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  white-space: normal; word-break: break-word;
+  opacity: 0; visibility: hidden; transition: opacity .14s ease; pointer-events: none;
+}
+.gtip.show { opacity: 1; visibility: visible; }
+.gtip .gt-t { font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid #3a4a59; }
+.gtip .gt-row { display: flex; gap: 10px; margin: 3px 0; }
+.gtip .gt-row > span { color: #9fb3c8; flex: 0 0 auto; }
+.gtip .gt-row > b { font-weight: 600; color: #e6eef5; }
+.gtip .gt-d { margin-top: 6px; color: #cdd9e5; }
+
+/* ==== 文末致谢（与正文视觉区隔） ==== */
+.end-wrap {
+  margin-top: 40pt;
+  padding: 24pt 8pt 8pt;
+  text-align: center;
+  page-break-before: avoid;
+}
+.end-wrap .end-rule {
+  width: 60pt;
+  height: 2px;
+  background: #1F4E79;
+  margin: 0 auto 16pt;
+  opacity: 0.6;
+}
+.end-wrap .end-ack {
+  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
+  font-size: 14pt;
+  color: #12304A;
+  font-weight: 700;
+  letter-spacing: 2pt;
+  margin-bottom: 14pt;
+  line-height: 1.8;
+}
+.end-wrap .end-signature {
+  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
+  font-size: 11pt;
+  color: #4A5A6A;
+  text-align: right;
+  letter-spacing: 1pt;
+}
+
+/* ==== 文末赞赏码（正文末尾，屏幕与 A4 打印均可见） ==== */
+.sponsor-wrap {
+  margin: 26pt auto 0;
+  padding-top: 18pt;
+  border-top: 1px solid #C6D6E8;
+  text-align: center;
+  page-break-inside: avoid;
+}
+.sponsor-wrap .sponsor-lead {
+  font-size: 11pt;
+  color: #12304A;
+  margin-bottom: 10pt;
+  line-height: 1.8;
+}
+.sponsor-wrap .sponsor-img {
+  display: block;
+  width: 62mm;
+  max-width: 70%;
+  height: auto;
+  /* 与 HTML width/height 属性一起保证 1:1 占位：图片解码失败也不会塌陷成零高度 */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  border: 1px solid #C6D6E8;
+  border-radius: 8px;
+}
+.sponsor-wrap .sponsor-note {
+  font-size: 9pt;
+  color: #6B7280;
+  margin-top: 8pt;
+  letter-spacing: 1pt;
+}
+
+/* ==== 文末许可协议（与《指南》同款 CC BY-NC 4.0；小字紧随赞赏码，屏幕与打印同源） ==== */
+.license-wrap {
+  margin: 16pt auto 0;
+  padding-bottom: 10pt;
+  text-align: center;
+  /* 与赞赏码绑在同一打印页，避免单独溢出成空白尾页 */
+  page-break-inside: avoid;
+  page-break-before: avoid;
+}
+.license-wrap .license-title {
+  font-size: 9.5pt;
+  font-weight: bold;
+  color: #12304A;
+  letter-spacing: 3pt;
+  margin-bottom: 5pt;
+}
+.license-wrap .license-line {
+  font-size: 8pt;
+  color: #6B7280;
+  line-height: 1.8;
+}
+.license-wrap a {
+  color: #164E8A;
+  text-decoration: none;
+  border-bottom: 1px dotted #164E8A;
+}
+
+/* ==== 网页版左侧浮动书签（仅屏幕显示，打印时隐藏） ==== */
+@media screen {
+  .bookmarks-toggle {
+    position: fixed; left: 0; top: 110px;
+    width: 40px; height: 40px;
+    background: #1F4E79; color: #fff;
+    border: none; border-radius: 0 8px 8px 0;
+    font-size: 18px; cursor: pointer; z-index: 1000;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: center;
+    transition: left 0.25s ease;
+  }
+  .bookmarks-toggle .tb-icon { transition: transform 0.25s ease; display:block; }
+  .bookmarks-panel {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: 300px; height: 100vh;
+    background: rgba(255,255,255,0.98);
+    border-right: 1px solid #E0E6EA;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    overflow-y: auto; overflow-x: hidden; z-index: 999;
+    padding: 60px 16px 80px 20px;
+    padding-bottom: max(80px, env(safe-area-inset-bottom));
+    font-size: 13px;
+    box-sizing: border-box;
+    transform: translateX(0); transition: transform 0.25s ease;
+  }
+  .bookmarks-panel.collapsed { transform: translateX(-100%); }
+  .bookmarks-panel .bp-title {
+    display: flex; align-items: center; justify-content: space-between;
+    font-weight: 700; color: #1F4E79; font-size: 15px;
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 2px solid #1F4E79;
+    letter-spacing: 1px;
+  }
+  .bookmarks-panel ul { list-style: none; padding: 0; margin: 0; }
+  .bookmarks-panel li { margin: 4px 0; }
+  .bookmarks-panel li.toc-1 { font-weight: 700; color: #1F4E79; font-size: 13.5px; margin-top: 8px; }
+  .bookmarks-panel li.toc-2 { color: #1F6FB2; font-size: 12.5px; margin-left: 14px; font-weight: 600; }
+  .bookmarks-panel li.toc-3 { color: #4A5A6A; font-size: 11.5px; margin-left: 28px; }
+  .bookmarks-panel a {
+    color: inherit; text-decoration: none;
+    display: block; padding: 3px 6px; border-radius: 3px;
+    word-break: break-word;
+  }
+  .bookmarks-panel a:hover { background: #EAF1F8; text-decoration: none; }
+  .bookmarks-panel::-webkit-scrollbar { width: 6px; }
+  .bookmarks-panel::-webkit-scrollbar-thumb { background: #C8D0D6; border-radius: 3px; }
+  .bookmarks-panel::-webkit-scrollbar-track { background: transparent; }
+  /* 展开时给正文右侧留出空间 */
+  body.with-bookmarks { padding-left: 300px !important; }
+}
+
+/* ==== 网页版末尾：扫码下载区块（仅屏幕显示，打印/PDF 时隐藏） ==== */
+.qr-download-wrap {
+  margin: 60pt 0 40pt;
+  padding: 32pt 24pt 28pt;
+  text-align: center;
+  background: #F1F5FA;
+  border: 1px solid #C6D6E8;
+  border-radius: 12px;
+  page-break-before: avoid;
+}
+.qr-download-wrap .qr-title {
+  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: #1F4E79;
+  letter-spacing: 1.5pt;
+  margin: 0 0 6pt;
+}
+.qr-download-wrap .qr-subtitle {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  font-size: 11pt;
+  color: #4A5A6A;
+  margin: 0 0 22pt;
+  letter-spacing: 0.5pt;
+}
+.qr-download-wrap .qr-img {
+  display: inline-block;
+  width: 220px;
+  height: 220px;
+  background: #FFFFFF;
+  padding: 12px;
+  border: 1px solid #E0E6EA;
+  border-radius: 8px;
+  margin: 0 0 14pt;
+}
+.qr-download-wrap .qr-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.qr-download-wrap .qr-hint {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  font-size: 10pt;
+  color: #6B7280;
+  margin: 0;
+  letter-spacing: 0.3pt;
+}
+
+/* ==== 网页版末尾：志愿填报指南小程序码区块（屏幕与打印/PDF 均显示） ==== */
+.qr-mini-wrap {
+  margin: 0 0 40pt;
+  padding: 28pt 24pt 26pt;
+  text-align: center;
+  background: #F1F5FA;
+  border: 1px solid #C6D6E8;
+  border-radius: 12px;
+  page-break-before: avoid;
+}
+.qr-mini-wrap .qr-title {
+  font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
+  font-size: 16pt;
+  font-weight: 700;
+  color: #1F4E79;
+  letter-spacing: 1.5pt;
+  margin: 0 0 6pt;
+}
+.qr-mini-wrap .qr-subtitle {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  font-size: 11pt;
+  color: #4A5A6A;
+  margin: 0 0 22pt;
+  letter-spacing: 0.5pt;
+}
+.qr-mini-wrap .qr-mini-img {
+  display: inline-block;
+  width: 198px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(31, 78, 121, 0.18), 0 2px 6px rgba(31, 78, 121, 0.08);
+  margin: 0 0 12pt;
+}
+.qr-mini-wrap .qr-mini-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 22px;
+  mix-blend-mode: multiply; /* 白底溶入卡片背景 */
+}
+.qr-mini-wrap .qr-hint {
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  font-size: 10pt;
+  color: #6B7280;
+  margin: 0;
+  letter-spacing: 0.3pt;
+}
+@media print {
+  .bookmarks-toggle, .bookmarks-panel, .qr-download-wrap { display: none !important; }
+  /* 小程序码在 PDF 中保留（纸质用户也能扫码用小程序阅读），并强制渲染卡片底色与圆角阴影 */
+  .qr-mini-wrap {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .qr-mini-wrap .qr-mini-img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+
+/* ==== 指北专用：篇章扉页、篇名来源、脚注释义（沿用指南字号与留白） ==== */
+.part-head .part-kicker {
+    font-family: 'KaiTi','STKaiti','SimSun',serif;
+    font-size: 11pt; color: #1F6FB2; letter-spacing: 2pt;
+    text-align: center; margin: 0 0 10pt;
+}
+.part-head .part-desc {
+    font-size: 10.5pt; color: #4A5A6A; text-align: center;
+    line-height: 1.9; margin: 0 0 18pt;
+}
+article.note { page-break-before: always; }
+/* 分组标题与组内第一篇同页，避免只印一个分组名的空页 */
+article.note.first-in-group { page-break-before: auto; }
+/* 每篇笔记的篇名居中，正文仍左对齐 */
+article.note > h1 { margin-top: 0; text-align: center; }
+.note-src {
+    font-size: 9pt; color: #6B7280; margin: 0 0 10pt;
+    font-family: 'SimSun','STSong',serif;
+}
+.fn-ref {
+    font-size: 8pt; color: #1F6FB2; vertical-align: super;
+    text-decoration: none; font-weight: 600; cursor: help;
+}
+.fn-ref[data-term] {
+    border-bottom: 1px dotted #1F6FB2;
+}
+.fn-defs {
+    margin-top: 16pt; padding: 10pt 12pt;
+    background: #F5F7F8; border-left: 3pt solid #C8D0D6;
+    border-radius: 3pt; font-size: 9.5pt; line-height: 1.75;
+    page-break-inside: auto;
+}
+.fn-defs h3 { margin: 0 0 6pt; color: #4A5A6A; font-size: 10.5pt; }
+.fn-defs p { margin: 3pt 0; text-indent: 0; }
+.fn-defs .fn-key { color: #1F4E79; font-weight: 700; }
+.group-head { page-break-before: always; }
+/* 专业篇：门类(level2) → 专业类(level3)；首条专业类与门类标题同页，避免空页 */
+.subgroup-head { margin-top: 14pt; color: #1F6FB2; }
+.subgroup-head.first-subgroup { page-break-before: auto; margin-top: 12pt; }
+@media print {
+  .note-src { color: #6B7280; }
+}
+
+/* ==== 篇数括注：挂在标题后，不写独立说明段 ==== */
+.part-count, .group-count {
+    font-size: 10.5pt; font-weight: 400; color: #6B7280;
+    letter-spacing: 0; margin-left: 4pt;
+}
+.group-count { font-size: 10pt; }
+
+/* ==== 浮动导航：逐层级折叠 / 展开（仅屏幕；打印时面板整体隐藏） ==== */
+@media screen {
+  .bookmarks-panel .bm-toggle-btn { font-size: 11px; padding: 3px 8px;
+    border: 1px solid #C6D8E8; border-radius: 4px;
+    background: #F1F5FA; color: #1F4E79; cursor: pointer; }
+  .bookmarks-panel .bm-toggle-btn:hover { background: #E1ECF7; }
+  /* 赞赏快捷入口：浮动导航在文件开头就解析完，绕开 14 MB 长文档末尾的解析延迟；
+     位于导航树最末（「致谢」之后），与目录列表拉开间距并加分隔线 */
+  .bookmarks-panel .bm-sponsor {
+    display: block;
+    margin: 14px 0 0;
+    padding: 8px 10px;
+    border: 1px solid #E3C08A;
+    border-top: 1px solid #E3C08A;
+    border-radius: 6px;
+    background: #FFF7E8;
+    color: #8A5A12;
+    font-size: 12.5px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: .5px;
+  }
+  .bookmarks-panel .bm-sponsor:hover { background: #FFECC9; color: #6E460C; }
+  .bookmarks-panel .bm-sponsor span { float: right; opacity: .55; }
+  .bookmarks-panel ul ul {
+      display: none; padding-left: 10px; margin-left: 8px;
+      border-left: 1px solid #DCE5EE;
+  }
+  .bookmarks-panel li.open > ul { display: block; }
+  .bookmarks-panel li.toc-2, .bookmarks-panel li.toc-3, .bookmarks-panel li.toc-4 { margin-left: 0; }
+  .bookmarks-panel li.toc-4 { color: #6B7280; font-size: 11px; }
+  .bookmarks-panel li { margin: 2px 0; }
+  /* 折叠箭头与标题上下居中：行内两块等高，箭头盒撑满行高后内部三角垂直居中 */
+  .bm-row { display: flex; align-items: stretch; gap: 2px; border-radius: 4px; }
+  .bm-row:hover { background: #EEF4FB; }
+  .bm-caret, .bm-blank {
+      flex: 0 0 16px; width: 16px; height: auto; min-height: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0; margin: 0; border: none; background: transparent;
+      color: #1F4E79; font-size: 11px; line-height: 1;
+  }
+  .bm-caret { cursor: pointer; transition: transform 0.15s ease; }
+  .bm-blank { cursor: default; }
+  .bookmarks-panel li.bm-parent.open > .bm-row > .bm-caret { transform: rotate(90deg); }
+  .bm-row a { flex: 1; min-width: 0; }
+  .bookmarks-panel a.current { background: #DCE9F6; color: #12304A; font-weight: 700; }
+}
+
+/* ==== 篇尾结束符：左右实线自动铺满 + 雪人版本标记（网页 / PDF 统一） ====
+   雪人数量由 build_notes.py 的 SNOWMAN_COUNT 控制（第一版 1 个，以后每版递增）；
+   flex: 1 让左右实线吃掉剩余宽度，网页连续长页与 A4 打印页都横向铺满；
+   结束符放在 <article> 内部，打印时随本篇最后一页，不会单独成页。 */
+.note-end {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 1.8em 0 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.note-end .note-end-line {
+  flex: 1 1 auto;
+  height: 0;
+  border-top: 1px solid #C6D6E8;
+}
+.note-end .note-end-snow {
+  flex: 0 0 auto;
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+}
+/* 网页版连续长页：篇与篇之间留白（不再用单调的 border-bottom） */
+@media screen {
+  article.note { margin-bottom: 1.4em; }
+  article.note > :last-child { margin-bottom: 0; }
+  article.note:last-of-type { margin-bottom: 0; }
+}
+/* 打印版：同一枚结束符。
+   Chrome 在页底放不下独立块时，会在页尾和下一页各画一份（雪人重复、多出空白装饰页）；
+   把正文最后一块与结束符绑定，放不下时整组一起换页 —— 雪人只画一次，
+   换页后那一页仍带着正文，不会出现「整页只剩一枚雪人」的留白页。 */
+@media print {
+  .note-end { margin: 6pt 0 0; gap: 10px; }
+  .note-end .note-end-snow { font-size: 10pt; }
+  article.note > :nth-last-child(2),
+  article.note > .fn-defs > :last-child {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+  .note-end { break-before: avoid-page; page-break-before: avoid; }
+}
+
+/* ==== 正文两端对齐（中文书页排版） ====
+   段落、列表项、表格单元格、提示框一律两端对齐；末行保持左对齐，
+   避免短行 / 单行被拉出稀疏字距。标题、封面、目录、导航、致谢仍按各自原有对齐。 */
+p, li, td, .callout {
+    text-align: justify;
+    text-justify: inter-ideograph;
+    text-align-last: left;
+}
+.toc-list li, .bookmarks-panel li { text-align: left; }
