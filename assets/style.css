@@ -263,6 +263,49 @@ mark.stat {
 .gtip .gt-d { margin-top: 6px; color: #cdd9e5; }
 
 /* ==== 文末致谢（与正文视觉区隔） ==== */
+/* ==== 书末「特别感谢」独立页（参考姊妹篇《指南》「特别感谢」版式）====
+   顺序固定：本页 → 致谢页（含两张卡片与贴底许可协议）。
+   ★ 勿把本页移到「致谢」之后：会把卡片推到下一页，.license-wrap 的大
+     margin 是按「致谢在页顶」实测校准的，动了协议就不再贴底。 */
+.special-thanks { page-break-before: always; }
+.special-thanks h1 { text-align: center; }
+.thanks-lead, .thanks-tail {
+  text-align: center;
+  /* 全局 p 规则带 text-align-last:left，单行/末行会被强制左对齐；
+     必须同时覆盖 text-align-last，否则这里的 center 不生效。 */
+  text-align-last: center;
+  text-indent: 0;
+  font-size: 12pt;
+  color: #33414A;
+  line-height: 1.8;
+}
+.thanks-lead { margin: 20pt 0 0; }
+.thanks-list { margin: 26pt auto; text-align: center; }
+.thanks-list .thanks-row {
+  text-align: center;
+  text-indent: 0;
+  color: #1F4E79;
+  font-size: 14pt;
+  font-weight: 700;
+  line-height: 2.0;
+  /* 省份与姓名之间用全角空格对齐：两字省名中间补一个全角空格，
+     与「黑龙江」三字等宽；汉字与全角空格等宽，打印态不会错位。 */
+  white-space: pre-wrap;
+}
+.thanks-tail { margin: 26pt 0 0; font-size: 11.5pt; }
+/* emoji 与句号整体不拆行，避免窄屏/打印时被挤成孤零零的一行 */
+.thanks-emoji { white-space: nowrap; }
+@media print {
+  .special-thanks { padding-top: 24pt; }
+  .special-thanks h1 { margin-top: 4pt; }
+  .thanks-lead { margin-top: 16pt; }
+  .thanks-list { margin: 22pt auto; }
+  /* 左右各外扩 14pt：居中文字的中心点不变，但多出 28pt 行宽，
+     保证结语与结尾 emoji 同行（独立快速预览的内容区比正式打印窄，
+     不扩会让 emoji 被挤到孤零零的第二行）。页边距 28mm，安全。 */
+  .thanks-tail { margin: 22pt -14pt 0; }
+}
+
 .end-wrap {
   margin-top: 40pt;
   padding: 24pt 8pt 8pt;
