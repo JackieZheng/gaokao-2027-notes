@@ -279,9 +279,10 @@ mark.kw[data-term] { cursor: help; }
 
 /* ==== 文末赞赏码（正文末尾，屏幕与 A4 打印均可见） ==== */
 .sponsor-wrap {
-  margin: 26pt auto 0;
-  padding-top: 18pt;
-  border-top: 1px solid #C6D6E8;
+  /* 与上方线上二维码块靠留白区隔，不再用横线（用户要求去掉横线、
+     并适当拉开两块距离）；打印态另有更紧凑的间距覆盖。 */
+  margin: 36pt auto 0;
+  padding-top: 12pt;
   text-align: center;
   page-break-inside: avoid;
 }
@@ -670,4 +671,63 @@ p, li, td, .callout {
     contain: none !important;
     contain-intrinsic-size: none !important;
   }
+}
+
+/* ==== 尾页：线上版二维码（上）→ 赞赏码（下）→ 许可协议贴最后一页底部 ====
+   二维码用内联 SVG（矢量、无 base64），指向 GitHub Pages；赞赏码保留原有
+   上分隔线与上边距，天然形成两段式与适当间距。二维码采用「图左文右」的
+   横向紧凑块（比竖排矮约 80pt），保证尾页仍是一页、不额外多出一页。
+   ★ 不要改用整页容器 + absolute / flex：Chrome 打印对跨页容器内的绝对定位
+     与 flex auto-margin 不可靠，实测会把尾页撕成两页、协议跑到页面中部。 */
+.online-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14pt;
+  margin: 18pt auto 0;
+  text-align: left;
+  page-break-inside: avoid;
+}
+.online-wrap .online-qr-box {
+  flex: 0 0 26mm;
+  width: 26mm;
+  height: 26mm;
+  margin: 0;
+  padding: 3pt;
+  border: 1px solid #C6D6E8;
+  border-radius: 8px;
+  box-sizing: content-box;
+}
+.online-wrap .online-qr-box svg { display: block; width: 100%; height: 100%; }
+.online-wrap .online-text { min-width: 0; }
+.online-wrap .online-lead {
+  font-size: 11pt; color: #12304A; line-height: 1.8; margin-bottom: 5pt;
+}
+.online-wrap .online-url { font-size: 9pt; margin-top: 4pt; word-break: break-all; }
+.online-wrap .online-url a {
+  color: #164E8A; text-decoration: none; border-bottom: 1px dotted #164E8A;
+}
+.online-wrap .online-note {
+  font-size: 8.5pt; color: #6B7280; margin-top: 3pt; letter-spacing: .5pt;
+}
+/* 打印态：保持纯流式。压缩结束语原有的 40pt+24pt 大留白与块间距，
+   再给许可协议一段上边距把它推到最后一页底部（仅打印态，网页版不变）。 */
+@media print {
+  .end-wrap { margin-top: 10pt; padding-top: 6pt; }
+  .online-wrap { margin-top: 8pt; gap: 10pt; }
+  .online-qr-box { flex-basis: 24mm; width: 24mm; height: 24mm; }
+  .sponsor-wrap { margin-top: 28pt; padding-top: 6pt; }
+  .sponsor-wrap .sponsor-img { width: 56mm; }
+  .sponsor-wrap .sponsor-note { margin-top: 4pt; }
+  /* 许可协议推到最后一页下部。实测：50pt 时协议结束在 y=549（大片空白），
+     230pt 时结束在 y=682（距内容区底约 61pt），且仍是一页、校验全过。
+     ★ 不要改用整页容器 + absolute / min-height：Chrome 打印会忽略/压缩
+       容器的 min-height，协议反而上移到 y=593；大 margin 更稳定。 */
+  .license-wrap { margin-top: 230pt; }
+  .license-wrap .license-line { line-height: 1.5; }
+  /* 尾页四块总高已小于 A4 内容区；解除 avoid 链式约束，否则 Chrome 会
+     保守地把「赞赏码 + 许可协议」整组推到下一页（实测会多出一页）。
+     全局规则仍保留 page-break-before:avoid 供屏幕/其它打印场景使用。 */
+  .end-wrap, .online-wrap, .sponsor-wrap, .license-wrap { page-break-inside: auto; }
+  .license-wrap { page-break-before: auto; }
 }
