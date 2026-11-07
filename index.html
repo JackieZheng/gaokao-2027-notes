@@ -49,6 +49,7 @@ document.addEventListener('keydown',function(e){
 });
 var KEY='bm_nodes_v2';
 var parents=[].slice.call(p.querySelectorAll('li.bm-parent'));
+var curA=null;/* 当前高亮项缓存：跳转时 O(1)，不再全量扫描 825 个链接 */
 function save(){try{localStorage.setItem(KEY,JSON.stringify(parents.filter(function(li){return li.classList.contains('open');}).map(function(li){return li.dataset.k;})));}catch(e){}}
 var raw=null;try{raw=localStorage.getItem(KEY);}catch(e){}
 if(raw!==null){var set={};try{JSON.parse(raw).forEach(function(k){set[k]=1;});}catch(e){}
@@ -60,8 +61,8 @@ p.addEventListener('click',function(e){
   var c=e.target.closest?e.target.closest('.bm-caret'):null;
   if(c){var li=c.closest?c.closest('li'):null;if(li){li.classList.toggle('open');save();}e.stopPropagation();return;}
   var a=e.target.closest?e.target.closest('a'):(e.target.tagName==='A'?e.target:null);
-  if(a){p.querySelectorAll('a.current').forEach(function(x){x.classList.remove('current');});
-    if(a.id!=='bmSponsor')a.classList.add('current');s(false);}
+  if(a){if(curA)curA.classList.remove('current');
+    curA=(a.id!=='bmSponsor')?a:null;if(curA)curA.classList.add('current');s(false);}
 });
 })();</script>
 <div class="cover-page"><img class="bg-img" src="assets/cover_onsite.jpg" alt="封面"><div class="cover-overlay"><h1>2027高考志愿填报指北</h1><div class="sub">高报笔记全编 · 专业 / 院校 / 城市 / 攻略</div><div class="sub2">（家长与学生通用资料版）</div><div style="flex: 1;"></div><div class="cover-callout"><span class="cover-callout-title">本书收录什么</span><div class="cover-callout-body">· 四大篇章共 689 篇高报笔记全文，全书共计约 284.0 万字，约 <span id="cover-pages">2458</span> 页；<br>· 目录按原笔记目录编排，按门类、省份、城市与专题逐篇检索；<br>· 篇内脚注释义与术语词条一并收录，查得到、看得懂；<br>· 姊妹篇<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>讲方法，本书给资料。</div></div><div style="flex: 1;"></div><div class="cover-meta-wrap"><div class="cover-meta-box">适用对象：高三学生及家长 / 高报规划从业者<br>资料分支：4 个　编撰时间：2026 年 11 月<br><span class="cover-note">说明：本册为高报笔记原文汇编，具体政策、批次、志愿数量与时间节点，均以“省教育考试院”官方最终公布为准。</span></div></div></div></div>
@@ -899,30 +900,56 @@ p.addEventListener('click',function(e){
 <script>(function(){
   var slots=[].slice.call(document.querySelectorAll('.note-slot'));
   if(!slots.length)return;
+  /* data-loaded = 已发起 fetch（防重复）；data-ready = 内容已注入、布局已稳定。
+     两者必须分开：跳转等待的是 data-ready，若用 data-loaded 会在 fetch 刚发出
+     就误判「加载完成」而提前滚动，上方占位随后撑高 → 锚点越深越不准。 */
   function load(s){if(s.getAttribute('data-loaded'))return;s.setAttribute('data-loaded','1');
     var u=s.getAttribute('data-src');
-    fetch(u).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(h){s.innerHTML=h;s.classList.add('loaded');})
-    .catch(function(){s.innerHTML='<div class="slot-error">内容加载失败，请刷新页面重试</div>';});}
+    fetch(u).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(h){
+      s.innerHTML=h;s.classList.add('loaded');
+      var art=s.querySelector('article.note');
+      if(art){
+        /* 临时强制渲染，量出本篇真实高度再写回占位尺寸；屏幕外时
+           content-visibility:auto 会返回估值，直接读会失真。 */
+        art.style.contentVisibility='visible';
+        var real=art.offsetHeight;
+        if(real)art.style.containIntrinsicSize='auto '+real+'px';
+        art.style.contentVisibility='';
+      }
+      s.setAttribute('data-ready','1');
+    })
+    .catch(function(){s.innerHTML='<div class="slot-error">内容加载失败，请刷新页面重试</div>';
+      s.setAttribute('data-ready','1');});}
   if('IntersectionObserver' in window){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){load(e.target);io.unobserve(e.target);}});},{rootMargin:'800px 0px'});
     slots.forEach(function(s){io.observe(s);});
   }else{slots.forEach(load);}
+  /* 跳转策略：只加载目标这一篇。
+     未加载的占位高度固定（min-height:140px）且稳定，本来就不会把目标算偏；
+     旧版反而把「目标及其上方全部」几百个 slot 一起加载（几百个并发 fetch +
+     约 10MB 的 innerHTML 插入），既卡又不可能在超时前布局稳定 —— 这才是
+     锚点不准与跳转卡顿的根源。等目标真正注入完成后再滚动，并做二次校准。 */
   function go(h){
     var id=h.replace(/^#/,'');
     var slot=document.querySelector('.note-slot[data-anchor="'+id+'"]');
     if(!slot)return false;
-    var idx=slots.indexOf(slot);
-    /* 关键修复：跳转前先把「目标 slot 及其上方所有未加载的占位」加载完。
-       C 版是分块懒加载，目标上方若有大量空占位（每槽仅 140px），浏览器会把目标
-       算得偏上；等上方内容异步加载撑高后，目标被往下推，落点就偏上 → 表现为
-       “个别定位锚点不准确”（越深的笔记越明显）。先把上方布局稳定再滚动即可精确。 */
-    for(var i=0;i<=idx;i++){ if(!slots[i].getAttribute('data-loaded')) load(slots[i]); }
+    if(!slot.getAttribute('data-loaded'))load(slot);
     var t=0,iv=setInterval(function(){
-      var ready=true;
-      for(var i=0;i<=idx;i++){ if(!slots[i].getAttribute('data-loaded')){ready=false;break;} }
-      if(ready||t>900){clearInterval(iv);var tg=document.getElementById(id)||slot;if(tg)tg.scrollIntoView();}
+      if(slot.getAttribute('data-ready')||t>100){
+        clearInterval(iv);
+        requestAnimationFrame(function(){
+          var tg=document.getElementById(id)||slot;
+          if(!tg)return;
+          tg.scrollIntoView();
+          /* 二次校准：抵消面板收起导致的正文宽度变化等布局抖动 */
+          requestAnimationFrame(function(){
+            var r=tg.getBoundingClientRect();
+            if(Math.abs(r.top)>2)window.scrollBy(0,r.top);
+          });
+        });
+      }
       t++;
-    },40);
+    },30);
     return true;
   }
   document.addEventListener('click',function(e){var a=e.target.closest?e.target.closest('a[href^="#"]'):null;

@@ -652,3 +652,22 @@ p, li, td, .callout {
     text-align-last: left;
 }
 .toc-list li, .bookmarks-panel li { text-align: left; }
+
+/* ==== 屏幕渲染隔离（解决全量加载后交互卡顿）====
+   全量注入后正文约 8.5 万个 DOM 节点、页面总高约 217 万 px。任何一次
+   面板显隐 / 宽度变化 / 内容注入都会触发整棵布局树重算（实测 1~2 秒）。
+   content-visibility:auto 让屏幕外的笔记跳过布局与绘制，把重算范围
+   收敛到视口附近（实测降到 10ms 级）。contain-intrinsic-size 的 3150px
+   是全篇平均高度（实测估出的总高与真实总高误差约 1%）；懒加载版会在
+   片段注入后用 JS 实测真实高度覆盖此值，避免滚动条与锚点失真。
+   ★ 打印态必须强制全部渲染，否则 PDF 只剩占位高度 —— 切勿删除下一段。 */
+@media screen {
+  article.note { content-visibility: auto; contain-intrinsic-size: auto 3150px; }
+}
+@media print {
+  article.note {
+    content-visibility: visible !important;
+    contain: none !important;
+    contain-intrinsic-size: none !important;
+  }
+}
