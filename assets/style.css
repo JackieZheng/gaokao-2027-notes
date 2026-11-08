@@ -554,7 +554,19 @@ mark.stat {
 }
 @media print {
   .bookmarks-toggle, .bookmarks-panel, .qr-download-wrap,
-  .feedback-fab-wrap, .feedback-fab { display: none !important; }
+  .feedback-fab-wrap, .feedback-fab,
+  .search-fab, .search-panel, .search-fab-tip { display: none !important; }
+  /* 搜索命中的临时高亮只属于屏幕交互，打印 / PDF 必须原样还原，
+     否则用户搜完立刻打印会把黄底与左边框带进书里。 */
+  .search-hit {
+    background: none !important; border-left: none !important;
+    padding-left: 0 !important;
+  }
+  .search-hit-kw {
+    background: none !important; color: inherit !important;
+    font-weight: inherit !important; padding: 0 !important;
+    box-shadow: none !important;
+  }
   /* 小程序码在 PDF 中保留（纸质用户也能扫码用小程序阅读），并强制渲染卡片底色与圆角阴影 */
   .qr-mini-wrap {
     -webkit-print-color-adjust: exact !important;
@@ -904,4 +916,140 @@ p, li, td, .callout {
 }
 @media (prefers-reduced-motion: reduce) {
   .feedback-fab, .feedback-fab-label, .feedback-fab-tip { transition: none; }
+}
+
+/* ==== 右上角「全文搜索」浮动图标 + 居中搜索面板 ====
+   HTML/JS 由 build_notes.py 的 SEARCH_UI_HTML 生成，单页版与 C 版共用。
+   默认 display:none 保证非屏幕媒体（尤其 Chrome 打印 PDF）不会出现；
+   @media screen 下才固定定位。右上角空闲：左侧书签 z-index 1000、右下
+   反馈按钮 1001、词条气泡 9999，故搜索层用 10010 稳居最上。
+   收起态把面板缩放回右上角图标位置，展开态回到页面正中，形成
+   「点图标展开居中 / 点空白收回图标」的动画，不新增任何外部资源。 */
+.search-fab, .search-panel { display: none; }
+@media screen {
+  .search-fab {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; right: 22px; top: 18px; z-index: 10010;
+    width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+    background: #1F6FB2; color: #fff; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: .22;
+    transition: opacity .22s ease, background .22s ease, transform .22s ease;
+  }
+  .search-fab:hover, .search-fab:focus-visible {
+    opacity: 1; background: #164E8A; transform: scale(1.06);
+  }
+  .search-fab:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
+  .search-fab-icon { width: 24px; height: 24px; display: block; }
+  /* 悬停 / 聚焦时浮出的气泡，独立于按钮不继承其半透明；箭头指向右侧图标 */
+  .search-fab-tip {
+    position: fixed; right: 78px; top: 26px; z-index: 10011;
+    display: inline-flex; align-items: center; height: 30px;
+    padding: 0 12px; background: #1F6FB2; color: #fff;
+    font-size: 13px; font-weight: 600; border-radius: 8px;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: 0; visibility: hidden; transform: translateX(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .search-fab-tip::after {
+    content: ""; position: absolute; right: -5px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px; border-style: solid;
+    border-color: transparent transparent transparent #1F6FB2;
+  }
+  .search-fab:hover + .search-fab-tip,
+  .search-fab:focus-visible + .search-fab-tip {
+    opacity: 1; visibility: visible; transform: translateX(0);
+  }
+  .search-panel {
+    display: flex; flex-direction: column;
+    position: fixed; left: 50%; top: 10%; z-index: 10010;
+    width: min(620px, calc(100vw - 32px));
+    max-height: 80vh; box-sizing: border-box;
+    background: #fff; border: 1px solid #D8E2EA; border-radius: 14px;
+    box-shadow: 0 18px 54px rgba(31,78,121,.24);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translate(calc(-50% + 50vw - 45px), calc(-50% - 10vh + 45px)) scale(.12);
+    transform-origin: center center;
+    transition: transform .3s cubic-bezier(.2,.8,.2,1),
+                opacity .22s ease, visibility .22s ease;
+  }
+  .search-panel.open {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translate(-50%, 0) scale(1);
+  }
+  .search-head {
+    display: flex; align-items: center; gap: 8px;
+    flex: 0 0 auto; padding: 12px 14px;
+    border-bottom: 1px solid #E6EDF3;
+  }
+  .search-head-icon { width: 20px; height: 20px; flex: 0 0 20px; }
+  .search-input {
+    flex: 1 1 auto; min-width: 0; height: 36px; padding: 0 10px;
+    border: 1px solid #C6D6E8; border-radius: 8px;
+    background: #FAFCFF; color: #263442;
+    font-family: inherit; font-size: 14px;
+  }
+  .search-input:focus { outline: none; border-color: #1F6FB2; background: #fff; }
+  .search-clear, .search-close {
+    flex: 0 0 auto; padding: 6px 8px; border: 0; border-radius: 6px;
+    background: transparent; color: #5F6E7C; font-size: 13px; cursor: pointer;
+  }
+  .search-close { font-size: 22px; line-height: 1; }
+  .search-clear:hover, .search-close:hover { background: #EAF1F8; color: #164E8A; }
+  .search-meta {
+    flex: 0 0 auto; padding: 8px 16px 4px;
+    font-size: 12px; color: #6B7A88;
+  }
+  /* 滚动条只加在结果容器：输入框与统计行始终固定可见 */
+  .search-results {
+    flex: 1 1 auto; min-height: 0;
+    overflow-y: auto; overflow-x: hidden;
+    padding: 4px 10px 12px;
+    scrollbar-width: thin; scrollbar-color: #C8D0D6 transparent;
+  }
+  .search-results::-webkit-scrollbar { width: 8px; }
+  .search-results::-webkit-scrollbar-thumb { background: #C8D0D6; border-radius: 4px; }
+  .search-results::-webkit-scrollbar-track { background: transparent; }
+  .search-item {
+    display: block; padding: 10px; margin: 2px 0;
+    border-left: 3px solid transparent; border-radius: 8px;
+    color: inherit; text-decoration: none;
+  }
+  .search-item:hover, .search-item:focus-visible {
+    background: #EAF1F8; border-left-color: #1F6FB2;
+  }
+  .si-t { display: block; font-size: 13.5px; font-weight: 600; color: #1F4E79; }
+  .si-s { display: block; margin-top: 3px; font-size: 12.5px; line-height: 1.7; color: #4A5A6A; }
+  .si-n { display: block; margin-top: 4px; font-size: 11px; color: #8A99AD; }
+  .search-empty { padding: 24px 12px; text-align: center; font-size: 13px; color: #8A99AD; }
+  .search-hit-kw {
+    background: #FFF0A8; color: #7A4B00; font-style: normal;
+    font-weight: 600; padding: 0 1px; border-radius: 2px;
+  }
+  /* 命中词本身就是重点词 / 院校专业名时，在原有青蓝荧光内部叠加更醒目的暖黄；
+     原有的亮蓝实线下划线仍在，双色叠加可辨。 */
+  mark .search-hit-kw {
+    background: #FFE27A; color: #6A3D00;
+    box-shadow: inset 0 -2px 0 #EF9F27;
+  }
+  /* 面板展开时图标让位，收回时由 close() 移除 is-hidden 恢复显示。 */
+  .search-fab.is-hidden { display: none; }
+  .search-hit {
+    background: #FFFBEA !important;
+    border-left: 4px solid #EF9F27 !important;
+    padding-left: 10px !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}
+@media screen and (max-width: 600px) {
+  .search-fab { right: 14px; top: 14px; width: 42px; height: 42px; }
+  .search-fab-tip { right: 66px; top: 20px; }
+  .search-panel { width: min(560px, calc(100vw - 28px)); }
+  .search-head { padding: 10px; gap: 5px; }
+  .search-clear { padding: 5px; font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-fab, .search-panel { transition: none; }
 }
