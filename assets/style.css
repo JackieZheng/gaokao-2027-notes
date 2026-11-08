@@ -553,7 +553,8 @@ mark.stat {
   letter-spacing: 0.3pt;
 }
 @media print {
-  .bookmarks-toggle, .bookmarks-panel, .qr-download-wrap { display: none !important; }
+  .bookmarks-toggle, .bookmarks-panel, .qr-download-wrap,
+  .feedback-fab-wrap, .feedback-fab { display: none !important; }
   /* 小程序码在 PDF 中保留（纸质用户也能扫码用小程序阅读），并强制渲染卡片底色与圆角阴影 */
   .qr-mini-wrap {
     -webkit-print-color-adjust: exact !important;
@@ -835,4 +836,72 @@ p, li, td, .callout {
      全局规则仍保留 page-break-before:avoid 供屏幕/其它打印场景使用。 */
   .end-wrap, .online-wrap, .sponsor-wrap, .license-wrap { page-break-inside: auto; }
   .license-wrap { page-break-before: auto; }
+}
+
+/* ==== 右下角「问题反馈」浮动按钮（仅屏幕显示，PDF 隐藏）====
+   HTML 由 build_notes.py 的 FEEDBACK_FAB_HTML 生成，单页版与 C 版共用。
+   默认隐藏是为了让 <a> 在非屏幕媒体下不会以行内元素混进正文流；屏幕媒体
+   下才以固定胶囊出现。左侧浮动书签在 left:0 / top:110px / z-index:1000，
+   与本按钮（right/bottom / z-index:1001）互不遮挡。
+   悬停或键盘聚焦时 .feedback-fab-label 滑出「问题反馈」四字；title 与
+   aria-label 另作兜底，读屏与浏览器原生 tooltip 都能读到。 */
+.feedback-fab-wrap { display: none; }
+@media screen {
+  .feedback-fab-wrap {
+    position: fixed; right: 22px; bottom: 22px; z-index: 1001;
+    display: block;
+  }
+  .feedback-fab {
+    display: inline-flex; align-items: center;
+    height: 46px; padding: 0; border-radius: 23px;
+    background: #1F6FB2; color: #fff;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    text-decoration: none; white-space: nowrap; overflow: hidden;
+    transition: background .22s ease, box-shadow .22s ease;
+  }
+  .feedback-fab:hover, .feedback-fab:focus-visible {
+    background: #164E8A;
+    box-shadow: 0 6px 18px rgba(31,78,121,.38);
+  }
+  .feedback-fab:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
+  .feedback-fab-icon { flex: 0 0 46px; width: 46px; height: 46px; display: block; }
+  .feedback-fab-label {
+    display: block; max-width: 0; opacity: 0; padding: 0;
+    font-size: 13px; font-weight: 600; letter-spacing: .5px;
+    transition: max-width .25s ease, opacity .2s ease, padding .25s ease;
+  }
+  .feedback-fab:hover .feedback-fab-label,
+  .feedback-fab:focus-visible .feedback-fab-label {
+    max-width: 120px; opacity: 1; padding: 0 16px 0 2px;
+  }
+  .feedback-fab-tip {
+    position: absolute; right: 0; bottom: calc(100% + 12px);
+    width: 268px; box-sizing: border-box;
+    padding: 12px 14px;
+    background: #fff; color: #33414A;
+    border: 1px solid #D8E2EA; border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(31,78,121,.16);
+    font-size: 12.5px; line-height: 1.8;
+    text-align: justify; text-align-last: left;
+    opacity: 0; visibility: hidden; transform: translateY(5px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .feedback-fab-tip::after {
+    content: ""; position: absolute; right: 17px; bottom: -7px;
+    width: 12px; height: 12px; background: #fff;
+    border-right: 1px solid #D8E2EA; border-bottom: 1px solid #D8E2EA;
+    transform: rotate(45deg);
+  }
+  .feedback-fab-wrap:hover .feedback-fab-tip,
+  .feedback-fab-wrap:focus-within .feedback-fab-tip {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+}
+@media screen and (max-width: 600px) {
+  .feedback-fab-wrap { right: 14px; bottom: 14px; }
+  .feedback-fab-tip { width: min(268px, calc(100vw - 28px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feedback-fab, .feedback-fab-label, .feedback-fab-tip { transition: none; }
 }
