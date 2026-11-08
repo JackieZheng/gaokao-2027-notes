@@ -66,14 +66,20 @@ p.addEventListener('click',function(e){
 });
 })();</script>
 <div class="feedback-fab-wrap" id="feedbackFabWrap"><div class="feedback-fab-tip" id="feedbackFabTip" role="tooltip">如果您发现书中有错误，或者有好的意见/建议，欢迎联系我们。如果链接无法打开，也可以加微信：JackieZhengChina 联系我们反馈。</div><a class="feedback-fab" id="feedbackFab" href="https://github.com/JackieZheng/gaokao-2027-notes/issues/1" target="_blank" rel="noopener noreferrer" aria-label="问题反馈（在新窗口打开）" aria-describedby="feedbackFabTip"><svg class="feedback-fab-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M24 9c-8.3 0-15 5.6-15 12.5 0 3.9 2.1 7.4 5.5 9.7L13 38l6.9-3.2c1.3.3 2.7.5 4.1.5 8.3 0 15-5.6 15-12.5S32.3 9 24 9Z" fill="#fff"/><path d="M20.4 17.8a3.7 3.7 0 1 1 5.1 3.5c-1.3.6-1.8 1.5-1.8 2.8v.4" fill="none" stroke="#1F6FB2" stroke-width="2.3" stroke-linecap="round"/><circle cx="23.7" cy="28.4" r="1.5" fill="#1F6FB2"/></svg><span class="feedback-fab-label">问题反馈</span></a></div>
-<button class="search-fab" id="searchFab" type="button" aria-label="全文搜索" aria-expanded="false" aria-controls="searchPanel"><svg class="search-fab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#fff" stroke-width="2"/><path d="M15.5 15.5L21 21" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button><span class="search-fab-tip" role="tooltip">全文检索</span><div class="search-panel" id="searchPanel" role="dialog" aria-label="全文搜索"><div class="search-head"><svg class="search-head-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#1F6FB2" stroke-width="2"/><path d="M15.5 15.5L21 21" fill="none" stroke="#1F6FB2" stroke-width="2" stroke-linecap="round"/></svg><input class="search-input" id="searchInput" type="search" autocomplete="off" spellcheck="false" placeholder="输入关键词，空格分隔（或关系）" aria-label="搜索关键词"><button class="search-clear" id="searchClear" type="button" aria-label="清空关键词">清空</button><button class="search-close" id="searchClose" type="button" aria-label="关闭搜索">&times;</button></div><div class="search-meta" id="searchMeta" aria-live="polite"></div><div class="search-results" id="searchResults"></div></div><script>(function(){
+<button class="search-fab" id="searchFab" type="button" aria-label="全文搜索" aria-expanded="false" aria-controls="searchPanel"><svg class="search-fab-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#fff" stroke-width="2"/><path d="M15.5 15.5L21 21" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button><span class="search-fab-tip" role="tooltip">全文检索</span><div class="search-panel" id="searchPanel" role="dialog" aria-label="全文搜索"><div class="search-head"><svg class="search-head-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="#1F6FB2" stroke-width="2"/><path d="M15.5 15.5L21 21" fill="none" stroke="#1F6FB2" stroke-width="2" stroke-linecap="round"/></svg><input class="search-input" id="searchInput" type="search" autocomplete="off" spellcheck="false" placeholder="输入关键词，空格分隔（或关系）" aria-label="搜索关键词"><button class="search-clear" id="searchClear" type="button" aria-label="清空关键词">清空</button><button class="search-close" id="searchClose" type="button" aria-label="关闭搜索">&times;</button></div><div class="search-meta" id="searchMeta" aria-live="polite"></div><div class="search-progress" id="searchProgress" hidden><div class="search-progress-bar" id="searchProgressBar"></div></div><div class="search-results" id="searchResults"></div></div><script>(function(){
 var fab=document.getElementById('searchFab'),panel=document.getElementById('searchPanel'),
     input=document.getElementById('searchInput'),results=document.getElementById('searchResults'),
     meta=document.getElementById('searchMeta'),btnClear=document.getElementById('searchClear'),
-    btnClose=document.getElementById('searchClose');
+    btnClose=document.getElementById('searchClose'),
+    prog=document.getElementById('searchProgress'),pbar=document.getElementById('searchProgressBar');
 if(!fab||!panel||!input||!results)return;
 var IDX='assets/search-index.js',KEY='gaokao_search_q_v1',MAX=60;
-var ready=false,loading=false,timer=null;
+/* 索引拆成若干 ≤2MB 分片：IDX 是清单（window.SEARCH_INDEX_MANIFEST），自带
+   各片路径 / 字节数 / 总和，运行时读取，不依赖构建顺序。GitHub Pages 对 .js
+   做 gzip，Content-Length 是压缩后大小，故分母用清单里的真实解压字节总和，
+   进度才不会瞬间跳到 100%。 */
+var MF=null,IDXBYTES=0,ready=false,loading=false,timer=null;
+function mb(n){return (n/1048576).toFixed(1)+' MB';}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function escRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
@@ -90,14 +96,108 @@ function open(){
 }
 function close(){panel.classList.remove('open');fab.classList.remove('is-hidden');
   fab.setAttribute('aria-expanded','false');}
-function load(){
-  if(ready||loading)return;loading=true;
-  meta.textContent='正在载入全文索引…';
+function setProgress(p){
+  if(!prog)return;
+  prog.hidden=false;
+  if(p===null){prog.classList.add('indet');pbar.style.width='35%';}
+  else{prog.classList.remove('indet');pbar.style.width=Math.max(3,Math.min(100,p*100))+'%';}
+}
+function hideProgress(){if(prog)prog.hidden=true;}
+/* 分片加载：清单用 <script src>（http(s) 与 file:// 都不受 CORS 限制），
+   拿到 parts / sizes / total 后再并发下载。进度分母 = 各片真实字节总和。 */
+function loadMeta(received,partsDone,partsTotal){
+  var pct=IDXBYTES?Math.min(99,Math.round(received/IDXBYTES*100)):0;
+  meta.textContent='首次载入全文索引，正在下载 '
+    +mb(received)+(IDXBYTES?' / '+mb(IDXBYTES)+'（'+pct+'%）':'')
+    +(partsTotal>1?'，分片 '+partsDone+'/'+partsTotal:'');
+}
+function fail(msg){loading=false;hideProgress();
+  meta.textContent=msg||'索引载入失败，请刷新页面重试';}
+function finish(){
+  loading=false;hideProgress();
+  ready=!!(window.SEARCH_INDEX&&window.SEARCH_INDEX.length);
+  if(ready){run(false);}else{fail();}
+}
+/* 清单：体积极小（几百字节），用 script 载入最稳，不触发 file:// 的 fetch 拦截。 */
+function loadManifest(){
   var s=document.createElement('script');s.src=IDX;
-  s.onload=function(){loading=false;ready=!!window.SEARCH_INDEX;
-    if(ready){run(false);}else{meta.textContent='索引载入失败，请刷新页面重试';}};
-  s.onerror=function(){loading=false;meta.textContent='索引载入失败，请刷新页面重试';};
+  s.onload=function(){
+    MF=window.SEARCH_INDEX_MANIFEST;
+    if(!MF||!MF.parts||!MF.parts.length){fail();return;}
+    IDXBYTES=MF.total||0;
+    if(location.protocol==='http:'||location.protocol==='https:'){
+      if(window.fetch&&window.ReadableStream){loadParts();}else{loadScripts();}
+    }else{loadScripts();}
+  };
+  s.onerror=function(){fail();};
   document.head.appendChild(s);
+}
+/* file:// 或不支持流式 fetch：串行 <script src> 逐片加载，天然按序 concat。 */
+function loadScripts(){
+  var i=0,n=MF.parts.length,received=0;
+  meta.textContent='首次载入全文索引，正在下载…';
+  results.innerHTML='<div class="search-empty">索引文件约 10 MB，请稍候，载入完成后自动显示结果。</div>';
+  setProgress(null);
+  function next(){
+    if(i>=n){finish();return;}
+    var s=document.createElement('script');s.src=MF.parts[i];
+    s.onload=function(){
+      received+=(MF.sizes&&MF.sizes[i])||0;i++;
+      setProgress(IDXBYTES?Math.min(1,received/IDXBYTES):null);
+      loadMeta(received,i,n);
+      next();
+    };
+    s.onerror=function(){fail();};
+    document.head.appendChild(s);
+  }
+  next();
+}
+/* http(s)：并发 fetch 全部切片，逐块累加真实字节；全部到齐后按片序
+   拼成一个 Blob 一次执行（零解码、顺序稳定），避免逐片 script 的竞态。 */
+function loadParts(){
+  var n=MF.parts.length,chunks=new Array(n),done=0,received=0,dead=false;
+  loadMeta(0,0,n);
+  results.innerHTML='<div class="search-empty">索引文件约 10 MB，请稍候，载入完成后自动显示结果。</div>';
+  setProgress(IDXBYTES?0:null);
+  MF.parts.forEach(function(u,k){
+    fetch(u).then(function(r){
+      if(!r.ok)throw new Error('http'+r.status);
+      if(!r.body||!r.body.getReader)throw new Error('no stream');
+      var reader=r.body.getReader(),buf=[];
+      function pump(){
+        return reader.read().then(function(res){
+          if(res.done){
+            chunks[k]=buf;done++;
+            loadMeta(received,done,n);
+            if(done===n){
+              var all=[];
+              for(var i=0;i<n;i++)for(var j=0;j<chunks[i].length;j++)all.push(chunks[i][j]);
+              var blob=new Blob(all,{type:'text/javascript'});
+              var url=URL.createObjectURL(blob);
+              var s=document.createElement('script');s.src=url;
+              s.onload=function(){URL.revokeObjectURL(url);finish();};
+              s.onerror=function(){URL.revokeObjectURL(url);fail();};
+              document.head.appendChild(s);
+            }
+            return;
+          }
+          received+=res.value.length;buf.push(res.value);
+          setProgress(IDXBYTES?Math.min(1,received/IDXBYTES):null);
+          loadMeta(received,done,n);
+          return pump();
+        });
+      }
+      return pump();
+    }).catch(function(){if(!dead){dead=true;window.SEARCH_INDEX=null;loadScripts();}});
+  });
+}
+function load(){
+  if(ready||loading)return;
+  loading=true;
+  meta.textContent='首次载入全文索引，正在读取清单…';
+  results.innerHTML='<div class="search-empty">索引文件约 10 MB，请稍候，载入完成后自动显示结果。</div>';
+  setProgress(null);
+  loadManifest();
 }
 function find(kws){
   var idx=window.SEARCH_INDEX||[],out=[];
@@ -193,7 +293,7 @@ window.__searchLocate=function(root,q){locate(root,q);};
 function run(save){
   var q=input.value.trim();
   if(!q){hint();if(save){try{localStorage.removeItem(KEY);}catch(e){}}return;}
-  if(!ready){meta.textContent='正在载入全文索引…';return;}
+  if(!ready){if(!loading)meta.textContent='正在载入全文索引…';return;}
   if(save){try{localStorage.setItem(KEY,q);}catch(e){}}
   var kws=q.split(/\s+/).filter(Boolean),out=find(kws);
   if(!out.length){meta.textContent='没有找到匹配的笔记';
@@ -240,7 +340,7 @@ input.addEventListener('keydown',function(e){
 });
 hint();
 })();</script>
-<div class="cover-page"><img class="bg-img" src="assets/cover_onsite.jpg" alt="封面"><div class="cover-overlay"><h1>2027高考志愿填报指北</h1><div class="sub">高报笔记全编 · 专业 / 院校 / 城市 / 攻略</div><div class="sub2">（家长与学生通用资料版）</div><div style="flex: 1;"></div><div class="cover-callout"><span class="cover-callout-title">本书收录什么</span><div class="cover-callout-body">· 四大篇章共 <mark class="stat">690</mark> 篇高报笔记全文，全书共计约 <mark class="stat">300.7</mark> 万字，约 <span id="cover-pages"><mark class="stat">2536</mark></span> 页；<br>· 目录按原笔记目录编排，按门类、省份、城市与专题逐篇检索；<br>· 篇内脚注释义与术语词条一并收录，查得到、看得懂；<br>· 姊妹篇<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>讲方法，本书给资料。</div></div><div style="flex: 1;"></div><div class="cover-meta-wrap"><div class="cover-meta-box">适用对象：高三学生及家长 / 高报规划从业者<br>编撰时间：2026 年 11 月<br><span class="cover-note">说明：本册为高报笔记原文汇编，具体政策、批次、志愿数量与时间节点，均以“省教育考试院”官方最终公布为准。</span></div></div></div></div>
+<div class="cover-page"><img class="bg-img" src="assets/cover_onsite.jpg" alt="封面"><div class="cover-overlay"><h1>2027高考志愿填报指北</h1><div class="sub">高报笔记全编 · 专业 / 院校 / 城市 / 攻略</div><div class="sub2">（家长与学生通用资料版）</div><div style="flex: 1;"></div><div class="cover-callout"><span class="cover-callout-title">本书收录什么</span><div class="cover-callout-body">· 四大篇章共 <mark class="stat">690</mark> 篇高报笔记全文，全书共计约 <mark class="stat">300.7</mark> 万字，约 <span id="cover-pages"><mark class="stat">2546</mark></span> 页；<br>· 目录按原笔记目录编排，按门类、省份、城市与专题逐篇检索；<br>· 篇内脚注释义与术语词条一并收录，查得到、看得懂；<br>· 姊妹篇<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>讲方法，本书给资料。</div></div><div style="flex: 1;"></div><div class="cover-meta-wrap"><div class="cover-meta-box">适用对象：高三学生及家长 / 高报规划从业者<br>编撰时间：2026 年 11 月<br><span class="cover-note">说明：本册为高报笔记原文汇编，具体政策、批次、志愿数量与时间节点，均以“省教育考试院”官方最终公布为准。</span></div></div></div></div>
 <h1 id="sec-1" style="page-break-before: always;">编撰说明</h1>
 <p style="text-indent: 2em;">本册是<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>的姊妹篇。指南讲方法与规则，本册给资料与素材：把笔者（雪人老师）日常的文章及笔记，按分类完整汇编成一本可检索、可打印的书，分享给粉丝家长和同业老师，希望对您有所帮助。</p>
 <p style="text-indent: 2em;">全书分四大篇章：专业篇、院校篇、城市篇、攻略篇，截止目前共收录 <mark class="stat"><strong>690</strong></mark> 篇笔记（专业 <mark class="stat">249</mark> 篇、院校 <mark class="stat">339</mark> 篇、城市 <mark class="stat">51</mark> 篇、攻略 <mark class="stat">51</mark> 篇）。</p>
