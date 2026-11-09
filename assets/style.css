@@ -557,6 +557,7 @@ mark.stat {
   .feedback-fab-wrap, .feedback-fab,
   .feedback-top-tip, .feedback-mobile-hint-wrap, .feedback-wx-card,
   .search-fab, .search-panel, .search-fab-tip,
+  .share-fab, .share-fab-tip,
   .search-progress { display: none !important; }
   .feedback-top { display: none !important; }
   /* 搜索命中的临时高亮只属于屏幕交互，打印 / PDF 必须原样还原，
@@ -1113,6 +1114,7 @@ p, li, td, .callout {
    收起态把面板缩放回右上角图标位置，展开态回到页面正中，形成
    「点图标展开居中 / 点空白收回图标」的动画，不新增任何外部资源。 */
 .search-fab, .search-panel { display: none; }
+.share-fab, .share-fab-tip { display: none; }
 @media screen {
   .search-fab {
     display: flex; align-items: center; justify-content: center;
@@ -1251,14 +1253,59 @@ p, li, td, .callout {
     padding-left: 10px !important;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
+  /* ==== 「分享」浮动按钮（搜索按钮正下方，两版共用）====
+     2026-11-09 用户定：搜索按钮下加分享按钮。走 Web Share API 降级：
+     点击唤起系统分享面板（用户手动选微信好友/朋友圈），不支持则复制链接。
+     默认半透明与搜索按钮一致（opacity:.22），hover 提亮至 1 并加深。面板展开时互斥让位。 */
+  .share-fab {
+    display: flex; align-items: center; justify-content: center;
+    position: fixed; right: 22px; top: 72px; z-index: 10010;
+    width: 46px; height: 46px; padding: 0; border: 0; border-radius: 50%;
+    background: #1F6FB2; color: #fff; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: .22;
+    transition: opacity .22s ease, background .22s ease, transform .22s ease;
+  }
+  .share-fab:hover, .share-fab:focus-visible {
+    opacity: 1; background: #164E8A; transform: scale(1.06);
+  }
+  .share-fab:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
+  .share-fab-icon { width: 22px; height: 22px; display: block; }
+  /* 悬停 / 聚焦 / 复制提示共用的气泡，箭头指向右侧分享按钮 */
+  .share-fab-tip {
+    position: fixed; right: 78px; top: 80px; z-index: 10011;
+    display: inline-flex; align-items: center; height: 30px;
+    padding: 0 12px; background: #1F6FB2; color: #fff;
+    font-size: 13px; font-weight: 600; border-radius: 8px;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: 0; visibility: hidden; transform: translateX(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .share-fab-tip::after {
+    content: ""; position: absolute; right: -5px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px; border-style: solid;
+    border-color: transparent transparent transparent #1F6FB2;
+  }
+  .share-fab:hover + .share-fab-tip,
+  .share-fab:focus-visible + .share-fab-tip,
+  .share-fab-tip.show {
+    opacity: 1; visibility: visible; transform: translateX(0);
+  }
+  /* 搜索面板展开时与分享按钮互斥（share-fab 在 DOM 中位于 search-panel 之后） */
+  .search-panel.open ~ .share-fab { display: none; }
 }
 @media screen and (max-width: 600px) {
   .search-fab { right: 14px; top: 14px; width: 42px; height: 42px; }
   .search-fab-tip { right: 66px; top: 20px; }
+  .share-fab { right: 14px; top: 62px; width: 42px; height: 42px; }
+  .share-fab-tip { right: 66px; top: 68px; }
   .search-panel { width: min(560px, calc(100vw - 28px)); }
   .search-head { padding: 10px; gap: 5px; }
   .search-clear { padding: 5px; font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .search-fab, .search-panel { transition: none; }
+  .share-fab, .share-fab-tip { transition: none; }
 }
