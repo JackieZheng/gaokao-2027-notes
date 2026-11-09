@@ -555,8 +555,10 @@ mark.stat {
 @media print {
   .bookmarks-toggle, .bookmarks-panel, .qr-download-wrap,
   .feedback-fab-wrap, .feedback-fab,
+  .feedback-top-tip, .feedback-mobile-hint-wrap, .feedback-wx-card,
   .search-fab, .search-panel, .search-fab-tip,
   .search-progress { display: none !important; }
+  .feedback-top { display: none !important; }
   /* 搜索命中的临时高亮只属于屏幕交互，打印 / PDF 必须原样还原，
      否则用户搜完立刻打印会把黄底与左边框带进书里。 */
   .search-hit {
@@ -862,8 +864,37 @@ p, li, td, .callout {
 @media screen {
   .feedback-fab-wrap {
     position: fixed; right: 22px; bottom: 22px; z-index: 1001;
-    display: block;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
   }
+  /* 2026-11-09 用户定：回顶部按钮在问题反馈图标「上边」，同色同尺寸圆钮。
+     10:41 追加：显隐改「渐隐」动画（opacity + 轻微下移缩放）；保留占位不撤掉
+     display，避免滚动时右下角反馈按钮位置跳动。visibility 延后到淡出结束再切。 */
+  .feedback-top {
+    display: block; width: 46px; height: 46px; padding: 0; border: 0;
+    border-radius: 50%; background: #1F6FB2; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .28s ease, transform .28s ease,
+                visibility 0s linear 0s,
+                background .22s ease, box-shadow .22s ease;
+  }
+  .feedback-top:hover, .feedback-top:focus-visible {
+    background: #164E8A;
+    box-shadow: 0 6px 18px rgba(31,78,121,.38);
+    transform: translateY(-2px);
+  }
+  .feedback-top:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
+  .feedback-top-icon { display: block; width: 46px; height: 46px; }
+  /* 用户 09:25 定：页面已在最顶部时隐藏回顶部按钮，同时连带隐藏它的短气泡。
+     10:41 改为渐隐：不用 display:none，靠 opacity/visibility/pointer-events。 */
+  .feedback-top.top-hidden {
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translateY(8px) scale(.92);
+    transition: opacity .28s ease, transform .28s ease,
+                visibility 0s linear .28s,
+                background .22s ease, box-shadow .22s ease;
+  }
+  .feedback-top.top-hidden + .feedback-top-tip { display: none; }
   .feedback-fab {
     display: inline-flex; align-items: center;
     height: 46px; padding: 0; border-radius: 23px;
@@ -883,17 +914,25 @@ p, li, td, .callout {
     font-size: 13px; font-weight: 600; letter-spacing: .5px;
     transition: max-width .25s ease, opacity .2s ease, padding .25s ease;
   }
+  /* 11:27 统一：反馈按钮恒 46px 圆钮，所有设备 hover 都不展开文字，
+     避免与左侧常显小气泡重叠（原仅触屏 / 窄屏禁用）。 */
   .feedback-fab:hover .feedback-fab-label,
   .feedback-fab:focus-visible .feedback-fab-label {
-    max-width: 120px; opacity: 1; padding: 0 16px 0 2px;
+    max-width: 0; opacity: 0; padding: 0;
   }
+  /* 2026-11-09 09:19 用户定稿：PC 端反馈长气泡保持深蓝实底（不恢复白底），
+     文案分两段——上段问候语、下段微信提示，中间细分隔线。触发仍两套独立，
+     旧版挂 wrap:hover 会让悬停回顶部误弹反馈文案。 */
   .feedback-fab-tip {
-    position: absolute; right: 0; bottom: calc(100% + 12px);
+    /* 2026-11-09 09:39 用户截图勘误：wrap 是「回顶部 + 反馈」两枚 46px 圆钮的整列，
+       用 calc(100% + 12px) 会把气泡顶到整列最上方、箭头错指回顶部按钮。
+       改为相对 wrap 底边（＝反馈按钮底边）上移 46px+12px，箭头正对反馈按钮。 */
+    position: absolute; right: 0; bottom: calc(46px + 12px);
     width: 268px; box-sizing: border-box;
     padding: 12px 14px;
-    background: #fff; color: #33414A;
-    border: 1px solid #D8E2EA; border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(31,78,121,.16);
+    background: #123A5C; color: #F2F8FF;
+    border: 1px solid #0B2A45; border-radius: 10px;
+    box-shadow: 0 12px 34px rgba(6,26,46,.42);
     font-size: 12.5px; line-height: 1.8;
     text-align: justify; text-align-last: left;
     opacity: 0; visibility: hidden; transform: translateY(5px);
@@ -902,21 +941,168 @@ p, li, td, .callout {
   }
   .feedback-fab-tip::after {
     content: ""; position: absolute; right: 17px; bottom: -7px;
-    width: 12px; height: 12px; background: #fff;
-    border-right: 1px solid #D8E2EA; border-bottom: 1px solid #D8E2EA;
+    width: 12px; height: 12px; background: #123A5C;
+    border-right: 1px solid #0B2A45; border-bottom: 1px solid #0B2A45;
     transform: rotate(45deg);
   }
-  .feedback-fab-wrap:hover .feedback-fab-tip,
-  .feedback-fab-wrap:focus-within .feedback-fab-tip {
-    opacity: 1; visibility: visible; transform: translateY(0);
+  .feedback-fab-tip-line { display: block; }
+  .feedback-fab-tip-line + .feedback-fab-tip-line {
+    margin-top: 7px; padding-top: 7px;
+    border-top: 1px solid rgba(255,255,255,.22); color: #C9DDF0;
   }
+  /* 11:44 用户定：反馈按钮悬停只显示左侧「点此查看反馈方式」小气泡，
+     ★ 不再弹原来 PC 版的深蓝长气泡。长气泡 DOM 保留（两段文案仍是卡片
+     内容来源），但恒隐藏；hover 时若小气泡已被 10 秒自动隐藏则重新显示。
+     手动点 × 关闭会写 data-dismissed，之后 hover 不再打扰用户。 */
+  .feedback-fab-tip { display: none; }
+  .feedback-fab-wrap:has(.feedback-fab:hover)
+    .feedback-mobile-hint-wrap:not([data-dismissed]),
+  .feedback-fab-wrap:has(.feedback-fab:focus-visible)
+    .feedback-mobile-hint-wrap:not([data-dismissed]) {
+    display: inline-flex !important;
+  }
+  /* 12:01 用户定：× 关闭按钮只在 10 秒倒计时期间显示；悬停反馈按钮时（无论
+     是否还在倒计时）一律不出现 ×，hover 召回的小气泡只有文字胶囊。 */
+  .feedback-fab-wrap:has(.feedback-fab:hover) .feedback-mobile-hint-close,
+  .feedback-fab-wrap:has(.feedback-fab:focus-visible) .feedback-mobile-hint-close {
+    display: none !important;
+  }
+  /* 2026-11-09 用户定：回顶部短气泡与右上角「全文搜索」图标气泡完全同款
+     （蓝底白字小胶囊 + 右侧三角箭头 + 同款阴影），视觉语言统一。 */
+  .feedback-top-tip {
+    position: absolute; right: 58px; top: 8px;
+    display: inline-flex; align-items: center; height: 30px;
+    padding: 0 12px; background: #1F6FB2; color: #fff;
+    font-size: 13px; font-weight: 600; border-radius: 8px;
+    white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: 0; visibility: hidden; transform: translateX(8px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .feedback-top-tip::after {
+    content: ""; position: absolute; right: -5px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px; border-style: solid;
+    border-color: transparent transparent transparent #1F6FB2;
+  }
+  .feedback-top:hover + .feedback-top-tip,
+  .feedback-top:focus-visible + .feedback-top-tip {
+    opacity: 1; visibility: visible; transform: translateX(0);
+  }
+  .feedback-fab-wrap.wx-open .feedback-fab-tip { display: none; }
+  /* 气泡 / 卡片下移到反馈按钮正上方后会盖住上列的回顶部圆钮，显示时让它暂时让位。
+     微信 / 触屏走 JS 的 wx-open；PC 长气泡 hover 走 :has()（现代浏览器，渐进增强）。
+     wrap 用 bottom:22px 固定定位，隐藏上列按钮不改变底边，气泡坐标不受影响。 */
+  .feedback-fab-wrap.wx-open .feedback-top,
+  .feedback-fab-wrap:has(.feedback-fab:hover) .feedback-top,
+  .feedback-fab-wrap:has(.feedback-fab:focus-visible) .feedback-top { display: none; }
+  /* 移动端没有 hover：常显一条短提示（10 秒自动关闭 / × 手动关闭），点它弹卡片；
+     主体样式与搜索图标气泡一致（用户 2026-11-09 定）。wrap 承担定位与整体隐藏。 */
+  /* 11:27 用户定：不再区分手机 / PC，「点此查看反馈方式」小气泡在所有设备上
+     默认常显（按钮左侧），10 秒后自动隐藏 / × 手动关闭。不再用 :has(hover)
+     触发，避免 !important 压过自动隐藏。 */
+  .feedback-mobile-hint-wrap {
+    display: inline-flex;
+    position: absolute; right: 58px; bottom: 8px;
+    align-items: center; gap: 6px;
+  }
+  .feedback-mobile-hint {
+    position: relative;
+    display: inline-flex; align-items: center; height: 30px;
+    padding: 0 12px; border: 0; border-radius: 8px;
+    background: #1F6FB2; color: #fff;
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    font-size: 13px; font-weight: 600; white-space: nowrap;
+    cursor: pointer;
+  }
+  .feedback-mobile-hint::after {
+    content: ""; position: absolute; right: -5px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px; border-style: solid;
+    border-color: transparent transparent transparent #1F6FB2;
+  }
+  .feedback-mobile-hint-close {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%;
+    background: rgba(9,30,52,.55); color: #fff;
+    font-size: 15px; line-height: 1; cursor: pointer;
+  }
+  /* 微信 / 触屏下的可复制反馈卡片：保持深蓝底，与蓝底短气泡 / 白底长气泡分层。 */
+  .feedback-wx-card {
+    display: none;
+    /* 同 .feedback-fab-tip：贴反馈按钮正上方，向下箭头指向问号图标（09:39 勘误）。 */
+    position: absolute; right: 0; bottom: calc(46px + 12px);
+    width: min(320px, calc(100vw - 28px)); box-sizing: border-box;
+    padding: 14px; border-radius: 12px; z-index: 1002;
+    background: #123A5C; color: #F2F8FF;
+    border: 1px solid #0B2A45;
+    box-shadow: 0 16px 44px rgba(6,26,46,.48);
+    font-size: 12.5px; line-height: 1.7;
+  }
+  .feedback-wx-card[hidden] { display: none !important; }
+  .feedback-wx-card.open { display: block; }
+  /* 用户 09:24 定：所有弹出气泡 / 卡片都要有小箭头指向触发它的图标。
+     卡片在反馈按钮上方，故用向下的菱形箭头（与长气泡同款）。 */
+  .feedback-wx-card::after {
+    content: ""; position: absolute; right: 17px; bottom: -7px;
+    width: 12px; height: 12px; background: #123A5C;
+    border-right: 1px solid #0B2A45; border-bottom: 1px solid #0B2A45;
+    transform: rotate(45deg);
+  }
+  .feedback-wx-head {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; font-weight: 700; margin-bottom: 8px;
+  }
+  .feedback-wx-close {
+    border: 0; background: transparent; color: #DCEBFA;
+    font-size: 20px; line-height: 1; cursor: pointer; padding: 0 2px;
+  }
+  .feedback-wx-hint { margin: 0 0 10px; color: #C9DDF0; font-size: 12px; }
+  /* 11:06 用户定：卡片文案补齐两段，第 2 段用细分隔线与第 1 段分层（照长气泡分行口径）。 */
+  .feedback-wx-hint-2 {
+    margin-top: 7px; padding-top: 7px;
+    border-top: 1px solid rgba(255,255,255,.16);
+  }
+  .feedback-wx-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+  .feedback-wx-label { flex: 0 0 auto; color: #A9C9E6; font-size: 11.5px; }
+  .feedback-wx-val {
+    flex: 1 1 auto; min-width: 0; padding: 5px 7px; border-radius: 6px;
+    background: #0B2A45; color: #fff; border: 1px solid #2A5E8C;
+    font-size: 11.5px; overflow-wrap: anywhere;
+    user-select: text; -webkit-user-select: text;
+  }
+  .feedback-wx-copy {
+    flex: 0 0 auto; padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid #6FA8D8; background: #1F6FB2; color: #fff; font-size: 11.5px;
+  }
+  .feedback-wx-copy:hover { background: #2E86CC; }
+  /* 「反馈链接」行：复制按钮下方叠一个「反馈」按钮，点击直接打开 issue（用户 09:19 定）。 */
+  .feedback-wx-actions {
+    flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px;
+  }
+  .feedback-wx-open {
+    padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid #6FA8D8; background: #F2F8FF; color: #123A5C;
+    font-size: 11.5px; font-weight: 600;
+  }
+  .feedback-wx-open:hover { background: #DCEBFA; }
 }
 @media screen and (max-width: 600px) {
-  .feedback-fab-wrap { right: 14px; bottom: 14px; }
+  .feedback-fab-wrap { right: 14px; bottom: 14px; gap: 8px; }
   .feedback-fab-tip { width: min(268px, calc(100vw - 28px)); }
+  .feedback-mobile-hint-wrap, .feedback-top-tip { right: 52px; }
+}
+/* 11:27 统一后只保留「无 hover 能力设备不显示 hover 长气泡」这一设备能力适配；
+   小气泡常显、卡片 toggle、label 不展开已全部提升到全局，不再按设备分叉。 */
+@media screen and (max-width: 600px), screen and (hover: none) {
+  .feedback-fab-tip { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .feedback-fab, .feedback-fab-label, .feedback-fab-tip { transition: none; }
+  .feedback-fab, .feedback-fab-label, .feedback-fab-tip,
+  .feedback-top-tip, .feedback-wx-card,
+  .feedback-top, .feedback-top.top-hidden { transition: none; }
+  .feedback-top:hover, .feedback-top:focus-visible,
+  .feedback-top.top-hidden { transform: none; }
 }
 
 /* ==== 右上角「全文搜索」浮动图标 + 居中搜索面板 ====
@@ -968,21 +1154,26 @@ p, li, td, .callout {
     position: fixed; left: 50%; top: 10%; z-index: 10010;
     width: min(620px, calc(100vw - 32px));
     max-height: 80vh; box-sizing: border-box;
-    background: #fff; border: 1px solid #D8E2EA; border-radius: 14px;
+    /* 2026-11-09：网页正文接近纯白，白底面板弹出后没区分度 → 加粗蓝描边。 */
+    background: #fff; border: 2px solid #1F6FB2; border-radius: 14px;
     box-shadow: 0 18px 54px rgba(31,78,121,.24);
     opacity: 0; visibility: hidden; pointer-events: none;
     transform: translate(calc(-50% + 50vw - 45px), calc(-50% - 10vh + 45px)) scale(.12);
     transform-origin: center center;
     transition: transform .3s cubic-bezier(.2,.8,.2,1),
-                opacity .22s ease, visibility .22s ease;
+                opacity .22s ease, visibility .22s ease, box-shadow .28s ease;
   }
   .search-panel.open {
     opacity: 1; visibility: visible; pointer-events: auto;
     transform: translate(-50%, 0) scale(1);
+    /* 纯 CSS 全屏压暗：不新增遮罩 DOM、不拦截点击（box-shadow 不是元素），
+       点面板外仍走原有 document 委托收起；只在展开态生效，收起态不压暗。 */
+    box-shadow: 0 0 0 100vmax rgba(9,30,52,.42), 0 24px 70px rgba(9,30,52,.46);
   }
   .search-head {
     display: flex; align-items: center; gap: 8px;
     flex: 0 0 auto; padding: 12px 14px;
+    border-top: 4px solid #1F6FB2;
     border-bottom: 1px solid #E6EDF3;
   }
   .search-head-icon { width: 20px; height: 20px; flex: 0 0 20px; }
