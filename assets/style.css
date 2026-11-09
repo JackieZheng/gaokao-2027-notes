@@ -1114,7 +1114,7 @@ p, li, td, .callout {
    收起态把面板缩放回右上角图标位置，展开态回到页面正中，形成
    「点图标展开居中 / 点空白收回图标」的动画，不新增任何外部资源。 */
 .search-fab, .search-panel { display: none; }
-.share-fab, .share-fab-tip { display: none; }
+.share-fab, .share-fab-tip, .share-toast { display: none; }
 @media screen {
   .search-fab {
     display: flex; align-items: center; justify-content: center;
@@ -1295,6 +1295,21 @@ p, li, td, .callout {
   }
   /* 搜索面板展开时与分享按钮互斥（share-fab 在 DOM 中位于 search-panel 之后） */
   .search-panel.open ~ .share-fab { display: none; }
+  /* 2026-11-09 用户定：浏览器不支持内置分享（微信 X5 / 旧浏览器）时的 5 秒提示条。
+     文案较长，用居中 toast 而非右侧气泡；自动消失由 JS showToast(ms=5000) 控制。 */
+  .share-toast {
+    position: fixed; left: 50%; bottom: 9vh; z-index: 10012;
+    max-width: min(560px, calc(100vw - 40px));
+    padding: 12px 18px; background: rgba(23,32,45,.94); color: #fff;
+    font-size: 14px; line-height: 1.6; border-radius: 10px;
+    text-align: left; box-shadow: 0 8px 28px rgba(0,0,0,.28);
+    transform: translate(-50%, 14px);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+  }
+  .share-toast.show {
+    opacity: 1; visibility: visible; transform: translate(-50%, 0);
+  }
 }
 @media screen and (max-width: 600px) {
   .search-fab { right: 14px; top: 14px; width: 42px; height: 42px; }
@@ -1307,5 +1322,5 @@ p, li, td, .callout {
 }
 @media (prefers-reduced-motion: reduce) {
   .search-fab, .search-panel { transition: none; }
-  .share-fab, .share-fab-tip { transition: none; }
+  .share-fab, .share-fab-tip, .share-toast { transition: none; }
 }
