@@ -1114,7 +1114,7 @@ p, li, td, .callout {
    收起态把面板缩放回右上角图标位置，展开态回到页面正中，形成
    「点图标展开居中 / 点空白收回图标」的动画，不新增任何外部资源。 */
 .search-fab, .search-panel { display: none; }
-.share-fab, .share-fab-tip, .share-toast { display: none; }
+.share-fab, .share-fab-tip, .share-msg { display: none; }
 @media screen {
   .search-fab {
     display: flex; align-items: center; justify-content: center;
@@ -1192,6 +1192,48 @@ p, li, td, .callout {
   }
   .search-close { font-size: 22px; line-height: 1; }
   .search-clear:hover, .search-close:hover { background: #EAF1F8; color: #164E8A; }
+  /* 2026-11-09 用户定：历史搜索下拉——点输入框显示，可逐个删除 / 一键清空 */
+  .search-history {
+    flex: 0 0 auto; max-height: 208px; overflow-y: auto;
+    padding: 2px 8px 6px;
+    border-bottom: 1px solid #E6EDF3; background: #FBFDFF;
+    scrollbar-width: thin; scrollbar-color: #C8D0D6 transparent;
+  }
+  .search-history[hidden] { display: none; }
+  .search-history-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 6px 3px;
+  }
+  .search-history-title {
+    font-size: 11px; font-weight: 600; letter-spacing: .04em; color: #8A99AD;
+  }
+  .search-history-clear {
+    border: 0; background: transparent; color: #6B7A88;
+    font-size: 11px; cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  }
+  .search-history-clear:hover { color: #B23B3B; background: #F5E9E9; }
+  .search-history-list { list-style: none; margin: 0; padding: 0; }
+  /* 2026-11-09 历史空态占位：新浏览器无历史时点输入框显示提示，不隐藏、不误判 */
+  .search-history-empty {
+    padding: 8px 10px; font-size: 12px; color: #9AA8B5; font-style: italic;
+  }
+  .search-history-item {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .sh-q {
+    flex: 1 1 auto; min-width: 0; text-align: left;
+    padding: 6px 8px; border: 0; border-radius: 6px; background: transparent;
+    font-family: inherit; font-size: 13px; color: #263442; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sh-q:hover, .sh-q:focus-visible, .sh-q.active { background: #EAF1F8; color: #1F4E79; }
+  .sh-q.active { box-shadow: inset 3px 0 0 #1F6FB2; font-weight: 600; }
+  .sh-del {
+    flex: 0 0 auto; width: 22px; height: 22px; line-height: 1;
+    border: 0; border-radius: 5px; background: transparent;
+    color: #A9B4BF; font-size: 15px; cursor: pointer;
+  }
+  .sh-del:hover { color: #B23B3B; background: #F5E9E9; }
   .search-meta {
     flex: 0 0 auto; padding: 8px 16px 4px;
     font-size: 12px; color: #6B7A88;
@@ -1295,21 +1337,40 @@ p, li, td, .callout {
   }
   /* 搜索面板展开时与分享按钮互斥（share-fab 在 DOM 中位于 search-panel 之后） */
   .search-panel.open ~ .share-fab { display: none; }
-  /* 2026-11-09 用户定：浏览器不支持内置分享（微信 X5 / 旧浏览器）时的 5 秒提示条。
-     文案较长，用居中 toast 而非右侧气泡；自动消失由 JS showToast(ms=5000) 控制。 */
-  .share-toast {
+  /* 2026-11-09 用户定（第八轮）：浏览器不支持内置分享 / 系统分享未唤起时的【消息框】。
+     带「知道了」按钮：点击立即关闭；未点击 10 秒自动关闭（JS showMsg 控制）。
+     ★ 曾因 @media screen 内未重设 display 而永远 display:none（用户「从来没见过 toast」）
+       → 必须在此补 display:block。 */
+  .share-msg {
+    display: block;
     position: fixed; left: 50%; bottom: 9vh; z-index: 10012;
-    max-width: min(560px, calc(100vw - 40px));
-    padding: 12px 18px; background: rgba(23,32,45,.94); color: #fff;
-    font-size: 14px; line-height: 1.6; border-radius: 10px;
+    max-width: min(440px, calc(100vw - 40px));
+    padding: 16px 18px 14px; background: rgba(23,32,45,.96); color: #fff;
+    font-size: 14px; line-height: 1.6; border-radius: 12px;
     text-align: left; box-shadow: 0 8px 28px rgba(0,0,0,.28);
     transform: translate(-50%, 14px);
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
   }
-  .share-toast.show {
-    opacity: 1; visibility: visible; transform: translate(-50%, 0);
+  .share-msg.show {
+    opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto;
   }
+  /* ★ 2026-11-09 用户定：消息框加标题栏，默认「提示消息」（分隔线分层） */
+  .share-msg-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 0 0 10px; padding: 0 0 10px;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+  }
+  .share-msg-title { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.4; }
+  .share-msg-text { margin: 0 0 12px; }
+  .share-msg-btn {
+    display: block; margin-left: auto; padding: 6px 18px;
+    border: 0; border-radius: 8px; background: #1F6FB2; color: #fff;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background .2s ease;
+  }
+  .share-msg-btn:hover, .share-msg-btn:focus-visible { background: #164E8A; }
+  .share-msg-btn:focus-visible { outline: 2px solid #7FB3D9; outline-offset: 2px; }
 }
 @media screen and (max-width: 600px) {
   .search-fab { right: 14px; top: 14px; width: 42px; height: 42px; }
@@ -1322,5 +1383,5 @@ p, li, td, .callout {
 }
 @media (prefers-reduced-motion: reduce) {
   .search-fab, .search-panel { transition: none; }
-  .share-fab, .share-fab-tip, .share-toast { transition: none; }
+  .share-fab, .share-fab-tip, .share-msg { transition: none; }
 }
