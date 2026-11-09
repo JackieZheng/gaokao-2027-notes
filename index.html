@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2027高考志愿填报指北</title>
+<meta property="og:title" content="2027高考志愿填报指北">
+<meta property="og:description" content="高考志愿填报系统化笔记：院校 / 专业 / 城市全景解读">
+<meta property="og:image" content="https://jackiezheng.github.io/gaokao-2027-notes/assets/cover_share_500.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jackiezheng.github.io/gaokao-2027-notes/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="assets/style.css">
 <style>
 /* C 网页版懒加载占位 */
@@ -372,37 +378,69 @@ function getIntro(anchor){
   if(el){var p=el.querySelector('p');if(p)return p.textContent.replace(/\s+/g,' ').trim();}
   return '';
 }
-function copyLink(){
+/* 2026-11-09 用户定：复制兜底分层（修复「个别浏览器复制失败」）——
+   ①navigator.clipboard.writeText（https 安全上下文，优先）
+   ②execCommand('copy')（readonly textarea，iOS 避免键盘弹起）
+   ③全选 textarea 让用户长按/手动复制（clipboard 与 execCommand 均不可用的
+   个别内核/iOS/微信 X5——长按 textarea 会弹「拷贝」菜单，最可靠兜底）。
+   silent=true：分享成功后的补充复制，失败静默（用户已达成分享，无需打扰）。 */
+function copyLink(silent){
   var c=curInfo();
   var text=c.title;
   if(c.intro)text+='\n'+c.intro;
   text+='\n'+c.url;
-  var done=function(){showTip('复制成功');};
-  var fail=function(){showTip('复制失败，请手动复制');};
+  var done=function(){if(!silent)showTip('复制成功');};
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(done,fail);
+    navigator.clipboard.writeText(text).then(done,function(){if(!silent)fallbackCopy(text,done);});
   }else{
-    var ta=document.createElement('textarea');
-    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
-    document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');done();}catch(e){fail();}
-    document.body.removeChild(ta);
+    fallbackCopy(text,done);
   }
 }
-/* 2026-11-09 用户定：分享复制操作始终执行，不管是否降级——复制到剪贴板
-   无条件发生；若浏览器支持 Web Share API，再附加唤起系统分享面板，
-   二者不互斥（复制先行、原生分享叠加，任一路径失败均不影响已完成的复制）。 */
+function fallbackCopy(text,done){
+  var ta=document.createElement('textarea');
+  ta.value=text;
+  ta.setAttribute('readonly','');
+  ta.style.cssText='position:fixed;top:0;left:0;width:2em;height:2em;opacity:0;border:0;padding:0;';
+  document.body.appendChild(ta);
+  ta.focus();ta.select();
+  try{ta.setSelectionRange(0,text.length);}catch(e){}
+  var ok=false;
+  try{ok=document.execCommand('copy');}catch(e){ok=false;}
+  if(ok){done();document.body.removeChild(ta);return;}
+  /* execCommand 也失败：把 textarea 放大并保持全选，让用户长按/手动复制 */
+  ta.style.cssText='position:fixed;top:28%;left:8%;width:84%;height:7em;'
+    +'font-size:16px;line-height:1.5;opacity:.95;z-index:2147483647;'
+    +'border:2px solid #1F6FB2;border-radius:8px;padding:10px;background:#fff;color:#222;';
+  ta.focus();ta.select();
+  try{ta.setSelectionRange(0,text.length);}catch(e){}
+  showTip('已全选，请长按复制');
+  setTimeout(function(){try{document.body.removeChild(ta);}catch(e){}},5000);
+}
+/* 2026-11-09 用户定：分享复制始终执行 + 移动端可唤起（修复「手机/微信无法唤起分享」）——
+   ★ 关键：navigator.share() 必须在用户手势内【最先】同步调用。iOS Safari / Android
+   要求 share 在同一手势 tick 触发；若先执行异步复制（clipboard.writeText 返回
+   Promise 脱离手势上下文）再 share，会被判 NotAllowedError 无法唤起。
+   → 本实现：share 同步最先调用；复制在 成功/失败/不支持/异常 四条路径都执行
+   （成功=补充复制且失败静默；失败=降级复制且提示；无 share=直接复制；
+   用户主动取消(Abort)=不复制不提示）。 */
 function share(){
   var c=curInfo();
-  copyLink();
+  var title=c.title||'';
+  var body=(c.intro||title);
   if(navigator.share){
-    navigator.share({title:c.title,text:(c.intro||c.title),url:c.url})
-      .catch(function(err){if(err&&err.name==='AbortError')return;});
+    var p=null;
+    try{p=navigator.share({title:title,text:body,url:c.url});}catch(e){p=null;}
+    if(p&&p.then){
+      p.then(function(){copyLink(true);},
+            function(err){if(err&&err.name==='AbortError')return;copyLink();});
+      return;
+    }
   }
+  copyLink();
 }
 btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();share();});
 })();</script>
-<div class="cover-page"><img class="bg-img" src="assets/cover_onsite.jpg" alt="封面"><div class="cover-overlay"><h1>2027高考志愿填报指北</h1><div class="sub">高报笔记全编 · 专业 / 院校 / 城市 / 攻略</div><div class="sub2">（家长与学生通用资料版）</div><div style="flex: 1;"></div><div class="cover-callout"><span class="cover-callout-title">本书收录什么</span><div class="cover-callout-body">· 四大篇章共 <mark class="stat">690</mark> 篇高报笔记全文，全书共计约 <mark class="stat">301.7</mark> 万字，约 <span id="cover-pages"><mark class="stat">2546</mark></span> 页；<br>· 目录按原笔记目录编排，按门类、省份、城市与专题逐篇检索；<br>· 篇内脚注释义与术语词条一并收录，查得到、看得懂；<br>· 姊妹篇<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>讲方法，本书给资料。</div></div><div style="flex: 1;"></div><div class="cover-meta-wrap"><div class="cover-meta-box">适用对象：高三学生及家长 / 高报规划从业者<br>编撰时间：2026 年 11 月<br><span class="cover-note">说明：本册为高报笔记原文汇编，具体政策、批次、志愿数量与时间节点，均以“省教育考试院”官方最终公布为准。</span></div></div></div></div>
+<div class="cover-page"><img class="bg-img" src="assets/cover_onsite.jpg" alt="封面"><div class="cover-overlay"><h1>2027高考志愿填报指北</h1><div class="sub">高报笔记全编 · 专业 / 院校 / 城市 / 攻略</div><div class="sub2">（家长与学生通用资料版）</div><div style="flex: 1;"></div><div class="cover-callout"><span class="cover-callout-title">本书收录什么</span><div class="cover-callout-body">· 四大篇章共 <mark class="stat">690</mark> 篇高报笔记全文，全书共计约 <mark class="stat">301.8</mark> 万字，约 <span id="cover-pages"><mark class="stat">2550</mark></span> 页；<br>· 目录按原笔记目录编排，按门类、省份、城市与专题逐篇检索；<br>· 篇内脚注释义与术语词条一并收录，查得到、看得懂；<br>· 姊妹篇<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>讲方法，本书给资料。</div></div><div style="flex: 1;"></div><div class="cover-meta-wrap"><div class="cover-meta-box">适用对象：高三学生及家长 / 高报规划从业者<br>编撰时间：2026 年 11 月<br><span class="cover-note">说明：本册为高报笔记原文汇编，具体政策、批次、志愿数量与时间节点，均以“省教育考试院”官方最终公布为准。</span></div></div></div></div>
 <h1 id="sec-1" style="page-break-before: always;">编撰说明</h1>
 <p style="text-indent: 2em;">本册是<a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer" title="在新窗口打开《2027高考志愿填报指南》" style="color:#12304A;text-decoration:none;border-bottom:1px dotted #164E8A;">《2027高考志愿填报指南》</a>的姊妹篇。指南讲方法与规则，本册给资料与素材：把笔者（雪人老师）日常的文章及笔记，按分类完整汇编成一本可检索、可打印的书，分享给粉丝家长和同业老师，希望对您有所帮助。</p>
 <p style="text-indent: 2em;">全书分四大篇章：专业篇、院校篇、城市篇、攻略篇，截止目前共收录 <mark class="stat"><strong>690</strong></mark> 篇笔记（专业 <mark class="stat">249</mark> 篇、院校 <mark class="stat">339</mark> 篇、城市 <mark class="stat">51</mark> 篇、攻略 <mark class="stat">51</mark> 篇）。</p>
