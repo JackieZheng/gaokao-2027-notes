@@ -31,12 +31,19 @@ body { margin: 0; }
 .cover-page {
     width: 100%;
     max-width: 21cm;
-    aspect-ratio: 210 / 297;
     margin: 0 auto;
     position: relative; overflow: hidden;
     page-break-after: always;
-    display: flex; justify-content: center; align-items: center;
     container-type: inline-size;
+}
+/* 2026-11-10 浏览器兼容修复（用户报「封面背景个别浏览器显示不全」）：
+   封面高度原依赖 aspect-ratio:210/297，部分旧浏览器不支持该属性 → 容器
+   高度塌陷为 0 → 绝对定位 .bg-img{height:100%} 解析为 0 → 背景图整个消失。
+   改用 ::before 的 padding-bottom 占位（百分比按包含块宽度解析，CSS2 起
+   全浏览器支持），等比缩放保底高度，不再依赖 aspect-ratio。297/210≈1.4142857。 */
+.cover-page::before {
+    content: ""; display: block; width: 100%;
+    padding-bottom: 141.42%;
 }
 @media screen {
     body { padding: 5% 10%; }
@@ -1030,10 +1037,19 @@ p, li, td, .callout {
   /* 微信 / 触屏下的可复制反馈卡片：保持深蓝底，与蓝底短气泡 / 白底长气泡分层。 */
   .feedback-wx-card {
     display: none;
-    /* 同 .feedback-fab-tip：贴反馈按钮正上方，向下箭头指向问号图标（09:39 勘误）。 */
-    position: absolute; right: 0; bottom: calc(46px + 12px);
+    /* 2026-11-10 Bug 4（关闭按钮穿透）根因修复：卡片原在 .feedback-fab-wrap
+       （position:fixed; z-index:1001）内部，wrap 形成独立堆叠上下文，卡片
+       z-index:10020 被局限在 wrap 内、相对页面永远 ≤1001，低于右侧浮层按钮
+       （share/search-fab 10010、tip 10011、share 提示 10012），卡片展开后其
+       右上角关闭 × 若与浮层按钮重叠，点击会命中更上层按钮（穿透）。
+       现把卡片移出 wrap（HTML 结构调整），改 position:fixed 直接相对视口定位，
+       z-index:10020 真正相对页面生效，× 永不被遮挡。定位沿用旧几何：
+       wrap 原 bottom:22px、卡片 bottom:calc(46px+12px) → 视口 bottom:80px；
+       right 从 wrap 的 22px 起算 → 视口 right:22px（见下方 600px 覆盖）。 */
+    position: fixed; right: 22px; bottom: calc(22px + 46px + 12px);
     width: min(330px, calc(100vw - 28px)); box-sizing: border-box;
-    padding: 14px; border-radius: 12px; z-index: 1002;
+    padding: 14px; border-radius: 12px;
+    z-index: 10020;
     background: #123A5C; color: #F2F8FF;
     border: 1px solid #0B2A45;
     box-shadow: 0 16px 44px rgba(6,26,46,.48);
@@ -1091,6 +1107,8 @@ p, li, td, .callout {
   .feedback-fab-wrap { right: 14px; bottom: 14px; gap: 8px; }
   .feedback-fab-tip { width: min(268px, calc(100vw - 28px)); }
   .feedback-mobile-hint-wrap, .feedback-top-tip { right: 52px; }
+  /* 2026-11-10 卡片移出 wrap 后改为固定定位，移动端跟随 wrap 的 14px 基准 */
+  .feedback-wx-card { right: 14px; bottom: calc(14px + 46px + 12px); }
 }
 /* 11:27 统一后只保留「无 hover 能力设备不显示 hover 长气泡」这一设备能力适配；
    小气泡常显、卡片 toggle、label 不展开已全部提升到全局，不再按设备分叉。 */
@@ -1185,11 +1203,11 @@ p, li, td, .callout {
 @media screen and (max-width: 600px) {
   .prev-next-wrap { right: 14px; gap: 4px; }
 }
-/* 12:23 用户定：气泡要在悬停时提示，桌面任意宽度都显示；
-   仅真正触屏（无 hover）才隐藏，不再按 max-width:600px 隐藏。 */
-@media (hover: none) {
-  .pn-tip { display: none; }
-}
+/* 2026-11-10 用户报「个别浏览器上下篇没气泡提示（其它按钮就能显示）」：
+   原 .pn-tip 专属 @media(hover:none){display:none} 使触屏设备永不显示，而
+   .search-fab-tip / .share-fab-tip 无此限制（触屏可显示）。为保持一致，
+   移除 .pn-tip 的 hover:none 隐藏——触屏点按触发 :hover 粘滞即显示，与
+   search/share 行为一致。 */
 @media (prefers-reduced-motion: reduce) {
   .pn-btn, .pn-tip, .prev-next-wrap { transition: none; }
 }
