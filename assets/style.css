@@ -556,6 +556,7 @@ mark.stat {
   .feedback-top-tip, .feedback-mobile-hint-wrap, .feedback-wx-card,
   .search-fab, .search-panel, .search-fab-tip,
   .share-fab, .share-fab-tip,
+  .prev-next-wrap, .pn-tip,
   .search-progress { display: none !important; }
   .feedback-top { display: none !important; }
   /* 搜索命中的临时高亮只属于屏幕交互，打印 / PDF 必须原样还原，
@@ -1102,6 +1103,95 @@ p, li, td, .callout {
   .feedback-top, .feedback-top.top-hidden { transition: none; }
   .feedback-top:hover, .feedback-top:focus-visible,
   .feedback-top.top-hidden { transform: none; }
+}
+
+/* ==== 右侧上下居中「上一篇 / 当前篇 / 下一篇」按钮组 ====
+   HTML/JS 由 build_notes.py 的 prev_next_html() 生成，单页版与 C 版共用。
+   设计（12:42 用户定，参考效果）：整个按钮组 = 一个蓝色药丸胶囊（#2470B8、
+   border-radius:32px），三个白色图标纵向排列（实心 ▲ / 圆环 ○ / 实心 ▼，
+   viewBox 24 + 22px，与搜索/分享小图标风格一致），去掉每按钮圆形背景，
+   悬停/聚焦某一段时该段出现深蓝圆形高亮；左侧蓝胶囊气泡分别提示三篇名称，
+   带指向胶囊的右指小三角。
+   默认 display:none 保证非屏幕媒体（Chrome 打印 PDF）不出现；@media screen 下
+   才固定定位并上下居中（top:50% + translateY(-50%)）。z-index 与反馈按钮同为
+   1001（右侧同一列互不重叠：本组居中、反馈贴底、搜索贴顶）。 */
+.prev-next-wrap { display: none; }
+@media screen {
+  /* 12:42 用户定（参考效果）：整个按钮组 = 一个蓝色药丸胶囊，三个白色图标
+     纵向排列；去掉每按钮的圆形背景，悬停/聚焦某一段时该段出现深蓝圆形高亮。
+     默认半透明（参考搜索/分享按钮 opacity .22），悬停/聚焦本组提亮至 1。 */
+  .prev-next-wrap {
+    position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+    z-index: 1001;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    /* 12:52 用户定：整个按钮组宽度与右侧其它按钮（搜索/分享/反馈/回顶，46px）
+       一致，故水平不设内边距（胶囊宽 = 按钮宽 46px），仅留垂直内边距。 */
+    padding: 6px 0;
+    background: #2470B8;
+    /* 13:32 用户定：圆角适当再小一些（16px → 10px），更接近右侧按钮的柔和感。 */
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(31,78,121,.30);
+    opacity: .22;
+    transition: opacity .25s ease, box-shadow .25s ease;
+  }
+  .prev-next-wrap:hover, .prev-next-wrap:focus-within {
+    opacity: 1;
+    box-shadow: 0 8px 26px rgba(31,78,121,.42);
+  }
+  .pn-item { position: relative; }
+  .pn-btn {
+    display: flex; align-items: center; justify-content: center;
+    /* 13:32 用户定：悬停圆形背景太大、贴满胶囊 → 按钮 46px → 38px，
+       四周 margin 4px 留出呼吸空间（按钮+margin=46px，胶囊宽仍与右侧一致）。 */
+    width: 38px; height: 38px; margin: 4px; padding: 0; border: 0;
+    border-radius: 50%; background: transparent; cursor: pointer;
+    transition: background .22s ease;
+  }
+  .pn-btn:hover, .pn-btn:focus-visible { background: rgba(0,0,0,.18); }
+  .pn-btn:focus-visible { outline: 2px solid rgba(255,255,255,.85); outline-offset: 2px; }
+  .pn-btn-icon { display: block; width: 28px; height: 28px; }
+  /* 首篇/末篇边界：禁用按钮 + 气泡给出「已经是第一篇/最后一篇」文案。 */
+  .pn-btn.pn-disabled { opacity: .38; cursor: default; }
+  .pn-btn.pn-disabled:hover, .pn-btn.pn-disabled:focus-visible { background: transparent; }
+  /* 蓝胶囊气泡：贴胶囊左侧、垂直居中、右指小三角（悬停本行/聚焦按钮显示）。
+     省略号移到内层 .pn-tip-text，外层不设 overflow 以免裁剪右指箭头。 */
+  .pn-tip {
+    position: absolute; right: 60px; top: 50%;
+    display: inline-flex; align-items: center; height: 30px;
+    padding: 0 12px; background: #1F6FB2; color: #fff;
+    font-size: 13px; font-weight: 600; border-radius: 8px;
+    white-space: nowrap; pointer-events: none;
+    max-width: min(300px, calc(100vw - 130px));
+    box-shadow: 0 4px 14px rgba(31,78,121,.28);
+    opacity: 0; visibility: hidden;
+    transform: translate(8px, -50%);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  }
+  .pn-tip .pn-tip-text {
+    display: block; min-width: 0;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+  .pn-tip::after {
+    content: ""; position: absolute; right: -5px; top: 50%;
+    transform: translateY(-50%);
+    border-width: 5px 0 5px 6px; border-style: solid;
+    border-color: transparent transparent transparent #1F6FB2;
+  }
+  .pn-item:hover .pn-tip,
+  .pn-btn:focus-visible + .pn-tip {
+    opacity: 1; visibility: visible; transform: translate(0, -50%);
+  }
+}
+@media screen and (max-width: 600px) {
+  .prev-next-wrap { right: 14px; gap: 4px; }
+}
+/* 12:23 用户定：气泡要在悬停时提示，桌面任意宽度都显示；
+   仅真正触屏（无 hover）才隐藏，不再按 max-width:600px 隐藏。 */
+@media (hover: none) {
+  .pn-tip { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pn-btn, .pn-tip, .prev-next-wrap { transition: none; }
 }
 
 /* ==== 右上角「全文搜索」浮动图标 + 居中搜索面板 ====
