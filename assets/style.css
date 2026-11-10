@@ -21,6 +21,14 @@
     @top-right { content: none; }
     @bottom-center { content: none; }
 }
+/* 2026-11-10 实证（cover_probe2.py，精确 bbox 判定）：Chrome/Edge 打印对命名页
+   page:cover 与 @page :first 均支持，任一生效即满版。命名页精确控制封面页；
+   :first 兜底（封面是文档第一页，两规则同为 margin:0 不冲突）。 */
+@page :first {
+    margin: 0;
+    @top-right { content: none; }
+    @bottom-center { content: none; }
+}
 html {
     font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', 'SimSun', sans-serif;
     font-size: 11pt;
@@ -52,9 +60,22 @@ body { margin: 0; }
 }
 @media screen {
     body { padding: 5% 10%; }
+    /* 2026-11-10 用户报「刚打开页面封面字体超大，JS 加载后才恢复」：--fw 默认
+       793.7px 在窄屏/手机与实际封面宽度(≈min(80vw,793.7px)，body padding 两侧
+       各 10% + max-width 21cm)不符，COVER_FIX_JS 加载前文字按 793.7px 缩放 =>
+       超大。屏幕下默认改 min(80vw,793.7px)，JS 加载前即正确（仍保留 --fw:793.7px
+       基础默认作 print 用）；print 下 @media print 强制 793.7px。 */
+    .cover-page { --fw: min(80vw, 793.7px); }
 }
 @media print {
-    .cover-page { width: 21cm; max-width: none; }
+    .cover-page {
+        width: 21cm; max-width: none;
+        /* 2026-11-10 满版修复：挂命名页 page:cover（配合上方 @page cover{margin:0}），
+           实证 Chrome/Edge 支持；--fw 强制 793.7px(!important 覆盖 JS 喂的屏幕值)，
+           保证打印文字按 A4 宽缩放，不受屏幕加载时 --fw 影响。 */
+        page: cover;
+        --fw: 793.7px !important;
+    }
 }
 .cover-page .bg-img {
     position: absolute; top: 0; left: 0;
@@ -1194,6 +1215,7 @@ p, li, td, .callout {
   }
   .pn-tip .pn-tip-text {
     display: block; min-width: 0;
+    white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis;
   }
   .pn-tip::after {
