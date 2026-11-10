@@ -34,15 +34,17 @@ body { margin: 0; }
     margin: 0 auto;
     position: relative; overflow: hidden;
     page-break-after: always;
-    container-type: inline-size;
-    /* 2026-11-10 20:0x 用户定【权威】：封面高度机制 = .cover-page 本体的
-       aspect-ratio:210/297（按元素自身宽解析，≈1.4142857，已实证渲染完整），
-       作主机制；@supports not 仅在浏览器【不支持】aspect-ratio 时，用
-       padding-top:141.42% 作降级（padding-top 百分比按包含块=封面内容宽解析，
-       不依赖父高度；封面内容全为 absolute，铺满 padding box，不受 padding
-       挤压）。二者互斥、永不叠加。此前尝试的 height:100%（父=body 无定高，
-       解析为 auto，无效）与 ::before 撑高（子元素高度不改变无实际高度的
-       父盒，且现代浏览器降级不触发，均废弃）。 */
+    /* 2026-11-10 20:3x 用户定【权威】· 浏览器对 CSS 支持不友好修复：
+       封面文字等比缩放【不再依赖 cqw（容器查询单位）】——部分浏览器/WebView
+       不支持 cqw，导致文字不缩放、内容溢出裁切（底部「适用对象」不显示）、
+       封面显示不全（用户三条实测症状同源）。改用 JS 驱动的 CSS 变量 --fw
+       （= 封面实际渲染宽度 px，COVER_FIX_JS 在 load/resize 时按 offsetWidth
+       喂值），全部 cqw 换算为 calc(var(--fw)*k)。--fw 默认 793.7px（A4 宽），
+       保证无 JS 时文字为 A4 尺寸。高度机制：aspect-ratio:210/297 作主机制
+       （按元素自身宽），@supports not 内 padding-top:141.42% 作互斥降级，
+       COVER_FIX_JS 另设 height=max(宽×297/210, overlay 内容高) 作最终兜底
+       （防 aspect-ratio 未生效时高度塌陷 → 背景不全）。 */
+    --fw: 793.7px;
     aspect-ratio: 210 / 297;
 }
 @supports not (aspect-ratio: 210 / 297) {
@@ -63,7 +65,7 @@ body { margin: 0; }
 .cover-page .cover-overlay {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
-    padding: 12.4cqw 10.5cqw;
+    padding: calc(var(--fw) * 0.124) calc(var(--fw) * 0.105);
     background: linear-gradient(180deg,
         rgba(255,255,255,0.88) 0%,
         rgba(255,255,255,0.80) 30%,
@@ -71,59 +73,61 @@ body { margin: 0; }
         rgba(255,255,255,0.60) 80%,
         rgba(255,255,255,0.80) 100%);
 }
-/* 封面文字全部按容器宽度 cqw 等比缩放（沿用《指南》的 container-type: inline-size）：
+/* 封面文字等比缩放：用 JS 喂值的 CSS 变量 --fw（封面实际宽度 px）替代 cqw，
+   兼容不支持容器查询（cqw）的浏览器/WebView（用户 2026-11-10 实测确认）。
    ① clamp 只保留极小的可读下限，避免窄屏被 px 下限钳住而不再缩小；
-   ② padding / margin / 边框 / 阴影同步改 cqw，容器变窄时留白也等比收缩；
+   ② padding / margin / 边框 / 阴影同步 --fw，容器变窄时留白也等比收缩；
    ③ 保留原 px 上限，A4 打印（21cm ≈ 793.7px）时数值与《指南》一致、版面不变。 */
 .cover-page h1 {
     font-family: 'SimHei', 'Microsoft YaHei', 'PingFang SC', sans-serif;
-    font-size: clamp(2px, 5.7cqw, 45px);
+    font-size: clamp(2px, calc(var(--fw) * 0.057), 45px);
     color: #12304A; font-weight: 900;
-    margin: 0 0 1cqw 0; letter-spacing: 0; text-align: center;
-    text-shadow: 0 0.13cqw 0.25cqw rgba(255,255,255,0.9);
+    margin: 0 0 calc(var(--fw) * 0.01) 0; letter-spacing: 0; text-align: center;
+    text-shadow: 0 calc(var(--fw) * 0.0013) calc(var(--fw) * 0.0025) rgba(255,255,255,0.9);
 }
 .cover-page .sub {
-    font-size: clamp(2px, 2.35cqw, 19px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0235), 19px);
     color: #164E8A; text-align: center;
-    font-weight: 700; margin-bottom: 0.76cqw;
-    text-shadow: 0 0.13cqw 0.25cqw rgba(255,255,255,0.9);
+    font-weight: 700; margin-bottom: calc(var(--fw) * 0.0076);
+    text-shadow: 0 calc(var(--fw) * 0.0013) calc(var(--fw) * 0.0025) rgba(255,255,255,0.9);
 }
 .cover-page .sub2 {
-    font-size: clamp(2px, 1.85cqw, 15px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0185), 15px);
     color: #2E4A5F; text-align: center;
-    margin-bottom: 3.02cqw;
+    margin-bottom: calc(var(--fw) * 0.0302);
 }
 .cover-page .cover-callout {
-    border-left: 0.5cqw solid #164E8A;
+    border-left: calc(var(--fw) * 0.005) solid #164E8A;
     background: rgba(255,255,255,0.92);
-    padding: 1.76cqw 2.27cqw;
-    box-shadow: 0 0.25cqw 1cqw rgba(0,0,0,0.08);
-    border-radius: 0.5cqw;
+    padding: calc(var(--fw) * 0.0176) calc(var(--fw) * 0.0227);
+    box-shadow: 0 calc(var(--fw) * 0.0025) calc(var(--fw) * 0.01) rgba(0,0,0,0.08);
+    border-radius: calc(var(--fw) * 0.005);
 }
 .cover-page .cover-callout-title {
-    font-size: clamp(2px, 2.18cqw, 17px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0218), 17px);
     color: #12304A; font-weight: 700;
-    display: block; margin-bottom: 0.76cqw;
+    display: block; margin-bottom: calc(var(--fw) * 0.0076);
 }
 .cover-page .cover-callout-body {
-    font-size: clamp(2px, 1.85cqw, 15px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0185), 15px);
     color: #2E3E48; line-height: 2.0;
-    padding-left: 0.5cqw;
+    padding-left: calc(var(--fw) * 0.005);
     overflow-wrap: anywhere;
 }
 .cover-page .cover-meta-wrap {
     text-align: center;
-    font-size: clamp(2px, 1.76cqw, 14px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0176), 14px);
     color: #2E4A5F; line-height: 1.9;
 }
 .cover-page .cover-meta-box {
     background: rgba(255,255,255,0.85);
-    padding: 1.26cqw 1.76cqw; border-radius: 0.5cqw;
+    padding: calc(var(--fw) * 0.0126) calc(var(--fw) * 0.0176);
+    border-radius: calc(var(--fw) * 0.005);
     display: inline-block;
     max-width: 100%; overflow-wrap: anywhere;
 }
 .cover-page .cover-note {
-    font-size: clamp(2px, 1.34cqw, 11px);
+    font-size: clamp(2px, calc(var(--fw) * 0.0134), 11px);
     color: #4A5A6A;
 }
 /* 通用图片约束：任何插图最大宽度 100%（手机上不会溢出） */
