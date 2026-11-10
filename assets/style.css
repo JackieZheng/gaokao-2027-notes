@@ -35,21 +35,18 @@ body { margin: 0; }
     position: relative; overflow: hidden;
     page-break-after: always;
     container-type: inline-size;
-    /* 2026-11-10 18:5x 用户定（封面显示不全复现）：高度主机制恢复 aspect-ratio，
-       它按【元素自身宽度】解析（210/297≈1.4142857），不受包含块宽度影响。
-       此前 ::before{padding-bottom:141.42%} 按【包含块宽度】解析：当 body
-       内容宽（padding:5% 10%）大于封面 max-width:21cm 时，算出的高度偏高，
-       使 .bg-img object-fit:cover 被拉高裁切 → 表现为「封面显示不全」。
-       恢复 aspect-ratio 修正；旧浏览器由下方 @supports not 用 padding-bottom 兜底。 */
+    /* 2026-11-10 20:0x 用户定【权威】：封面高度机制 = .cover-page 本体的
+       aspect-ratio:210/297（按元素自身宽解析，≈1.4142857，已实证渲染完整），
+       作主机制；@supports not 仅在浏览器【不支持】aspect-ratio 时，用
+       padding-top:141.42% 作降级（padding-top 百分比按包含块=封面内容宽解析，
+       不依赖父高度；封面内容全为 absolute，铺满 padding box，不受 padding
+       挤压）。二者互斥、永不叠加。此前尝试的 height:100%（父=body 无定高，
+       解析为 auto，无效）与 ::before 撑高（子元素高度不改变无实际高度的
+       父盒，且现代浏览器降级不触发，均废弃）。 */
     aspect-ratio: 210 / 297;
 }
-/* 旧浏览器兜底：仅在不支持 aspect-ratio 时才用 ::before padding-bottom 占位，
-   避免容器高度塌陷为 0（背景图消失）。现代浏览器由 aspect-ratio 定高。 */
 @supports not (aspect-ratio: 210 / 297) {
-    .cover-page::before {
-        content: ""; display: block; width: 100%;
-        padding-bottom: 141.42%;
-    }
+    .cover-page { padding-top: 141.42%; }
 }
 @media screen {
     body { padding: 5% 10%; }
