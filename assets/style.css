@@ -49,10 +49,19 @@ body { margin: 0; }
 @media screen {
     body { padding: 5% 10%; }
     .cover-frame {
-        width: 100%; max-width: 21cm; margin: 0 auto;
+         
+        width: min(100vw * 0.8, 21cm);
+        height: calc(min(100vw * 0.8, 21cm) * 297 / 210);
+        margin: 0 auto;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity .22s ease;
     }
+    .cover-frame.ready { opacity: 1; }
     .cover-page {
         --fw: 793.7px;
+         
+        --cs: calc(min(100vw * 0.8, 21cm) / 793.7px);
         width: 793.7px; max-width: none; margin: 0;
         transform: scale(var(--cs, 1));
         transform-origin: top left;
@@ -1075,6 +1084,7 @@ p, li, td, .callout {
   .feedback-top, .feedback-top.top-hidden { transition: none; }
   .feedback-top:hover, .feedback-top:focus-visible,
   .feedback-top.top-hidden { transform: none; }
+  .cover-frame { transition: none; }    
 }
 
  
