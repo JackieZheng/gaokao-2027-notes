@@ -48,15 +48,23 @@ body { margin: 0; }
 }
 @media screen {
     body { padding: 5% 10%; }
-     
-    .cover-page { --fw: min(80vw, 793.7px); }
+    .cover-frame {
+        width: 100%; max-width: 21cm; margin: 0 auto;
+    }
+    .cover-page {
+        --fw: 793.7px;
+        width: 793.7px; max-width: none; margin: 0;
+        transform: scale(var(--cs, 1));
+        transform-origin: top left;
+    }
 }
 @media print {
+    .cover-frame { width: auto; max-width: none; height: auto !important; }
     .cover-page {
         width: 100%; max-width: none;    
         height: 23.8cm !important;        
         page: cover;
-         
+        transform: none !important;
         --fw: 582px !important;
     }
 }
