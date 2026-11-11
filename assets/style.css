@@ -16,18 +16,12 @@
         color: #6B7280;
     }
 }
+ 
 @page cover {
-    margin: 0;
-    @top-right { content: none; }
-    @bottom-center { content: none; }
+    margin: 2.4cm 2.8cm 3.5cm;
 }
-/* 2026-11-10 实证（cover_probe2.py，精确 bbox 判定）：Chrome/Edge 打印对命名页
-   page:cover 与 @page :first 均支持，任一生效即满版。命名页精确控制封面页；
-   :first 兜底（封面是文档第一页，两规则同为 margin:0 不冲突）。 */
 @page :first {
-    margin: 0;
-    @top-right { content: none; }
-    @bottom-center { content: none; }
+    margin: 2.4cm 2.8cm 3.5cm;
 }
 html {
     font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', 'SimSun', sans-serif;
@@ -42,16 +36,7 @@ body { margin: 0; }
     margin: 0 auto;
     position: relative; overflow: hidden;
     page-break-after: always;
-    /* 2026-11-10 20:3x 用户定【权威】· 浏览器对 CSS 支持不友好修复：
-       封面文字等比缩放【不再依赖 cqw（容器查询单位）】——部分浏览器/WebView
-       不支持 cqw，导致文字不缩放、内容溢出裁切（底部「适用对象」不显示）、
-       封面显示不全（用户三条实测症状同源）。改用 JS 驱动的 CSS 变量 --fw
-       （= 封面实际渲染宽度 px，COVER_FIX_JS 在 load/resize 时按 offsetWidth
-       喂值），全部 cqw 换算为 calc(var(--fw)*k)。--fw 默认 793.7px（A4 宽），
-       保证无 JS 时文字为 A4 尺寸。高度机制：aspect-ratio:210/297 作主机制
-       （按元素自身宽），@supports not 内 padding-top:141.42% 作互斥降级，
-       COVER_FIX_JS 另设 height=max(宽×297/210, overlay 内容高) 作最终兜底
-       （防 aspect-ratio 未生效时高度塌陷 → 背景不全）。 */
+     
     --fw: 793.7px;
     aspect-ratio: 210 / 297;
 }
@@ -60,21 +45,16 @@ body { margin: 0; }
 }
 @media screen {
     body { padding: 5% 10%; }
-    /* 2026-11-10 用户报「刚打开页面封面字体超大，JS 加载后才恢复」：--fw 默认
-       793.7px 在窄屏/手机与实际封面宽度(≈min(80vw,793.7px)，body padding 两侧
-       各 10% + max-width 21cm)不符，COVER_FIX_JS 加载前文字按 793.7px 缩放 =>
-       超大。屏幕下默认改 min(80vw,793.7px)，JS 加载前即正确（仍保留 --fw:793.7px
-       基础默认作 print 用）；print 下 @media print 强制 793.7px。 */
+     
     .cover-page { --fw: min(80vw, 793.7px); }
 }
 @media print {
     .cover-page {
-        width: 21cm; max-width: none;
-        /* 2026-11-10 满版修复：挂命名页 page:cover（配合上方 @page cover{margin:0}），
-           实证 Chrome/Edge 支持；--fw 强制 793.7px(!important 覆盖 JS 喂的屏幕值)，
-           保证打印文字按 A4 宽缩放，不受屏幕加载时 --fw 影响。 */
+        width: 100%; max-width: none;    
+        height: 23.8cm !important;        
         page: cover;
-        --fw: 793.7px !important;
+         
+        --fw: 582px !important;
     }
 }
 .cover-page .bg-img {
@@ -94,11 +74,7 @@ body { margin: 0; }
         rgba(255,255,255,0.60) 80%,
         rgba(255,255,255,0.80) 100%);
 }
-/* 封面文字等比缩放：用 JS 喂值的 CSS 变量 --fw（封面实际宽度 px）替代 cqw，
-   兼容不支持容器查询（cqw）的浏览器/WebView（用户 2026-11-10 实测确认）。
-   ① clamp 只保留极小的可读下限，避免窄屏被 px 下限钳住而不再缩小；
-   ② padding / margin / 边框 / 阴影同步 --fw，容器变窄时留白也等比收缩；
-   ③ 保留原 px 上限，A4 打印（21cm ≈ 793.7px）时数值与《指南》一致、版面不变。 */
+ 
 .cover-page h1 {
     font-family: 'SimHei', 'Microsoft YaHei', 'PingFang SC', sans-serif;
     font-size: clamp(2px, calc(var(--fw) * 0.057), 45px);
@@ -151,7 +127,7 @@ body { margin: 0; }
     font-size: clamp(2px, calc(var(--fw) * 0.0134), 11px);
     color: #4A5A6A;
 }
-/* 通用图片约束：任何插图最大宽度 100%（手机上不会溢出） */
+ 
 img { max-width: 100%; height: auto; }
 img.bg-img { max-width: 100%; height: 100%; }
 h1 {
@@ -176,7 +152,7 @@ h3 {
 p { margin: 4pt 0; }
 ul, ol { margin: 4pt 0 6pt 20pt; padding: 0; }
 li { margin: 2pt 0; }
-/* 表格容器：手机窄屏下可横向滚动，避免撑破容器 */
+ 
 .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -223,7 +199,7 @@ figcaption {
 .toc-list li.toc-4 { color: #4A5A6A; font-size: 9.5pt; }
 .toc-list a { color: inherit; text-decoration: none; }
 .toc-list a:hover { text-decoration: underline; color: #0d47a1; }
-/* 目录章节：各级可折叠树；标题行右侧放「展开/折叠」合并按钮；圆点分级参考指南样式 */
+ 
 .toc-head { display: flex; align-items: center; justify-content: space-between; }
 .toc-toggle-btn { font-size: 10pt; padding: 2pt 10pt; border: 1px solid #C8D0D6;
   background: #F4F8FC; color: #1F4E79; border-radius: 4px; cursor: pointer; }
@@ -249,9 +225,7 @@ figcaption {
 a { color: #1F6FB2; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ==== 关键词荧光下划线 ====
-   姊妹篇区分：《指南》= 暖黄荧光 + 1.5px 金色实线；本书 = 亮青蓝荧光 + 2px 亮蓝实线。
-   同为「高亮荧光笔 + 实线下划线」，亮度接近、清晰易识别，但冷色系与暖黄一眼可分。 */
+ 
 mark.kw {
   background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
   color: #33414A;
@@ -259,31 +233,23 @@ mark.kw {
   border-bottom: 2px solid #1F6FB2;
   border-radius: 2px;
   font-weight: 600;
-  /* Chrome 打印默认丢背景色，显式保留荧光笔效果（实线下划线本就会打印） */
+   
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-/* 命中《高报词条》的词条：鼠标变问号，悬停弹释义 */
+ 
 mark.kw[data-term] { cursor: help; }
 
-/* ==== 院校 / 专业名称高亮 ====
-   2026-11 用户新口径：与词条（mark.kw）分开处理——院校/专业名去掉荧光背景与加粗，
-   只保留 2px 亮蓝实线下划线；词条仍保持「荧光 + 下划线 + 加粗」不变。
-   独立类名 ent 只做统计与单独调整留口，不污染重点词计数与词条悬停逻辑。
-   注释里不写完整标签字面串，避免内联后被计数误抓。 */
+ 
 mark.ent {
-  background: none;                 /* 去荧光：覆盖浏览器默认黄底 */
-  color: inherit;                   /* 保持正文文字颜色，不加粗 */
-  border-bottom: 2px solid #1F6FB2; /* 只保留亮蓝实线下划线 */
+  background: none;                  
+  color: inherit;                    
+  border-bottom: 2px solid #1F6FB2;  
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
-/* ==== 封面 / 编撰说明的统计数字重点 ====
-   与正文关键词同一套「荧光笔 + 亮蓝实线」视觉，但用独立类名 stat：
-   verify 以 kw 类的标签前缀统计正文词条标注数，封面/前言的 stat 类标注
-   不会被计入，避免污染「重点荧光标注」的清单一致性。
-   注意：本注释不要写出完整标签字面串，否则内联进 HTML 后会被计数误抓。 */
+ 
 mark.stat {
   background: linear-gradient(180deg, rgba(120,216,240,0.0) 0%, rgba(120,216,240,0.0) 50%, rgba(120,216,240,0.70) 50%, rgba(120,216,240,0.70) 95%, rgba(120,216,240,0.0) 95%);
   color: #12304A;
@@ -295,7 +261,7 @@ mark.stat {
   print-color-adjust: exact;
 }
 
-/* ==== 词条悬停提示气泡（参考 disk-analyzer 富信息 tooltip） ==== */
+ 
 .gtip {
   position: fixed; z-index: 9999; max-width: 320px; padding: 10px 12px;
   background: #1f2933; color: #e8eef3; border: 1px solid #43607c; border-radius: 8px;
@@ -310,17 +276,13 @@ mark.stat {
 .gtip .gt-row > b { font-weight: 600; color: #e6eef5; }
 .gtip .gt-d { margin-top: 6px; color: #cdd9e5; }
 
-/* ==== 文末致谢（与正文视觉区隔） ==== */
-/* ==== 书末「特别感谢」独立页（参考姊妹篇《指南》「特别感谢」版式）====
-   顺序固定：本页 → 致谢页（含两张卡片与贴底许可协议）。
-   ★ 勿把本页移到「致谢」之后：会把卡片推到下一页，.license-wrap 的大
-     margin 是按「致谢在页顶」实测校准的，动了协议就不再贴底。 */
+ 
+ 
 .special-thanks { page-break-before: always; }
 .special-thanks h1 { text-align: center; }
 .thanks-lead, .thanks-tail {
   text-align: center;
-  /* 全局 p 规则带 text-align-last:left，单行/末行会被强制左对齐；
-     必须同时覆盖 text-align-last，否则这里的 center 不生效。 */
+   
   text-align-last: center;
   text-indent: 0;
   font-size: 12pt;
@@ -336,22 +298,19 @@ mark.stat {
   font-size: 14pt;
   font-weight: 700;
   line-height: 2.0;
-  /* 省份与姓名之间用全角空格对齐：两字省名中间补一个全角空格，
-     与「黑龙江」三字等宽；汉字与全角空格等宽，打印态不会错位。 */
+   
   white-space: pre-wrap;
 }
 .thanks-tail { margin: 26pt 0 0; font-size: 11.5pt; }
-/* emoji 与句号整体不拆行，避免窄屏/打印时被挤成孤零零的一行 */
+ 
 .thanks-emoji { white-space: nowrap; }
 @media print {
   .special-thanks { padding-top: 24pt; }
   .special-thanks h1 { margin-top: 4pt; }
   .thanks-lead { margin-top: 16pt; }
   .thanks-list { margin: 22pt auto; }
-  /* 左右各外扩 14pt：居中文字的中心点不变，但多出 28pt 行宽，
-     保证结语与结尾 emoji 同行（独立快速预览的内容区比正式打印窄，
-     不扩会让 emoji 被挤到孤零零的第二行）。页边距 28mm，安全。 */
-  .thanks-tail { margin: 22pt -14pt 0; }
+   
+  .thanks-tail { margin: 22pt 0 0; }
 }
 
 .end-wrap {
@@ -384,8 +343,7 @@ mark.stat {
   letter-spacing: 1pt;
 }
 
-/* ==== 文末赞赏码（正文末尾，屏幕与 A4 打印均可见） ====
-   卡片外观统一由 .bm-card 提供（见「尾页」段），此处只留块间距与内部排版。 */
+ 
 .sponsor-wrap { margin: 30pt auto 0; }
 .sponsor-wrap .sponsor-lead {
   font-size: 10.5pt;
@@ -398,7 +356,7 @@ mark.stat {
   width: 58mm;
   max-width: 70%;
   height: auto;
-  /* 与 HTML width/height 属性一起保证 1:1 占位：图片解码失败也不会塌陷成零高度 */
+   
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   border: 1px solid #C6D6E8;
@@ -411,12 +369,12 @@ mark.stat {
   letter-spacing: 1pt;
 }
 
-/* ==== 文末许可协议（与《指南》同款 CC BY-NC 4.0；小字紧随赞赏码，屏幕与打印同源） ==== */
+ 
 .license-wrap {
   margin: 16pt auto 0;
   padding-bottom: 10pt;
   text-align: center;
-  /* 与赞赏码绑在同一打印页，避免单独溢出成空白尾页 */
+   
   page-break-inside: avoid;
   page-break-before: avoid;
 }
@@ -438,7 +396,7 @@ mark.stat {
   border-bottom: 1px dotted #164E8A;
 }
 
-/* ==== 网页版左侧浮动书签（仅屏幕显示，打印时隐藏） ==== */
+ 
 @media screen {
   .bookmarks-toggle {
     position: fixed; left: 0; top: 110px;
@@ -486,11 +444,11 @@ mark.stat {
   .bookmarks-panel::-webkit-scrollbar { width: 6px; }
   .bookmarks-panel::-webkit-scrollbar-thumb { background: #C8D0D6; border-radius: 3px; }
   .bookmarks-panel::-webkit-scrollbar-track { background: transparent; }
-  /* 展开时给正文右侧留出空间 */
+   
   body.with-bookmarks { padding-left: 300px !important; }
 }
 
-/* ==== 网页版末尾：扫码下载区块（仅屏幕显示，打印/PDF 时隐藏） ==== */
+ 
 .qr-download-wrap {
   margin: 60pt 0 40pt;
   padding: 32pt 24pt 28pt;
@@ -538,7 +496,7 @@ mark.stat {
   letter-spacing: 0.3pt;
 }
 
-/* ==== 网页版末尾：志愿填报指南小程序码区块（屏幕与打印/PDF 均显示） ==== */
+ 
 .qr-mini-wrap {
   margin: 0 0 40pt;
   padding: 28pt 24pt 26pt;
@@ -576,7 +534,7 @@ mark.stat {
   width: 100%;
   height: auto;
   border-radius: 22px;
-  mix-blend-mode: multiply; /* 白底溶入卡片背景 */
+  mix-blend-mode: multiply;  
 }
 .qr-mini-wrap .qr-hint {
   font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
@@ -594,8 +552,7 @@ mark.stat {
   .prev-next-wrap, .pn-tip,
   .search-progress { display: none !important; }
   .feedback-top { display: none !important; }
-  /* 搜索命中的临时高亮只属于屏幕交互，打印 / PDF 必须原样还原，
-     否则用户搜完立刻打印会把黄底与左边框带进书里。 */
+   
   .search-hit {
     background: none !important; border-left: none !important;
     padding-left: 0 !important;
@@ -605,7 +562,7 @@ mark.stat {
     font-weight: inherit !important; padding: 0 !important;
     box-shadow: none !important;
   }
-  /* 小程序码在 PDF 中保留（纸质用户也能扫码用小程序阅读），并强制渲染卡片底色与圆角阴影 */
+   
   .qr-mini-wrap {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
@@ -619,7 +576,7 @@ mark.stat {
 }
 
 
-/* ==== 指北专用：篇章扉页、篇名来源、脚注释义（沿用指南字号与留白） ==== */
+ 
 .part-head .part-kicker {
     font-family: 'KaiTi','STKaiti','SimSun',serif;
     font-size: 11pt; color: #1F6FB2; letter-spacing: 2pt;
@@ -630,9 +587,9 @@ mark.stat {
     line-height: 1.9; margin: 0 0 18pt;
 }
 article.note { page-break-before: always; }
-/* 分组标题与组内第一篇同页，避免只印一个分组名的空页 */
+ 
 article.note.first-in-group { page-break-before: auto; }
-/* 每篇笔记的篇名居中，正文仍左对齐 */
+ 
 article.note > h1 { margin-top: 0; text-align: center; }
 .note-src {
     font-size: 9pt; color: #6B7280; margin: 0 0 10pt;
@@ -655,28 +612,29 @@ article.note > h1 { margin-top: 0; text-align: center; }
 .fn-defs p { margin: 3pt 0; text-indent: 0; }
 .fn-defs .fn-key { color: #1F4E79; font-weight: 700; }
 .group-head { page-break-before: always; }
-/* 专业篇：门类(level2) → 专业类(level3)；首条专业类与门类标题同页，避免空页 */
+ 
+.group-head.first-group { page-break-before: auto; }
+ 
 .subgroup-head { margin-top: 14pt; color: #1F6FB2; }
 .subgroup-head.first-subgroup { page-break-before: auto; margin-top: 12pt; }
 @media print {
   .note-src { color: #6B7280; }
 }
 
-/* ==== 篇数括注：挂在标题后，不写独立说明段 ==== */
+ 
 .part-count, .group-count {
     font-size: 10.5pt; font-weight: 400; color: #6B7280;
     letter-spacing: 0; margin-left: 4pt;
 }
 .group-count { font-size: 10pt; }
 
-/* ==== 浮动导航：逐层级折叠 / 展开（仅屏幕；打印时面板整体隐藏） ==== */
+ 
 @media screen {
   .bookmarks-panel .bm-toggle-btn { font-size: 11px; padding: 3px 8px;
     border: 1px solid #C6D8E8; border-radius: 4px;
     background: #F1F5FA; color: #1F4E79; cursor: pointer; }
   .bookmarks-panel .bm-toggle-btn:hover { background: #E1ECF7; }
-  /* 赞赏快捷入口：浮动导航在文件开头就解析完，绕开 14 MB 长文档末尾的解析延迟；
-     位于导航树最末（「致谢」之后），与目录列表拉开间距并加分隔线 */
+   
   .bookmarks-panel .bm-sponsor {
     display: block;
     margin: 14px 0 0;
@@ -701,7 +659,7 @@ article.note > h1 { margin-top: 0; text-align: center; }
   .bookmarks-panel li.toc-2, .bookmarks-panel li.toc-3, .bookmarks-panel li.toc-4 { margin-left: 0; }
   .bookmarks-panel li.toc-4 { color: #6B7280; font-size: 11px; }
   .bookmarks-panel li { margin: 2px 0; }
-  /* 折叠箭头与标题上下居中：行内两块等高，箭头盒撑满行高后内部三角垂直居中 */
+   
   .bm-row { display: flex; align-items: stretch; gap: 2px; border-radius: 4px; }
   .bm-row:hover { background: #EEF4FB; }
   .bm-caret, .bm-blank {
@@ -717,10 +675,7 @@ article.note > h1 { margin-top: 0; text-align: center; }
   .bookmarks-panel a.current { background: #DCE9F6; color: #12304A; font-weight: 700; }
 }
 
-/* ==== 篇尾结束符：左右实线自动铺满 + 雪人版本标记（网页 / PDF 统一） ====
-   雪人数量由 build_notes.py 的 SNOWMAN_COUNT 控制（第一版 1 个，以后每版递增）；
-   flex: 1 让左右实线吃掉剩余宽度，网页连续长页与 A4 打印页都横向铺满；
-   结束符放在 <article> 内部，打印时随本篇最后一页，不会单独成页。 */
+ 
 .note-end {
   display: flex;
   align-items: center;
@@ -742,16 +697,13 @@ article.note > h1 { margin-top: 0; text-align: center; }
   letter-spacing: 0.18em;
   white-space: nowrap;
 }
-/* 网页版连续长页：篇与篇之间留白（不再用单调的 border-bottom） */
+ 
 @media screen {
   article.note { margin-bottom: 1.4em; }
   article.note > :last-child { margin-bottom: 0; }
   article.note:last-of-type { margin-bottom: 0; }
 }
-/* 打印版：同一枚结束符。
-   Chrome 在页底放不下独立块时，会在页尾和下一页各画一份（雪人重复、多出空白装饰页）；
-   把正文最后一块与结束符绑定，放不下时整组一起换页 —— 雪人只画一次，
-   换页后那一页仍带着正文，不会出现「整页只剩一枚雪人」的留白页。 */
+ 
 @media print {
   .note-end { margin: 6pt 0 0; gap: 10px; }
   .note-end .note-end-snow { font-size: 10pt; }
@@ -763,9 +715,7 @@ article.note > h1 { margin-top: 0; text-align: center; }
   .note-end { break-before: avoid-page; page-break-before: avoid; }
 }
 
-/* ==== 正文两端对齐（中文书页排版） ====
-   段落、列表项、表格单元格、提示框一律两端对齐；末行保持左对齐，
-   避免短行 / 单行被拉出稀疏字距。标题、封面、目录、导航、致谢仍按各自原有对齐。 */
+ 
 p, li, td, .callout {
     text-align: justify;
     text-justify: inter-ideograph;
@@ -773,14 +723,7 @@ p, li, td, .callout {
 }
 .toc-list li, .bookmarks-panel li { text-align: left; }
 
-/* ==== 屏幕渲染隔离（解决全量加载后交互卡顿）====
-   全量注入后正文约 8.5 万个 DOM 节点、页面总高约 217 万 px。任何一次
-   面板显隐 / 宽度变化 / 内容注入都会触发整棵布局树重算（实测 1~2 秒）。
-   content-visibility:auto 让屏幕外的笔记跳过布局与绘制，把重算范围
-   收敛到视口附近（实测降到 10ms 级）。contain-intrinsic-size 的 3150px
-   是全篇平均高度（实测估出的总高与真实总高误差约 1%）；懒加载版会在
-   片段注入后用 JS 实测真实高度覆盖此值，避免滚动条与锚点失真。
-   ★ 打印态必须强制全部渲染，否则 PDF 只剩占位高度 —— 切勿删除下一段。 */
+ 
 @media screen {
   article.note { content-visibility: auto; contain-intrinsic-size: auto 3150px; }
 }
@@ -792,14 +735,9 @@ p, li, td, .callout {
   }
 }
 
-/* ==== 尾页：线上版二维码卡片（上）→ 赞赏码卡片（下）→ 许可协议贴底 ====
-   两块用同一个 .bm-card：同宽、同圆角边框、同深蓝顶条、同内边距，让原本
-   散落的两组内容各自成卡、整页重心居中。二维码仍用内联 SVG（矢量、无
-   base64），保持「图左文右」横向紧凑（比竖排矮约 80pt），保证尾页仍是一页。
-   ★ 不要改用整页容器 + absolute / flex auto-margin / min-height：Chrome 打印
-     对跨页容器内的这些定位不可靠，实测会把尾页撕成两页、协议跑到页面中部。 */
+ 
 .bm-card {
-  /* 顶条用边框而非背景色：Chrome 打印不保证输出背景，边框一定可见 */
+   
   width: 124mm;
   max-width: 100%;
   box-sizing: border-box;
@@ -813,9 +751,7 @@ p, li, td, .callout {
   text-align: center;
   page-break-inside: avoid;
 }
-/* 流式卡片内容：默认图左文右；容器变窄时 .online-text 整块换行到二维码
-   下方（上下布局），二维码由 justify-content:center 自动居中。判断阈值由
-   .online-text 的 flex-basis/min-width 决定，不需要 JS 或容器查询。 */
+ 
 .online-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -837,8 +773,7 @@ p, li, td, .callout {
   box-sizing: content-box;
 }
 .online-wrap .online-qr-box svg { display: block; width: 100%; height: 100%; }
-/* 横向时占据二维码右侧剩余宽度；一旦「二维码 + 间距 + 200pt」放不下，
-   整块自动换到下一行。min() 保证窄屏下文字块不溢出卡片。 */
+ 
 .online-wrap .online-text {
   flex: 1 1 200pt;
   min-width: min(200pt, 100%);
@@ -849,8 +784,7 @@ p, li, td, .callout {
 }
 .online-wrap .online-url {
   font-size: 8.5pt; margin-top: 4pt;
-  /* 卡片变窄（上下布局）时允许网址在任意字符处折行，绝不溢出卡片边框；
-     宽屏 / 打印横向布局下文字区足够，网址仍自然保持一行。 */
+   
   overflow-wrap: anywhere;
 }
 .online-wrap .online-url a {
@@ -859,51 +793,58 @@ p, li, td, .callout {
 .online-wrap .online-note {
   font-size: 8.5pt; color: #6B7280; margin-top: 3pt; letter-spacing: .5pt;
 }
-/* 打印态：保持纯流式。★ 三个 margin 是联动的：增大上方两段留白，必须等量
-   减小 .license-wrap 的 margin-top，否则协议会被推到下一页 / 偏离贴底位置。
-   实测基准（正式 PDF，pt）：署名末 225.6 → 卡片1 244.4（留白 18.8），
-   卡片1底 320.4 → 卡片2 329.2（9.6），卡片2底 468.0 → 协议标题 652.9（185.1），
-   即「上挤下空」。用户要求拉开前两段，故把下方留白匀 65.6pt 给上方：
-   署名→卡片1 ≈60pt、卡片间 ≈34pt、卡片2→协议 ≈119pt，卡片组重心落在页面中
-   部 y≈422（页高 841.9 的中线 421）。换算：ΔCSS = ΔPDF ÷ 0.733（Chrome 打印
-   正文整体按 内容区宽/页宽=154/210≈0.733 缩放；快速尾页预览没有这个缩放，
-   量出的 y 会偏大约 1.36 倍，切勿拿来直接调打印 margin）。
-   ★ 大 margin 是唯一稳定方案，勿改回容器定位 / min-height。 */
+ 
 @media print {
-  .end-wrap { margin-top: 10pt; padding-top: 6pt; }
+  .end-wrap { margin-top: 8pt; padding-top: 6pt; }
   .bm-card { background: #fff; padding: 10pt 16pt 9pt; }
-  .online-wrap { margin-top: 68pt; gap: 12pt 14pt; }   /* +56pt CSS ≈ +41pt PDF */
+  .online-wrap { margin-top: 30pt; gap: 12pt 14pt; }
   .online-qr-box { flex-basis: 22mm; width: 22mm; height: 22mm; }
-  .sponsor-wrap { margin-top: 45pt; }                   /* +33pt CSS ≈ +24pt PDF */
+  .sponsor-wrap { margin-top: 20pt; }
   .sponsor-wrap .sponsor-img { width: 42mm; }
   .sponsor-wrap .sponsor-note { margin-top: 4pt; }
-  /* 协议仍贴最后一页下部：249pt − (56+33)pt = 160pt，保持协议末行 y≈686。
-     若以后再调上方间距，这里必须同步等量反向调整并重新用正式 PDF 实测。 */
-  .license-wrap { margin-top: 160pt; }
-  .license-wrap .license-line { line-height: 1.5; }
-  /* 尾页四块总高已小于 A4 内容区；解除 avoid 链式约束，否则 Chrome 会
-     保守地把「赞赏码 + 许可协议」整组推到下一页（实测会多出一页）。
-     全局规则仍保留 page-break-before:avoid 供屏幕/其它打印场景使用。 */
+   
+  .license-wrap { margin-top: 36pt; padding-bottom: 0; }
+  .license-wrap .license-line { line-height: 1.4; }
+   
   .end-wrap, .online-wrap, .sponsor-wrap, .license-wrap { page-break-inside: auto; }
   .license-wrap { page-break-before: auto; }
+   
+   
+  .print-zoom { font-size: 8.08pt; width: 113mm; margin: 0; }
+  .print-zoom h1 { font-size: 11.73pt; }
+  .print-zoom h2 { font-size: 9.89pt; }
+  .print-zoom h3 { font-size: 8.80pt; }
+  .print-zoom h4, .print-zoom h5, .print-zoom h6 { font-size: 8.08pt; }
+  .print-zoom p, .print-zoom li, .print-zoom blockquote,
+  .print-zoom dd, .print-zoom dt, .print-zoom .callout { font-size: 8.08pt; overflow-wrap: anywhere; word-break: break-word; }
+  .print-zoom table { font-size: 7.70pt; }
+  .print-zoom td, .print-zoom th { font-size: 7.70pt; }
+  .print-zoom figcaption { font-size: 6.97pt; }
+  .print-zoom .note-src { font-size: 6.60pt; }
+  .print-zoom .fn-ref { font-size: 5.86pt; }
+  .print-zoom .fn-defs { font-size: 6.97pt; line-height: 1.28; }
+  .print-zoom .fn-defs h3 { font-size: 7.70pt; }
+  .print-zoom .fn-defs p { font-size: 6.97pt; }
+  .print-zoom .part-kicker { font-size: 8.06pt; }
+  .print-zoom .part-desc { font-size: 7.70pt; line-height: 1.39; }
+  .print-zoom .part-count, .print-zoom .group-count { font-size: 7.33pt; }
+  .print-zoom .toc-list li.toc-1 { font-size: 8.43pt; }
+  .print-zoom .toc-list li.toc-2 { font-size: 7.70pt; }
+  .print-zoom .toc-list li.toc-3 { font-size: 7.33pt; }
+  .print-zoom .toc-list li.toc-4 { font-size: 6.97pt; }
+  .print-zoom .toc-toggle-btn { font-size: 7.33pt; }
+  .print-zoom code, .print-zoom pre, .print-zoom kbd { font-size: 7.40pt; }
+  .print-zoom .note-end-snow { font-size: 7.33pt; }
 }
 
-/* ==== 右下角「问题反馈」浮动按钮（仅屏幕显示，PDF 隐藏）====
-   HTML 由 build_notes.py 的 FEEDBACK_FAB_HTML 生成，单页版与 C 版共用。
-   默认隐藏是为了让 <a> 在非屏幕媒体下不会以行内元素混进正文流；屏幕媒体
-   下才以固定胶囊出现。左侧浮动书签在 left:0 / top:110px / z-index:1000，
-   与本按钮（right/bottom / z-index:1001）互不遮挡。
-   悬停或键盘聚焦时 .feedback-fab-label 滑出「问题反馈」四字；title 与
-   aria-label 另作兜底，读屏与浏览器原生 tooltip 都能读到。 */
+ 
 .feedback-fab-wrap { display: none; }
 @media screen {
   .feedback-fab-wrap {
     position: fixed; right: 22px; bottom: 22px; z-index: 1001;
     display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
   }
-  /* 2026-11-09 用户定：回顶部按钮在问题反馈图标「上边」，同色同尺寸圆钮。
-     10:41 追加：显隐改「渐隐」动画（opacity + 轻微下移缩放）；保留占位不撤掉
-     display，避免滚动时右下角反馈按钮位置跳动。visibility 延后到淡出结束再切。 */
+   
   .feedback-top {
     display: block; width: 46px; height: 46px; padding: 0; border: 0;
     border-radius: 50%; background: #1F6FB2; cursor: pointer;
@@ -920,8 +861,7 @@ p, li, td, .callout {
   }
   .feedback-top:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
   .feedback-top-icon { display: block; width: 46px; height: 46px; }
-  /* 用户 09:25 定：页面已在最顶部时隐藏回顶部按钮，同时连带隐藏它的短气泡。
-     10:41 改为渐隐：不用 display:none，靠 opacity/visibility/pointer-events。 */
+   
   .feedback-top.top-hidden {
     opacity: 0; visibility: hidden; pointer-events: none;
     transform: translateY(8px) scale(.92);
@@ -949,19 +889,14 @@ p, li, td, .callout {
     font-size: 13px; font-weight: 600; letter-spacing: .5px;
     transition: max-width .25s ease, opacity .2s ease, padding .25s ease;
   }
-  /* 11:27 统一：反馈按钮恒 46px 圆钮，所有设备 hover 都不展开文字，
-     避免与左侧常显小气泡重叠（原仅触屏 / 窄屏禁用）。 */
+   
   .feedback-fab:hover .feedback-fab-label,
   .feedback-fab:focus-visible .feedback-fab-label {
     max-width: 0; opacity: 0; padding: 0;
   }
-  /* 2026-11-09 09:19 用户定稿：PC 端反馈长气泡保持深蓝实底（不恢复白底），
-     文案分两段——上段问候语、下段微信提示，中间细分隔线。触发仍两套独立，
-     旧版挂 wrap:hover 会让悬停回顶部误弹反馈文案。 */
+   
   .feedback-fab-tip {
-    /* 2026-11-09 09:39 用户截图勘误：wrap 是「回顶部 + 反馈」两枚 46px 圆钮的整列，
-       用 calc(100% + 12px) 会把气泡顶到整列最上方、箭头错指回顶部按钮。
-       改为相对 wrap 底边（＝反馈按钮底边）上移 46px+12px，箭头正对反馈按钮。 */
+     
     position: absolute; right: 0; bottom: calc(46px + 12px);
     width: 268px; box-sizing: border-box;
     padding: 12px 14px;
@@ -985,10 +920,7 @@ p, li, td, .callout {
     margin-top: 7px; padding-top: 7px;
     border-top: 1px solid rgba(255,255,255,.22); color: #C9DDF0;
   }
-  /* 11:44 用户定：反馈按钮悬停只显示左侧「点此查看反馈方式」小气泡，
-     ★ 不再弹原来 PC 版的深蓝长气泡。长气泡 DOM 保留（两段文案仍是卡片
-     内容来源），但恒隐藏；hover 时若小气泡已被 10 秒自动隐藏则重新显示。
-     手动点 × 关闭会写 data-dismissed，之后 hover 不再打扰用户。 */
+   
   .feedback-fab-tip { display: none; }
   .feedback-fab-wrap:has(.feedback-fab:hover)
     .feedback-mobile-hint-wrap:not([data-dismissed]),
@@ -996,14 +928,12 @@ p, li, td, .callout {
     .feedback-mobile-hint-wrap:not([data-dismissed]) {
     display: inline-flex !important;
   }
-  /* 12:01 用户定：× 关闭按钮只在 10 秒倒计时期间显示；悬停反馈按钮时（无论
-     是否还在倒计时）一律不出现 ×，hover 召回的小气泡只有文字胶囊。 */
+   
   .feedback-fab-wrap:has(.feedback-fab:hover) .feedback-mobile-hint-close,
   .feedback-fab-wrap:has(.feedback-fab:focus-visible) .feedback-mobile-hint-close {
     display: none !important;
   }
-  /* 2026-11-09 用户定：回顶部短气泡与右上角「全文搜索」图标气泡完全同款
-     （蓝底白字小胶囊 + 右侧三角箭头 + 同款阴影），视觉语言统一。 */
+   
   .feedback-top-tip {
     position: absolute; right: 58px; top: 8px;
     display: inline-flex; align-items: center; height: 30px;
@@ -1025,17 +955,12 @@ p, li, td, .callout {
     opacity: 1; visibility: visible; transform: translateX(0);
   }
   .feedback-fab-wrap.wx-open .feedback-fab-tip { display: none; }
-  /* 气泡 / 卡片下移到反馈按钮正上方后会盖住上列的回顶部圆钮，显示时让它暂时让位。
-     微信 / 触屏走 JS 的 wx-open；PC 长气泡 hover 走 :has()（现代浏览器，渐进增强）。
-     wrap 用 bottom:22px 固定定位，隐藏上列按钮不改变底边，气泡坐标不受影响。 */
+   
   .feedback-fab-wrap.wx-open .feedback-top,
   .feedback-fab-wrap:has(.feedback-fab:hover) .feedback-top,
   .feedback-fab-wrap:has(.feedback-fab:focus-visible) .feedback-top { display: none; }
-  /* 移动端没有 hover：常显一条短提示（10 秒自动关闭 / × 手动关闭），点它弹卡片；
-     主体样式与搜索图标气泡一致（用户 2026-11-09 定）。wrap 承担定位与整体隐藏。 */
-  /* 11:27 用户定：不再区分手机 / PC，「点此查看反馈方式」小气泡在所有设备上
-     默认常显（按钮左侧），10 秒后自动隐藏 / × 手动关闭。不再用 :has(hover)
-     触发，避免 !important 压过自动隐藏。 */
+   
+   
   .feedback-mobile-hint-wrap {
     display: inline-flex;
     position: absolute; right: 58px; bottom: 8px;
@@ -1062,18 +987,10 @@ p, li, td, .callout {
     background: rgba(9,30,52,.55); color: #fff;
     font-size: 15px; line-height: 1; cursor: pointer;
   }
-  /* 微信 / 触屏下的可复制反馈卡片：保持深蓝底，与蓝底短气泡 / 白底长气泡分层。 */
+   
   .feedback-wx-card {
     display: none;
-    /* 2026-11-10 Bug 4（关闭按钮穿透）根因修复：卡片原在 .feedback-fab-wrap
-       （position:fixed; z-index:1001）内部，wrap 形成独立堆叠上下文，卡片
-       z-index:10020 被局限在 wrap 内、相对页面永远 ≤1001，低于右侧浮层按钮
-       （share/search-fab 10010、tip 10011、share 提示 10012），卡片展开后其
-       右上角关闭 × 若与浮层按钮重叠，点击会命中更上层按钮（穿透）。
-       现把卡片移出 wrap（HTML 结构调整），改 position:fixed 直接相对视口定位，
-       z-index:10020 真正相对页面生效，× 永不被遮挡。定位沿用旧几何：
-       wrap 原 bottom:22px、卡片 bottom:calc(46px+12px) → 视口 bottom:80px；
-       right 从 wrap 的 22px 起算 → 视口 right:22px（见下方 600px 覆盖）。 */
+     
     position: fixed; right: 22px; bottom: calc(22px + 46px + 12px);
     width: min(330px, calc(100vw - 28px)); box-sizing: border-box;
     padding: 14px; border-radius: 12px;
@@ -1085,8 +1002,7 @@ p, li, td, .callout {
   }
   .feedback-wx-card[hidden] { display: none !important; }
   .feedback-wx-card.open { display: block; }
-  /* 用户 09:24 定：所有弹出气泡 / 卡片都要有小箭头指向触发它的图标。
-     卡片在反馈按钮上方，故用向下的菱形箭头（与长气泡同款）。 */
+   
   .feedback-wx-card::after {
     content: ""; position: absolute; right: 17px; bottom: -7px;
     width: 12px; height: 12px; background: #123A5C;
@@ -1102,7 +1018,7 @@ p, li, td, .callout {
     font-size: 20px; line-height: 1; cursor: pointer; padding: 0 2px;
   }
   .feedback-wx-hint { margin: 0 0 10px; color: #C9DDF0; font-size: 12px; }
-  /* 11:06 用户定：卡片文案补齐两段，第 2 段用细分隔线与第 1 段分层（照长气泡分行口径）。 */
+   
   .feedback-wx-hint-2 {
     margin-top: 7px; padding-top: 7px;
     border-top: 1px solid rgba(255,255,255,.16);
@@ -1120,7 +1036,7 @@ p, li, td, .callout {
     border: 1px solid #6FA8D8; background: #1F6FB2; color: #fff; font-size: 11.5px;
   }
   .feedback-wx-copy:hover { background: #2E86CC; }
-  /* 「反馈链接」行：复制按钮下方叠一个「反馈」按钮，点击直接打开 issue（用户 09:19 定）。 */
+   
   .feedback-wx-actions {
     flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px;
   }
@@ -1135,11 +1051,10 @@ p, li, td, .callout {
   .feedback-fab-wrap { right: 14px; bottom: 14px; gap: 8px; }
   .feedback-fab-tip { width: min(268px, calc(100vw - 28px)); }
   .feedback-mobile-hint-wrap, .feedback-top-tip { right: 52px; }
-  /* 2026-11-10 卡片移出 wrap 后改为固定定位，移动端跟随 wrap 的 14px 基准 */
+   
   .feedback-wx-card { right: 14px; bottom: calc(14px + 46px + 12px); }
 }
-/* 11:27 统一后只保留「无 hover 能力设备不显示 hover 长气泡」这一设备能力适配；
-   小气泡常显、卡片 toggle、label 不展开已全部提升到全局，不再按设备分叉。 */
+ 
 @media screen and (max-width: 600px), screen and (hover: none) {
   .feedback-fab-tip { display: none; }
 }
@@ -1151,30 +1066,18 @@ p, li, td, .callout {
   .feedback-top.top-hidden { transform: none; }
 }
 
-/* ==== 右侧上下居中「上一篇 / 当前篇 / 下一篇」按钮组 ====
-   HTML/JS 由 build_notes.py 的 prev_next_html() 生成，单页版与 C 版共用。
-   设计（12:42 用户定，参考效果）：整个按钮组 = 一个蓝色药丸胶囊（#2470B8、
-   border-radius:32px），三个白色图标纵向排列（实心 ▲ / 圆环 ○ / 实心 ▼，
-   viewBox 24 + 22px，与搜索/分享小图标风格一致），去掉每按钮圆形背景，
-   悬停/聚焦某一段时该段出现深蓝圆形高亮；左侧蓝胶囊气泡分别提示三篇名称，
-   带指向胶囊的右指小三角。
-   默认 display:none 保证非屏幕媒体（Chrome 打印 PDF）不出现；@media screen 下
-   才固定定位并上下居中（top:50% + translateY(-50%)）。z-index 与反馈按钮同为
-   1001（右侧同一列互不重叠：本组居中、反馈贴底、搜索贴顶）。 */
+ 
 .prev-next-wrap { display: none; }
 @media screen {
-  /* 12:42 用户定（参考效果）：整个按钮组 = 一个蓝色药丸胶囊，三个白色图标
-     纵向排列；去掉每按钮的圆形背景，悬停/聚焦某一段时该段出现深蓝圆形高亮。
-     默认半透明（参考搜索/分享按钮 opacity .22），悬停/聚焦本组提亮至 1。 */
+   
   .prev-next-wrap {
     position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
     z-index: 1001;
     display: flex; flex-direction: column; align-items: center; gap: 4px;
-    /* 12:52 用户定：整个按钮组宽度与右侧其它按钮（搜索/分享/反馈/回顶，46px）
-       一致，故水平不设内边距（胶囊宽 = 按钮宽 46px），仅留垂直内边距。 */
+     
     padding: 6px 0;
     background: #2470B8;
-    /* 13:32 用户定：圆角适当再小一些（16px → 10px），更接近右侧按钮的柔和感。 */
+     
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(31,78,121,.30);
     opacity: .22;
@@ -1187,8 +1090,7 @@ p, li, td, .callout {
   .pn-item { position: relative; }
   .pn-btn {
     display: flex; align-items: center; justify-content: center;
-    /* 13:32 用户定：悬停圆形背景太大、贴满胶囊 → 按钮 46px → 38px，
-       四周 margin 4px 留出呼吸空间（按钮+margin=46px，胶囊宽仍与右侧一致）。 */
+     
     width: 38px; height: 38px; margin: 4px; padding: 0; border: 0;
     border-radius: 50%; background: transparent; cursor: pointer;
     transition: background .22s ease;
@@ -1196,11 +1098,10 @@ p, li, td, .callout {
   .pn-btn:hover, .pn-btn:focus-visible { background: rgba(0,0,0,.18); }
   .pn-btn:focus-visible { outline: 2px solid rgba(255,255,255,.85); outline-offset: 2px; }
   .pn-btn-icon { display: block; width: 28px; height: 28px; }
-  /* 首篇/末篇边界：禁用按钮 + 气泡给出「已经是第一篇/最后一篇」文案。 */
+   
   .pn-btn.pn-disabled { opacity: .38; cursor: default; }
   .pn-btn.pn-disabled:hover, .pn-btn.pn-disabled:focus-visible { background: transparent; }
-  /* 蓝胶囊气泡：贴胶囊左侧、垂直居中、右指小三角（悬停本行/聚焦按钮显示）。
-     省略号移到内层 .pn-tip-text，外层不设 overflow 以免裁剪右指箭头。 */
+   
   .pn-tip {
     position: absolute; right: 60px; top: 50%;
     display: inline-flex; align-items: center; height: 30px;
@@ -1232,22 +1133,12 @@ p, li, td, .callout {
 @media screen and (max-width: 600px) {
   .prev-next-wrap { right: 14px; gap: 4px; }
 }
-/* 2026-11-10 用户报「个别浏览器上下篇没气泡提示（其它按钮就能显示）」：
-   原 .pn-tip 专属 @media(hover:none){display:none} 使触屏设备永不显示，而
-   .search-fab-tip / .share-fab-tip 无此限制（触屏可显示）。为保持一致，
-   移除 .pn-tip 的 hover:none 隐藏——触屏点按触发 :hover 粘滞即显示，与
-   search/share 行为一致。 */
+ 
 @media (prefers-reduced-motion: reduce) {
   .pn-btn, .pn-tip, .prev-next-wrap { transition: none; }
 }
 
-/* ==== 右上角「全文搜索」浮动图标 + 居中搜索面板 ====
-   HTML/JS 由 build_notes.py 的 SEARCH_UI_HTML 生成，单页版与 C 版共用。
-   默认 display:none 保证非屏幕媒体（尤其 Chrome 打印 PDF）不会出现；
-   @media screen 下才固定定位。右上角空闲：左侧书签 z-index 1000、右下
-   反馈按钮 1001、词条气泡 9999，故搜索层用 10010 稳居最上。
-   收起态把面板缩放回右上角图标位置，展开态回到页面正中，形成
-   「点图标展开居中 / 点空白收回图标」的动画，不新增任何外部资源。 */
+ 
 .search-fab, .search-panel { display: none; }
 .share-fab, .share-fab-tip, .share-msg { display: none; }
 @media screen {
@@ -1265,7 +1156,7 @@ p, li, td, .callout {
   }
   .search-fab:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
   .search-fab-icon { width: 24px; height: 24px; display: block; }
-  /* 悬停 / 聚焦时浮出的气泡，独立于按钮不继承其半透明；箭头指向右侧图标 */
+   
   .search-fab-tip {
     position: fixed; right: 78px; top: 26px; z-index: 10011;
     display: inline-flex; align-items: center; height: 30px;
@@ -1291,7 +1182,7 @@ p, li, td, .callout {
     position: fixed; left: 50%; top: 10%; z-index: 10010;
     width: min(620px, calc(100vw - 32px));
     max-height: 80vh; box-sizing: border-box;
-    /* 2026-11-09：网页正文接近纯白，白底面板弹出后没区分度 → 加粗蓝描边。 */
+     
     background: #fff; border: 2px solid #1F6FB2; border-radius: 14px;
     box-shadow: 0 18px 54px rgba(31,78,121,.24);
     opacity: 0; visibility: hidden; pointer-events: none;
@@ -1303,8 +1194,7 @@ p, li, td, .callout {
   .search-panel.open {
     opacity: 1; visibility: visible; pointer-events: auto;
     transform: translate(-50%, 0) scale(1);
-    /* 纯 CSS 全屏压暗：不新增遮罩 DOM、不拦截点击（box-shadow 不是元素），
-       点面板外仍走原有 document 委托收起；只在展开态生效，收起态不压暗。 */
+     
     box-shadow: 0 0 0 100vmax rgba(9,30,52,.42), 0 24px 70px rgba(9,30,52,.46);
   }
   .search-head {
@@ -1327,7 +1217,7 @@ p, li, td, .callout {
   }
   .search-close { font-size: 22px; line-height: 1; }
   .search-clear:hover, .search-close:hover { background: #EAF1F8; color: #164E8A; }
-  /* 2026-11-09 用户定：历史搜索下拉——点输入框显示，可逐个删除 / 一键清空 */
+   
   .search-history {
     flex: 0 0 auto; max-height: 208px; overflow-y: auto;
     padding: 2px 8px 6px;
@@ -1348,7 +1238,7 @@ p, li, td, .callout {
   }
   .search-history-clear:hover { color: #B23B3B; background: #F5E9E9; }
   .search-history-list { list-style: none; margin: 0; padding: 0; }
-  /* 2026-11-09 历史空态占位：新浏览器无历史时点输入框显示提示，不隐藏、不误判 */
+   
   .search-history-empty {
     padding: 8px 10px; font-size: 12px; color: #9AA8B5; font-style: italic;
   }
@@ -1373,7 +1263,7 @@ p, li, td, .callout {
     flex: 0 0 auto; padding: 8px 16px 4px;
     font-size: 12px; color: #6B7A88;
   }
-  /* 全文索引约 10MB，首次加载需 1–2 分钟：显示真实下载进度，避免「一直载入」错觉 */
+   
   .search-progress {
     flex: 0 0 auto; height: 3px; margin: 2px 16px 6px;
     background: #E6ECF2; border-radius: 2px; overflow: hidden;
@@ -1390,7 +1280,7 @@ p, li, td, .callout {
     0% { margin-left: -35%; }
     100% { margin-left: 100%; }
   }
-  /* 滚动条只加在结果容器：输入框与统计行始终固定可见 */
+   
   .search-results {
     flex: 1 1 auto; min-height: 0;
     overflow-y: auto; overflow-x: hidden;
@@ -1416,13 +1306,12 @@ p, li, td, .callout {
     background: #FFF0A8; color: #7A4B00; font-style: normal;
     font-weight: 600; padding: 0 1px; border-radius: 2px;
   }
-  /* 命中词本身就是重点词 / 院校专业名时，在原有青蓝荧光内部叠加更醒目的暖黄；
-     原有的亮蓝实线下划线仍在，双色叠加可辨。 */
+   
   mark .search-hit-kw {
     background: #FFE27A; color: #6A3D00;
     box-shadow: inset 0 -2px 0 #EF9F27;
   }
-  /* 面板展开时图标让位，收回时由 close() 移除 is-hidden 恢复显示。 */
+   
   .search-fab.is-hidden { display: none; }
   .search-hit {
     background: #FFFBEA !important;
@@ -1430,10 +1319,7 @@ p, li, td, .callout {
     padding-left: 10px !important;
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
-  /* ==== 「分享」浮动按钮（搜索按钮正下方，两版共用）====
-     2026-11-09 用户定：搜索按钮下加分享按钮。走 Web Share API 降级：
-     点击唤起系统分享面板（用户手动选微信好友/朋友圈），不支持则复制链接。
-     默认半透明与搜索按钮一致（opacity:.22），hover 提亮至 1 并加深。面板展开时互斥让位。 */
+   
   .share-fab {
     display: flex; align-items: center; justify-content: center;
     position: fixed; right: 22px; top: 72px; z-index: 10010;
@@ -1448,7 +1334,7 @@ p, li, td, .callout {
   }
   .share-fab:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 3px; }
   .share-fab-icon { width: 22px; height: 22px; display: block; }
-  /* 悬停 / 聚焦 / 复制提示共用的气泡，箭头指向右侧分享按钮 */
+   
   .share-fab-tip {
     position: fixed; right: 78px; top: 80px; z-index: 10011;
     display: inline-flex; align-items: center; height: 30px;
@@ -1470,12 +1356,9 @@ p, li, td, .callout {
   .share-fab-tip.show {
     opacity: 1; visibility: visible; transform: translateX(0);
   }
-  /* 搜索面板展开时与分享按钮互斥（share-fab 在 DOM 中位于 search-panel 之后） */
+   
   .search-panel.open ~ .share-fab { display: none; }
-  /* 2026-11-09 用户定（第八轮）：浏览器不支持内置分享 / 系统分享未唤起时的【消息框】。
-     带「知道了」按钮：点击立即关闭；未点击 10 秒自动关闭（JS showMsg 控制）。
-     ★ 曾因 @media screen 内未重设 display 而永远 display:none（用户「从来没见过 toast」）
-       → 必须在此补 display:block。 */
+   
   .share-msg {
     display: block;
     position: fixed; left: 50%; bottom: 9vh; z-index: 10012;
@@ -1490,7 +1373,7 @@ p, li, td, .callout {
   .share-msg.show {
     opacity: 1; visibility: visible; transform: translate(-50%, 0); pointer-events: auto;
   }
-  /* ★ 2026-11-09 用户定：消息框加标题栏，默认「提示消息」（分隔线分层） */
+   
   .share-msg-head {
     display: flex; align-items: center; justify-content: space-between;
     margin: 0 0 10px; padding: 0 0 10px;
