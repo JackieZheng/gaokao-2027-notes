@@ -28,6 +28,9 @@ html {
     font-size: 11pt;
     line-height: 2.0;
     color: #33414A;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 body { margin: 0; }
 .cover-page {
