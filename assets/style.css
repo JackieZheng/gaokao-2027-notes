@@ -306,7 +306,7 @@ mark.stat {
    
   text-align-last: center;
   text-indent: 0;
-  font-size: 12pt;
+  font-size: 10.5pt;
   color: #33414A;
   line-height: 1.8;
 }
@@ -316,13 +316,13 @@ mark.stat {
   text-align: center;
   text-indent: 0;
   color: #1F4E79;
-  font-size: 14pt;
+  font-size: 12pt;
   font-weight: 700;
   line-height: 2.0;
    
   white-space: pre-wrap;
 }
-.thanks-tail { margin: 26pt 0 0; font-size: 11.5pt; }
+.thanks-tail { margin: 26pt 0 0; font-size: 10pt; }
  
 .thanks-emoji { white-space: nowrap; }
 @media print {
@@ -825,7 +825,7 @@ p, li, td, .callout {
   .sponsor-wrap .sponsor-note { margin-top: 4pt; }
    
   .license-wrap { margin-top: 36pt; padding-bottom: 0; }
-  .license-wrap .license-line { line-height: 1.4; }
+  .license-wrap .license-line { line-height: 1.8; }
    
   .end-wrap, .online-wrap, .sponsor-wrap, .license-wrap { page-break-inside: auto; }
   .license-wrap { page-break-before: auto; }
