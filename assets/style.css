@@ -831,31 +831,31 @@ p, li, td, .callout {
   .license-wrap { page-break-before: auto; }
    
    
-  .print-zoom { font-size: 8.08pt; width: 113mm; margin: 0; }
-  .print-zoom h1 { font-size: 11.73pt; }
-  .print-zoom h2 { font-size: 9.89pt; }
-  .print-zoom h3 { font-size: 8.80pt; }
-  .print-zoom h4, .print-zoom h5, .print-zoom h6 { font-size: 8.08pt; }
+  .print-zoom { font-size: 10.00pt; width: 154mm; margin: 0 auto; }
+  .print-zoom h1 { font-size: 14.52pt; }
+  .print-zoom h2 { font-size: 12.24pt; }
+  .print-zoom h3 { font-size: 10.89pt; }
+  .print-zoom h4, .print-zoom h5, .print-zoom h6 { font-size: 10.00pt; }
   .print-zoom p, .print-zoom li, .print-zoom blockquote,
-  .print-zoom dd, .print-zoom dt, .print-zoom .callout { font-size: 8.08pt; overflow-wrap: anywhere; word-break: break-word; }
-  .print-zoom table { font-size: 7.70pt; }
-  .print-zoom td, .print-zoom th { font-size: 7.70pt; }
-  .print-zoom figcaption { font-size: 6.97pt; }
-  .print-zoom .note-src { font-size: 6.60pt; }
-  .print-zoom .fn-ref { font-size: 5.86pt; }
-  .print-zoom .fn-defs { font-size: 6.97pt; line-height: 1.28; }
-  .print-zoom .fn-defs h3 { font-size: 7.70pt; }
-  .print-zoom .fn-defs p { font-size: 6.97pt; }
-  .print-zoom .part-kicker { font-size: 8.06pt; }
-  .print-zoom .part-desc { font-size: 7.70pt; line-height: 1.39; }
-  .print-zoom .part-count, .print-zoom .group-count { font-size: 7.33pt; }
-  .print-zoom .toc-list li.toc-1 { font-size: 8.43pt; }
-  .print-zoom .toc-list li.toc-2 { font-size: 7.70pt; }
-  .print-zoom .toc-list li.toc-3 { font-size: 7.33pt; }
-  .print-zoom .toc-list li.toc-4 { font-size: 6.97pt; }
-  .print-zoom .toc-toggle-btn { font-size: 7.33pt; }
-  .print-zoom code, .print-zoom pre, .print-zoom kbd { font-size: 7.40pt; }
-  .print-zoom .note-end-snow { font-size: 7.33pt; }
+  .print-zoom dd, .print-zoom dt, .print-zoom .callout { font-size: 10.00pt; overflow-wrap: anywhere; word-break: break-word; }
+  .print-zoom table { font-size: 9.53pt; }
+  .print-zoom td, .print-zoom th { font-size: 9.53pt; }
+  .print-zoom figcaption { font-size: 8.63pt; }
+  .print-zoom .note-src { font-size: 8.17pt; }
+  .print-zoom .fn-ref { font-size: 7.25pt; }
+  .print-zoom .fn-defs { font-size: 8.63pt; line-height: 1.75; }
+  .print-zoom .fn-defs h3 { font-size: 9.53pt; }
+  .print-zoom .fn-defs p { font-size: 8.63pt; }
+  .print-zoom .part-kicker { font-size: 9.98pt; }
+  .print-zoom .part-desc { font-size: 9.53pt; line-height: 1.39; }
+  .print-zoom .part-count, .print-zoom .group-count { font-size: 9.07pt; }
+  .print-zoom .toc-list li.toc-1 { font-size: 10.43pt; }
+  .print-zoom .toc-list li.toc-2 { font-size: 9.53pt; }
+  .print-zoom .toc-list li.toc-3 { font-size: 9.07pt; }
+  .print-zoom .toc-list li.toc-4 { font-size: 8.63pt; }
+  .print-zoom .toc-toggle-btn { font-size: 9.07pt; }
+  .print-zoom code, .print-zoom pre, .print-zoom kbd { font-size: 9.16pt; }
+  .print-zoom .note-end-snow { font-size: 9.07pt; }
 }
 
  
