@@ -616,13 +616,17 @@ article.note > h1 { margin-top: 0; text-align: center; }
     font-size: 9pt; color: #6B7280; margin: 0 0 10pt;
     font-family: 'SimSun','STSong',serif;
 }
+ 
+ 
+ 
+ 
+ 
 .fn-ref {
-    font-size: 8pt; color: #1F6FB2; vertical-align: super;
-    text-decoration: none; font-weight: 600; cursor: help;
+    vertical-align: super;
+    line-height: 0;
+    text-decoration: none; cursor: help;
 }
-.fn-ref[data-term] {
-    border-bottom: 1px dotted #1F6FB2;
-}
+.fn-ref svg { display: inline-block; }
 .fn-defs {
     margin-top: 16pt; padding: 10pt 12pt;
     background: #F5F7F8; border-left: 3pt solid #C8D0D6;
@@ -842,7 +846,6 @@ p, li, td, .callout {
   .print-zoom td, .print-zoom th { font-size: 9.53pt; }
   .print-zoom figcaption { font-size: 8.63pt; }
   .print-zoom .note-src { font-size: 8.17pt; }
-  .print-zoom .fn-ref { font-size: 7.25pt; }
   .print-zoom .fn-defs { font-size: 8.63pt; line-height: 1.75; }
   .print-zoom .fn-defs h3 { font-size: 9.53pt; }
   .print-zoom .fn-defs p { font-size: 8.63pt; }
