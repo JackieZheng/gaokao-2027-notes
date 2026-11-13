@@ -602,7 +602,7 @@ mark.stat {
  
  
 .read-history-mask{position:fixed;inset:0;z-index:10030;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.45);font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",sans-serif;}
-.read-history-card{width:min(380px,calc(100vw - 40px));background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);padding:22px 22px 18px;color:#1a1a1a;}
+.read-history-card{box-sizing:border-box;width:min(380px,90%);background:#fff;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.25);padding:22px 22px 18px;color:#1a1a1a;}
 .read-history-card .rh-title{font-size:16px;font-weight:700;color:#1F6FB2;margin-bottom:10px;}
 .read-history-card .rh-body{font-size:14px;line-height:1.7;color:#333;margin-bottom:18px;}
 .read-history-card .rh-actions{display:flex;justify-content:flex-end;gap:12px;}
@@ -726,13 +726,14 @@ article.note > h1 { margin-top: 0; text-align: center; }
   height: 0;
   border-top: 1px solid #C6D6E8;
 }
-.note-end .note-end-snow {
-  flex: 0 0 auto;
+.note-end-snow {
   font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 1;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   white-space: nowrap;
+  margin-left: 0.35em;
+  vertical-align: baseline;
 }
  
 @media screen {
@@ -743,13 +744,14 @@ article.note > h1 { margin-top: 0; text-align: center; }
  
 @media print {
   .note-end { margin: 6pt 0 0; gap: 10px; }
-  .note-end .note-end-snow { font-size: 10pt; }
-  article.note > :nth-last-child(2),
-  article.note > .fn-defs > :last-child {
-    break-after: avoid-page;
-    page-break-after: avoid;
-  }
-  .note-end { break-before: avoid-page; page-break-before: avoid; }
+  .note-end-snow { font-size: 10pt; }
+}
+
+ 
+.gk-title-mark {
+  color: #1F6FB2;
+  font-family: "PingFang SC NEW", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+  margin-right: 0.25em;
 }
 
  
@@ -1552,7 +1554,7 @@ p, li, td, .callout {
 }
 @media screen and (max-width: 600px) {
   .rh-fab { right: 14px; top: 112px; width: 42px; height: 42px; }
-  .rh-panel { right: 66px; top: 112px; width: calc(100vw - 80px); max-width: calc(100vw - 80px); }
+  .rh-panel { left: 24px; right: 66px; top: 112px; width: auto; max-width: none; }
   .rh-panel::after { top: 16px; }
   .rh-fab-tip { right: 66px; top: 118px; }
 }
