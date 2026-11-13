@@ -1136,7 +1136,8 @@ p, li, td, .callout {
   .pn-btn:focus-visible { outline: 2px solid rgba(255,255,255,.85); outline-offset: 2px; }
   .pn-btn-icon { display: block; width: 28px; height: 28px; }
    
-  .pn-btn.pn-disabled { opacity: .38; cursor: default; }
+   
+  .pn-btn.pn-disabled { opacity: .38; cursor: not-allowed; }
   .pn-btn.pn-disabled:hover, .pn-btn.pn-disabled:focus-visible { background: transparent; }
    
   .pn-tip {
@@ -1556,22 +1557,4 @@ p, li, td, .callout {
   .rh-fab-tip { right: 66px; top: 118px; }
 }
  
-@media screen and (max-height: 560px) {
-  .search-fab, .share-fab, .rh-fab,
-  .search-fab-tip, .share-fab-tip, .rh-fab-tip,
-  .prev-next-wrap, .feedback-fab-wrap, .rh-panel { zoom: 0.8; }
-  .search-fab, .share-fab, .rh-fab, .prev-next-wrap { right: 27.5px; }
-  .feedback-fab-wrap { right: 27.5px; bottom: 17.5px; }
-  .search-fab { top: 12.5px; }
-  .share-fab { top: 67.5px; }
-  .rh-fab { top: 122.5px; }
-  .search-fab-tip { right: 87.5px; top: 20px; }
-  .share-fab-tip { right: 87.5px; top: 75px; }
-  .rh-fab-tip { right: 87.5px; top: 130px; }
-  .rh-panel { top: 122.5px; right: 87.5px; }
-  .prev-next-wrap { top: 187.5px; transform: none; }
-}
- 
-@media screen and (max-height: 420px) {
-  .prev-next-wrap { top: 172.5px; }
-}
+
