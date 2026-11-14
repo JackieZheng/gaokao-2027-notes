@@ -96,11 +96,12 @@ body { margin: 0; }
 }
  
 .cover-page h1 {
-    font-family: 'SimHei', 'Microsoft YaHei', 'PingFang SC', sans-serif;
-    font-size: clamp(2px, calc(var(--fw) * 0.057), 45px);
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif;
+    font-size: clamp(2px, calc(var(--fw) * 0.068), 52px);
     color: #12304A; font-weight: 900;
-    margin: 0 0 calc(var(--fw) * 0.01) 0; letter-spacing: 0; text-align: center;
+    margin: calc(var(--fw) * 0.012) 0 calc(var(--fw) * 0.004) 0; letter-spacing: 0; text-align: center;
     text-shadow: 0 calc(var(--fw) * 0.0013) calc(var(--fw) * 0.0025) rgba(255,255,255,0.9);
+    border-bottom: none;  
 }
 .cover-page .sub {
     font-size: clamp(2px, calc(var(--fw) * 0.0235), 19px);
@@ -113,9 +114,16 @@ body { margin: 0; }
     color: #2E4A5F; text-align: center;
     margin-bottom: calc(var(--fw) * 0.0302);
 }
+.cover-page .cover-ver {
+    font-size: clamp(2px, calc(var(--fw) * 0.0185), 15px);
+    color: #2E4A5F; text-align: center;
+    border-bottom: 2px solid #1F4E79;  
+    padding-bottom: calc(var(--fw) * 0.0076);
+    margin-bottom: calc(var(--fw) * 0.0126);
+}
 .cover-page .cover-callout {
     border-left: calc(var(--fw) * 0.005) solid #164E8A;
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.5);  
     padding: calc(var(--fw) * 0.0176) calc(var(--fw) * 0.0227);
     box-shadow: 0 calc(var(--fw) * 0.0025) calc(var(--fw) * 0.01) rgba(0,0,0,0.08);
     border-radius: calc(var(--fw) * 0.005);
@@ -137,7 +145,7 @@ body { margin: 0; }
     color: #2E4A5F; line-height: 1.9;
 }
 .cover-page .cover-meta-box {
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.5);
     padding: calc(var(--fw) * 0.0126) calc(var(--fw) * 0.0176);
     border-radius: calc(var(--fw) * 0.005);
     display: inline-block;
@@ -355,6 +363,9 @@ mark.stat {
   letter-spacing: 2pt;
   margin-bottom: 14pt;
   line-height: 1.8;
+   
+  word-break: keep-all;
+  text-wrap: pretty;
 }
 .end-wrap .end-signature {
   font-family: 'KaiTi', 'STKaiti', 'SimSun', serif;
@@ -614,6 +625,9 @@ mark.stat {
     font-family: 'KaiTi','STKaiti','SimSun',serif;
     font-size: 11pt; color: #1F6FB2; letter-spacing: 2pt;
     text-align: center; margin: 0 0 10pt;
+     
+    word-break: keep-all;
+    text-wrap: pretty;
 }
 .part-head .part-desc {
     font-size: 10.5pt; color: #4A5A6A; text-align: center;
@@ -717,7 +731,7 @@ article.note > h1 { margin-top: 0; text-align: center; }
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 1.8em 0 0;
+  margin: 1.8em 0 1.4em;
   page-break-inside: avoid;
   break-inside: avoid;
 }
@@ -726,25 +740,56 @@ article.note > h1 { margin-top: 0; text-align: center; }
   height: 0;
   border-top: 1px solid #C6D6E8;
 }
-.note-end-snow {
+.note-end .note-end-snow {
+  flex: 0 0 auto;
   font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   line-height: 1;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.18em;
   white-space: nowrap;
-  margin-left: 0.35em;
-  vertical-align: baseline;
 }
  
 @media screen {
   article.note { margin-bottom: 1.4em; }
   article.note > :last-child { margin-bottom: 0; }
   article.note:last-of-type { margin-bottom: 0; }
+   
+  article.note > .note-end { margin-bottom: 1.4em; }
 }
  
 @media print {
-  .note-end { margin: 6pt 0 0; gap: 10px; }
-  .note-end-snow { font-size: 10pt; }
+   
+  article.note > :nth-last-child(2),
+  article.note > .fn-defs > :last-child,
+  article.note p,
+  article.note li {
+    orphans: 2;
+    widows: 2;
+  }
+   
+  .note-end {
+    display: block;
+    text-align: center;
+    margin: 6pt 0 0;
+    break-before: avoid-page;
+    page-break-before: avoid;
+    break-inside: avoid;
+  }
+  .note-end .note-end-line {
+    display: inline-block;
+    width: 40%;
+    vertical-align: middle;
+    border-top: 1px solid #C6D6E8;
+  }
+  .note-end .note-end-snow {
+    font-size: 10pt;
+    vertical-align: middle;
+  }
+  article.note > :nth-last-child(2),
+  article.note > .fn-defs > :last-child {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
 }
 
  
