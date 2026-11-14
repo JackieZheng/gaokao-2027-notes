@@ -994,6 +994,8 @@ p, li, td, .callout {
   }
   .feedback-fab-wrap.wx-open .feedback-fab-tip { display: none; }
    
+  .feedback-fab-wrap.wx-open .feedback-mobile-hint-wrap { display: none !important; }
+   
   .feedback-fab-wrap.wx-open .feedback-top,
   .feedback-fab-wrap:has(.feedback-fab:hover) .feedback-top,
   .feedback-fab-wrap:has(.feedback-fab:focus-visible) .feedback-top { display: none; }
@@ -1029,8 +1031,9 @@ p, li, td, .callout {
   .feedback-wx-card {
     display: none;
      
-    position: fixed; right: 22px; bottom: calc(22px + 46px + 12px);
-    width: min(330px, calc(100vw - 28px)); box-sizing: border-box;
+     
+    position: fixed; right: 80px; bottom: 22px;
+    width: min(330px, calc(100vw - 92px)); box-sizing: border-box;
     padding: 14px; border-radius: 12px;
     z-index: 10020;
     background: #123A5C; color: #F2F8FF;
@@ -1041,11 +1044,20 @@ p, li, td, .callout {
   .feedback-wx-card[hidden] { display: none !important; }
   .feedback-wx-card.open { display: block; }
    
+  .feedback-wx-scroll {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+   
+   
   .feedback-wx-card::after {
-    content: ""; position: absolute; right: 17px; bottom: -7px;
+    content: ""; position: absolute;
+    right: var(--wx-arrow-x, -7px); bottom: var(--wx-arrow-y, 17px);
     width: 12px; height: 12px; background: #123A5C;
-    border-right: 1px solid #0B2A45; border-bottom: 1px solid #0B2A45;
-    transform: rotate(45deg);
+    border-top: 1px solid #0B2A45; border-right: 1px solid #0B2A45;
+     
+    transform: rotate(var(--wx-arrow-rot));
   }
   .feedback-wx-head {
     display: flex; align-items: center; justify-content: space-between;
@@ -1090,7 +1102,7 @@ p, li, td, .callout {
   .feedback-fab-tip { width: min(268px, calc(100vw - 28px)); }
   .feedback-mobile-hint-wrap, .feedback-top-tip { right: 52px; }
    
-  .feedback-wx-card { right: 14px; bottom: calc(14px + 46px + 12px); }
+  .feedback-wx-card { right: 72px; bottom: 14px; }
 }
  
 @media screen and (max-width: 600px), screen and (hover: none) {
