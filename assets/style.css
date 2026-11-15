@@ -476,8 +476,10 @@ mark.stat {
   .bookmarks-panel::-webkit-scrollbar { width: 6px; }
   .bookmarks-panel::-webkit-scrollbar-thumb { background: #C8D0D6; border-radius: 3px; }
   .bookmarks-panel::-webkit-scrollbar-track { background: transparent; }
-   
+  
   body.with-bookmarks { padding-left: 300px !important; }
+   
+  body.with-bookmarks .bookmarks-toggle .tb-icon { transform: rotate(180deg); }
 }
 
  
