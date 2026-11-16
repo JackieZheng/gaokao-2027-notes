@@ -3,7 +3,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/JackieZheng/gaokao-2027-notes/main/assets/readme_cover.png" alt="《2027高考志愿填报指北》封面" width="720"></p>
 
 <p align="center">
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/blob/main/LICENSE"><img src="https://img.shields.io/github/license/JackieZheng/gaokao-2027-notes?style=flat-square&color=blue" alt="License"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-CC_BY--NC_4.0-blue?style=flat-square" alt="License"></a>
 <a href="https://github.com/JackieZheng/gaokao-2027-notes/stargazers"><img src="https://img.shields.io/github/stars/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=yellow" alt="GitHub Stars"></a>
 <a href="https://github.com/JackieZheng/gaokao-2027-notes/network/members"><img src="https://img.shields.io/github/forks/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=orange" alt="GitHub Forks"></a>
 <a href="https://github.com/JackieZheng/gaokao-2027-notes/commits/main"><img src="https://img.shields.io/github/last-commit/JackieZheng/gaokao-2027-notes?style=flat-square&color=green" alt="Last Commit"></a>
@@ -16,12 +16,12 @@
 <a href="https://github.com/JackieZheng/gaokao-2027-notes"><img src="https://img.shields.io/badge/Type-%E9%AB%98%E8%80%83%E5%BF%97%E6%84%BF%E5%A1%AB%E6%8A%A5%E7%AC%94%E8%AE%B0-purple?style=flat-square&logo=notion&logoColor=white" alt="Content Type"></a>
 <a href="https://www.markdownguide.org/"><img src="https://img.shields.io/badge/Format-Markdown-black?style=flat-square&logo=markdown&logoColor=white" alt="Main Format"></a>
 <a href="https://github.com/JackieZheng/gaokao-2027-notes/commits"><img src="https://img.shields.io/badge/%E6%9B%B4%E6%96%B0%E9%A2%91%E7%8E%87-%E6%8C%81%E7%BB%AD%E7%BB%B4%E6%8A%A4-brightgreen?style=flat-square" alt="Update Frequency"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes"><img src="https://img.shields.io/badge/%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4-2027%E5%B1%8A%E9%AB%98%E8%80%83%E7%94%9F-blueviolet?style=flat-square" alt="Suitable For"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes"><img src="https://img.shields.io/badge/%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4-%E9%AB%98%E4%B8%AD%E7%94%9F%E5%AE%B6%E9%95%BF-blueviolet?style=flat-square" alt="Suitable For"></a>
 </p>
 
 <p align="center">
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/actions"><img src="https://img.shields.io/github/actions/workflow/status/JackieZheng/gaokao-2027-notes/deploy.yml?label=%E6%96%87%E6%A1%A3%E9%83%A8%E7%BD%B2&style=flat-square" alt="Build Status"></a>
-<a href="https://gaokao-2027-notes.vercel.app/"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%A2%84%E8%A7%88-Vercel-000000?style=flat-square&logo=vercel" alt="Docs Preview"></a>
+<a href="https://jackiezheng.github.io/gaokao-2027-notes/"><img src="https://img.shields.io/badge/%E6%96%87%E6%A1%A3%E9%83%A8%E7%BD%B2-GitHub_Pages-blue?style=flat-square&logo=github&logoColor=white" alt="Build Status"></a>
+<a href="https://jackiezheng.github.io/gaokao-2027-notes/"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%A2%84%E8%A7%88-GitHub_Pages-1F4E79?style=flat-square&logo=github&logoColor=white" alt="Docs Preview"></a>
 </p>
 
 > <a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer">《2027高考志愿填报指南》</a> 的姊妹篇 —— 指南讲方法，指北给资料。
