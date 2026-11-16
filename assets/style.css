@@ -660,6 +660,11 @@ article.note > h1 { margin-top: 0; text-align: center; }
     text-decoration: none; cursor: help;
 }
 .fn-ref svg { display: inline-block; }
+ 
+@media screen {
+  .fn-ref { position: relative; }
+  .fn-ref::after { content: ''; position: absolute; inset: -10px; }
+}
 .fn-defs {
     margin-top: 16pt; padding: 10pt 12pt;
     background: #F5F7F8; border-left: 3pt solid #C8D0D6;
