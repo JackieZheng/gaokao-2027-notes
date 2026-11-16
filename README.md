@@ -1,4 +1,4 @@
-# 2027高考志愿填报指北
+<h1 align="center">2027高考志愿填报指北</h1>
 
 <p align="center"><img src="https://raw.githubusercontent.com/JackieZheng/gaokao-2027-notes/main/assets/readme_cover.png" alt="《2027高考志愿填报指北》封面" width="720"></p>
 
@@ -66,10 +66,9 @@
 
 ---
 
-时间仓促，才疏学浅，如有遗误，万望指正，不胜感谢。
+<p align="center">时间仓促，才疏学浅，如有遗误，万望指正，不胜感谢。</p>
 
-                                    雪人
-                          二〇二六年十一月  于天津
+<p align="right">雪人<br>二〇二六年十一月　于天津</p>
 
 ---
 
@@ -88,8 +87,8 @@
 
 ## 赞赏
 
-若这本小书对您有帮助，欢迎扫码赞助一杯咖啡。
+<p align="center">若这本小书对您有帮助，欢迎扫码赞助一杯咖啡。</p>
 
-<p align="center"><img src="assets/sponsor.jpg" alt="雪人 的赞赏码" width="300"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/JackieZheng/gaokao-2027-notes/main/assets/sponsor.jpg" alt="雪人 的赞赏码" width="300"></p>
 
 网页版左侧「指北导航」顶部另有「☕ 赞赏作者」入口，可直接跳到全书末尾；长文档加载未完成时点击，页面会在加载完成后自动补滚。
