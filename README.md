@@ -3,25 +3,25 @@
 <p align="center"><img src="https://raw.githubusercontent.com/JackieZheng/gaokao-2027-notes/main/assets/readme_cover.png" alt="《2027高考志愿填报指北》封面" width="720"></p>
 
 <p align="center">
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-CC_BY--NC_4.0-blue?style=flat-square" alt="License"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/stargazers"><img src="https://img.shields.io/github/stars/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=yellow" alt="GitHub Stars"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/network/members"><img src="https://img.shields.io/github/forks/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=orange" alt="GitHub Forks"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/commits/main"><img src="https://img.shields.io/github/last-commit/JackieZheng/gaokao-2027-notes?style=flat-square&color=green" alt="Last Commit"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/issues"><img src="https://img.shields.io/github/issues-raw/JackieZheng/gaokao-2027-notes?style=flat-square&color=critical" alt="Open Issues"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/graphs/contributors"><img src="https://img.shields.io/github/contributors/JackieZheng/gaokao-2027-notes?style=flat-square&color=lightgrey" alt="Contributors"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/License-CC_BY--NC_4.0-blue?style=flat-square" alt="License"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/stargazers" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/stars/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=yellow" alt="GitHub Stars"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/network/members" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/forks/JackieZheng/gaokao-2027-notes?style=flat-square&logo=github&logoColor=white&color=orange" alt="GitHub Forks"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/commits/main" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/last-commit/JackieZheng/gaokao-2027-notes?style=flat-square&color=green" alt="Last Commit"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/issues" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/issues-raw/JackieZheng/gaokao-2027-notes?style=flat-square&color=critical" alt="Open Issues"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/graphs/contributors" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/github/contributors/JackieZheng/gaokao-2027-notes?style=flat-square&color=lightgrey" alt="Contributors"></a>
 </p>
 
 <p align="center">
-<a href="https://github.com/topics/gaokao"><img src="https://img.shields.io/badge/Topic-Gaokao_2027-red?style=flat-square&logo=bookstack&logoColor=white" alt="Project Topic"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes"><img src="https://img.shields.io/badge/Type-%E9%AB%98%E8%80%83%E5%BF%97%E6%84%BF%E5%A1%AB%E6%8A%A5%E7%AC%94%E8%AE%B0-purple?style=flat-square&logo=notion&logoColor=white" alt="Content Type"></a>
-<a href="https://www.markdownguide.org/"><img src="https://img.shields.io/badge/Format-Markdown-black?style=flat-square&logo=markdown&logoColor=white" alt="Main Format"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes/commits"><img src="https://img.shields.io/badge/%E6%9B%B4%E6%96%B0%E9%A2%91%E7%8E%87-%E6%8C%81%E7%BB%AD%E7%BB%B4%E6%8A%A4-brightgreen?style=flat-square" alt="Update Frequency"></a>
-<a href="https://github.com/JackieZheng/gaokao-2027-notes"><img src="https://img.shields.io/badge/%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4-%E9%AB%98%E4%B8%AD%E7%94%9F%E5%AE%B6%E9%95%BF-blueviolet?style=flat-square" alt="Suitable For"></a>
+<a href="https://github.com/topics/gaokao" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Topic-Gaokao_2027-red?style=flat-square&logo=bookstack&logoColor=white" alt="Project Topic"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Type-%E9%AB%98%E8%80%83%E5%BF%97%E6%84%BF%E5%A1%AB%E6%8A%A5%E7%AC%94%E8%AE%B0-purple?style=flat-square&logo=notion&logoColor=white" alt="Content Type"></a>
+<a href="https://www.markdownguide.org/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/Format-Markdown-black?style=flat-square&logo=markdown&logoColor=white" alt="Main Format"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes/commits" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/%E6%9B%B4%E6%96%B0%E9%A2%91%E7%8E%87-%E6%8C%81%E7%BB%AD%E7%BB%B4%E6%8A%A4-brightgreen?style=flat-square" alt="Update Frequency"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4-%E9%AB%98%E4%B8%AD%E7%94%9F%E5%AE%B6%E9%95%BF-blueviolet?style=flat-square" alt="Suitable For"></a>
 </p>
 
 <p align="center">
-<a href="https://jackiezheng.github.io/gaokao-2027-notes/"><img src="https://img.shields.io/badge/%E6%96%87%E6%A1%A3%E9%83%A8%E7%BD%B2-GitHub_Pages-blue?style=flat-square&logo=github&logoColor=white" alt="Build Status"></a>
-<a href="https://jackiezheng.github.io/gaokao-2027-notes/"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%A2%84%E8%A7%88-GitHub_Pages-1F4E79?style=flat-square&logo=github&logoColor=white" alt="Docs Preview"></a>
+<a href="https://github.com/JackieZheng/gaokao-2027-notes" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/%E5%BC%80%E6%BA%90%E5%9C%B0%E5%9D%80-Github-blue?style=flat-square&logo=github&logoColor=white" alt="Open Source Repo"></a>
+<a href="https://jackiezheng.github.io/gaokao-2027-notes/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%A2%84%E8%A7%88-GitHub_Pages-1F4E79?style=flat-square&logo=github&logoColor=white" alt="Docs Preview"></a>
 </p>
 
 > <a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer">《2027高考志愿填报指南》</a> 的姊妹篇 —— 指南讲方法，指北给资料。
@@ -50,7 +50,7 @@
 
 ## 阅读方式
 
-- **在线阅读**：<https://jackiezheng.github.io/gaokao-2027-notes/>
+- **在线阅读**：<a href="https://jackiezheng.github.io/gaokao-2027-notes/" target="_blank" rel="noopener noreferrer">https://jackiezheng.github.io/gaokao-2027-notes/</a>
 - 左侧「指北导航」默认只显示一级条目，点 `▸` 逐层展开，可「全部展开 / 全部折叠」，展开状态记在浏览器本地；
 - 目录与导航中的每一条都能点击直达；`Ctrl/Cmd + B` 或 `Esc` 开关导航面板；
 - 右上角「全文搜索」支持多个关键词（空格分隔、或关系），**未加载的笔记也能搜到**；点击结果直达命中段落，把每个关键词都标出来（命中词即使是书中原有重点词 / 院校专业名，也会叠加暖黄底色），上次搜索词自动回填；面板展开时搜索图标自动隐藏、收回时恢复；
@@ -60,7 +60,7 @@
 
 ## 关联项目
 
-本书的姊妹篇是 <a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer">《2027高考志愿填报指南》</a>（仓库 [JackieZheng/gaokao-2027-guide](https://github.com/JackieZheng/gaokao-2027-guide)）。
+本书的姊妹篇是 <a href="https://jackiezheng.github.io/gaokao-2027-guide/" target="_blank" rel="noopener noreferrer">《2027高考志愿填报指南》</a>（仓库 <a href="https://github.com/JackieZheng/gaokao-2027-guide" target="_blank" rel="noopener noreferrer">JackieZheng/gaokao-2027-guide</a>）。
 
 **指南讲方法，指北给资料**：《指南》是方法论手册，本册是资料汇编，两册一绿一蓝配套使用：先用指南建立框架，再用指北查具体学校、专业与城市。笔记为日常资料整理，原有表述、年份与数据一律保留，涉及招生政策、批次、志愿数量与录取数据的部分，请结合当年各省教育考试院官方公告判断时效性。
 
@@ -74,14 +74,14 @@
 
 ## 许可协议
 
-本项目采用 [知识共享 署名-非商业性使用 4.0 国际（CC BY-NC 4.0）](https://creativecommons.org/licenses/by-nc/4.0/) 许可。
+本项目采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">知识共享 署名-非商业性使用 4.0 国际（CC BY-NC 4.0）</a> 许可。
 
 - ✅ **可分发**：允许转载、分享、公开传播
 - ✅ **可修改**：允许改编、整理、再创作
 - ❌ **不可商用**：不得用于商业出版及其它商业用途
 - 📌 **须署名**：使用时须注明原作者（雪人老师）及来源，并保留本许可说明
 
-完整法律文本见仓库根目录 [LICENSE](./LICENSE)。
+完整法律文本见仓库根目录 <a href="./LICENSE" target="_blank" rel="noopener noreferrer">LICENSE</a>。
 
 ---
 
