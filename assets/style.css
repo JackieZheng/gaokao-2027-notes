@@ -1640,5 +1640,24 @@ p, li, td, .callout {
     display: none !important;
   }
 }
+
+ 
+@media screen {
+  body.clean-screen .bookmarks-toggle,
+  body.clean-screen .prev-next-wrap,
+  body.clean-screen .search-fab,
+  body.clean-screen .share-fab,
+  body.clean-screen .rh-fab,
+  body.clean-screen .feedback-fab-wrap,
+  body.clean-screen .search-fab-tip,
+  body.clean-screen .share-fab-tip,
+  body.clean-screen .rh-fab-tip,
+  body.clean-screen .pn-tip,
+  body.clean-screen .feedback-fab-tip {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
  
 
