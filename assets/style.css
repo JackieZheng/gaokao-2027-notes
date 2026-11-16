@@ -452,7 +452,7 @@ mark.stat {
     box-shadow: 2px 0 12px rgba(0,0,0,0.08);
     overflow-y: auto; overflow-x: hidden; z-index: 999;
     overscroll-behavior: contain;  
-    padding: 60px 16px 80px 20px;
+    padding: 30px 16px 80px 20px;
     padding-bottom: max(80px, env(safe-area-inset-bottom));
     font-size: 13px;
     box-sizing: border-box;
