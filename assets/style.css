@@ -299,6 +299,10 @@ mark.stat {
   opacity: 0; visibility: hidden; transition: opacity .14s ease; pointer-events: none;
 }
 .gtip.show { opacity: 1; visibility: visible; }
+ 
+@media screen and (hover: none) and (pointer: coarse) {
+  .gtip.show { pointer-events: auto; }
+}
 .gtip .gt-t { font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid #3a4a59; }
 .gtip .gt-row { display: flex; gap: 10px; margin: 3px 0; }
 .gtip .gt-row > span { color: #9fb3c8; flex: 0 0 auto; }
