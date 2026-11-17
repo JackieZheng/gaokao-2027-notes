@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jackiezheng.github.io/gaokao-2027-notes/sitemap.xml
