@@ -33,6 +33,25 @@ html {
     -ms-text-size-adjust: 100%;
 }
 body { margin: 0; }
+
+ 
+@media screen {
+  .page-wm {
+    --wm-opacity: 0.10;    
+    position: fixed;
+    inset: 0;
+    z-index: -1;           
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: var(--wm-opacity);
+    pointer-events: none;  
+  }
+}
+ 
+@media print {
+  .page-wm { display: none !important; }
+}
 .cover-page {
     width: 100%;
     max-width: 21cm;
