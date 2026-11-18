@@ -1798,18 +1798,76 @@ html[data-gk-size] article.note h1 { font-size: 1.4545em; }
 html[data-gk-size] article.note h2 { font-size: 1.2273em; }
 html[data-gk-size] article.note h3 { font-size: 1.0909em; }
  
-html[data-gk-font] .print-zoom,
-html[data-gk-font] .print-zoom h1,
-html[data-gk-font] .print-zoom h2,
-html[data-gk-font] .print-zoom h3,
-html[data-gk-font] .print-zoom table th,
-html[data-gk-font] .print-zoom .fn-defs,
-html[data-gk-font] .print-zoom .fn-defs h3,
-html[data-gk-font] .print-zoom .note-src,
-html[data-gk-font] .print-zoom .part-kicker,
-html[data-gk-font] .print-zoom .part-desc,
-html[data-gk-font] .print-zoom .part-count,
-html[data-gk-font] .print-zoom .group-count { font-family: var(--gk-ff); }
+ 
+@media screen {
+   
+  html[data-gk-size] .print-zoom h1 { font-size: 1.4545em; }
+  html[data-gk-size] .print-zoom h2 { font-size: 1.2273em; }
+  html[data-gk-size] .print-zoom h3 { font-size: 1.0909em; }
+
+   
+  html[data-gk-size] .print-zoom .toc-list li.toc-1 { font-size: 1.0455em; }
+  html[data-gk-size] .print-zoom .toc-list li.toc-2 { font-size: 0.9545em; }
+  html[data-gk-size] .print-zoom .toc-list li.toc-3 { font-size: 0.9091em; }
+  html[data-gk-size] .print-zoom .toc-list li.toc-4 { font-size: 0.8636em; }
+  html[data-gk-size] .print-zoom .toc-toggle-btn { font-size: 0.9091em; }
+
+   
+  html[data-gk-size] .print-zoom .part-head .part-kicker { font-size: 1em; }
+  html[data-gk-size] .print-zoom .part-head .part-desc { font-size: 0.9545em; }
+  html[data-gk-size] .print-zoom .part-count,
+  html[data-gk-size] .print-zoom .group-count { font-size: 0.9545em; }
+  html[data-gk-size] .print-zoom .group-count { font-size: 0.9091em; }
+
+   
+  html[data-gk-size] .print-zoom figcaption { font-size: 0.8636em; }
+  html[data-gk-size] .print-zoom .note-src { font-size: 0.8182em; }
+  html[data-gk-size] .print-zoom .fn-defs { font-size: 0.8636em; }
+  html[data-gk-size] .print-zoom .fn-defs h3 { font-size: 0.9545em; }
+
+   
+   
+  html[data-gk-size] .special-thanks h1,
+  html[data-gk-size] .special-thanks ~ h1 { font-size: 1.4545em; }
+  html[data-gk-size] .thanks-lead { font-size: 0.9545em; }
+  html[data-gk-size] .thanks-tail { font-size: 0.9091em; }
+  html[data-gk-size] .thanks-list .thanks-row { font-size: 1.0909em; }
+
+  html[data-gk-size] .thanks-body { font-size: 0.9091em !important; }
+  html[data-gk-size] .end-wrap .end-ack { font-size: 1.2727em; }
+  html[data-gk-size] .end-wrap .end-signature { font-size: 1em; }
+
+   
+  html[data-gk-size] .print-zoom table { font-size: 0.9545em !important; }
+  html[data-gk-size] .print-zoom ul[style],
+  html[data-gk-size] .print-zoom ol[style] { font-size: 0.9545em !important; }
+}
+
+ 
+@media screen {
+  html[data-gk-font] body,
+  html[data-gk-font] body *:not(code):not(pre):not(kbd):not(svg):not(.note-end-snow):not(.thanks-emoji):not(.settings-opt) {
+    font-family: var(--gk-ff) !important;
+  }
+
+   
+  html[data-gk-font] body svg * {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+   
+  html[data-gk-font] body .settings-opt[data-gk-font="default"] {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Noto Sans SC', 'SimSun', sans-serif !important;
+  }
+  html[data-gk-font] body code,
+  html[data-gk-font] body pre,
+  html[data-gk-font] body kbd {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;
+  }
+  html[data-gk-font] body .note-end-snow,
+  html[data-gk-font] body .thanks-emoji {
+    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif !important;
+  }
+}
 
 .settings-fab, .settings-fab-tip, .settings-panel { display: none; }
 @media screen {
@@ -1905,7 +1963,8 @@ html[data-gk-font] .print-zoom .group-count { font-family: var(--gk-ff); }
   }
    
   .settings-opt.font-ready {
-    border: 2px solid #1F6FB2;
+     
+    border-bottom: 2px solid #1F6FB2;
   }
    
   .settings-font-progress { margin: 0 14px 14px; }
