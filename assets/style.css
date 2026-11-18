@@ -1897,10 +1897,15 @@ html[data-gk-font] .print-zoom .group-count { font-family: var(--gk-ff); }
     font: inherit; font-size: 12.5px; line-height: 1;
     padding: 6px 10px; border: 1px solid #C8D6E4; border-radius: 6px;
     background: #fff; color: #33414A; cursor: pointer;
+    box-sizing: border-box;
   }
   .settings-opt:hover { border-color: #1F6FB2; color: #1F6FB2; }
   .settings-opt.is-on {
     background: #1F4E79; border-color: #1F4E79; color: #fff;
+  }
+   
+  .settings-opt.font-ready {
+    border: 2px solid #1F6FB2;
   }
    
   .settings-font-progress { margin: 0 14px 14px; }
@@ -1915,6 +1920,21 @@ html[data-gk-font] .print-zoom .group-count { font-family: var(--gk-ff); }
     height: 100%; width: 0; border-radius: 4px; background: #1F6FB2;
     transition: width .25s ease;
   }
+  .settings-font-progress-num {
+    margin: 5px 0 0; font-size: 12px; color: #1F4E79; letter-spacing: .02em;
+    text-align: right;
+  }
+   
+  .font-toast {
+    position: fixed; right: 20px; bottom: 26px; z-index: 10080;
+    max-width: min(320px, calc(100vw - 40px)); box-sizing: border-box;
+    background: #1F4E79; color: #fff; font-size: 13px; line-height: 1.5;
+    padding: 10px 16px; border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.2);
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .font-toast.show { opacity: 1; transform: translateY(0); }
 }
 @media screen and (max-width: 600px) {
   .settings-fab { width: var(--side-btn-size); height: var(--side-btn-size); right: var(--side-btn-right); top: 14px; }
