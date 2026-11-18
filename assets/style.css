@@ -49,7 +49,12 @@ body { margin: 0; }
 }
 
 @media print {
-   
+
+}
+ 
+@media print {
+  html { background: transparent !important; }
+  body { background: transparent !important; }
 }
 .cover-page {
     width: 100%;
@@ -1792,14 +1797,19 @@ html[data-gk-size] table { font-size: inherit; }
 html[data-gk-size] article.note h1 { font-size: 1.4545em; }
 html[data-gk-size] article.note h2 { font-size: 1.2273em; }
 html[data-gk-size] article.note h3 { font-size: 1.0909em; }
-html[data-gk-font] { font-family: var(--gk-ff); }
-html[data-gk-font] article.note h1,
-html[data-gk-font] article.note h2,
-html[data-gk-font] article.note h3,
-html[data-gk-font] table th,
-html[data-gk-font] .fn-defs,
-html[data-gk-font] .fn-defs h3,
-html[data-gk-font] .note-src { font-family: var(--gk-ff); }
+ 
+html[data-gk-font] .print-zoom,
+html[data-gk-font] .print-zoom h1,
+html[data-gk-font] .print-zoom h2,
+html[data-gk-font] .print-zoom h3,
+html[data-gk-font] .print-zoom table th,
+html[data-gk-font] .print-zoom .fn-defs,
+html[data-gk-font] .print-zoom .fn-defs h3,
+html[data-gk-font] .print-zoom .note-src,
+html[data-gk-font] .print-zoom .part-kicker,
+html[data-gk-font] .print-zoom .part-desc,
+html[data-gk-font] .print-zoom .part-count,
+html[data-gk-font] .print-zoom .group-count { font-family: var(--gk-ff); }
 
 .settings-fab, .settings-fab-tip, .settings-panel { display: none; }
 @media screen {
@@ -1891,6 +1901,19 @@ html[data-gk-font] .note-src { font-family: var(--gk-ff); }
   .settings-opt:hover { border-color: #1F6FB2; color: #1F6FB2; }
   .settings-opt.is-on {
     background: #1F4E79; border-color: #1F4E79; color: #fff;
+  }
+   
+  .settings-font-progress { margin: 0 14px 14px; }
+  .settings-font-progress-label {
+    margin: 0 0 5px; font-size: 12px; color: #66788C; letter-spacing: .02em;
+  }
+  .settings-font-progress-track {
+    height: 8px; border-radius: 4px; background: #E6EDF3; overflow: hidden;
+    box-shadow: inset 0 0 0 1px #C8D6E4;
+  }
+  .settings-font-progress-fill {
+    height: 100%; width: 0; border-radius: 4px; background: #1F6FB2;
+    transition: width .25s ease;
   }
 }
 @media screen and (max-width: 600px) {
