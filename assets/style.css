@@ -1948,7 +1948,7 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
    
   .settings-reset {
     flex: 0 0 auto; font: inherit; font-size: 12px; line-height: 1;
-    padding: 4px 11px; margin-right: 2px;
+    padding: 4px 11px; margin-left: auto;
     border: 1px solid #1F6FB2; border-radius: 4px;
     background: #fff; color: #1F6FB2; cursor: pointer;
     transition: background .18s ease, color .18s ease;
