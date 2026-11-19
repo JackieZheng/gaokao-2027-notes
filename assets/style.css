@@ -1791,6 +1791,8 @@ html[data-gk-size="max"]    { font-size: 12.8pt; }
 html[data-gk-size="xl"]     { font-size: 14.2pt; }
 html[data-gk-size="xxl"]    { font-size: 15.8pt; }
 html[data-gk-size="xxxl"]   { font-size: 17.5pt; }
+html[data-gk-size="xxxxl"]  { font-size: 19.4pt; }
+html[data-gk-size="xxxxxl"] { font-size: 21.5pt; }
  
 html[data-gk-size] table { font-size: inherit; }
  
