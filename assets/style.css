@@ -2092,7 +2092,7 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
   }
   .tts-fab:hover + .tts-fab-tip,
   .tts-fab:focus-visible + .tts-fab-tip,
-  .tts-fab:disabled + .tts-fab-tip {
+  .tts-fab-tip.show {
     opacity: 1; visibility: visible; transform: translateX(0);
   }
 
