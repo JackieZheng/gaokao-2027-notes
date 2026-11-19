@@ -1522,14 +1522,22 @@ p, li, td, .callout {
    
    
    
+   
   body:has(.settings-panel.open, .search-panel.open)
     :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
-        .share-fab, .share-fab-tip, .rh-fab, .rh-fab-tip) {
+        .share-fab, .share-fab-tip, .rh-fab, .rh-fab-tip,
+        .tts-fab, .tts-fab-tip) {
     display: none;
   }
   body:has(.rh-panel.open)
     :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
-        .share-fab, .share-fab-tip, .rh-fab-tip) {
+        .share-fab, .share-fab-tip, .rh-fab-tip,
+        .tts-fab, .tts-fab-tip) {
+    display: none;
+  }
+  body:has(.tts-panel.open)
+    :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
+        .share-fab, .share-fab-tip, .rh-fab, .rh-fab-tip) {
     display: none;
   }
    
@@ -1981,6 +1989,11 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
     padding: 6px 10px; border: 1px solid #C8D6E4; border-radius: 6px;
     background: #fff; color: #33414A; cursor: pointer;
     box-sizing: border-box;
+  }
+   
+   
+  .settings-opt .settings-font-pv {
+    height: 12px; width: auto; display: block;
   }
   .settings-opt:hover { border-color: #1F6FB2; color: #1F6FB2; }
   .settings-opt.is-on {
