@@ -1812,7 +1812,6 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
   html[data-gk-size] .print-zoom .toc-list li.toc-2 { font-size: 0.9545em; }
   html[data-gk-size] .print-zoom .toc-list li.toc-3 { font-size: 0.9091em; }
   html[data-gk-size] .print-zoom .toc-list li.toc-4 { font-size: 0.8636em; }
-  html[data-gk-size] .print-zoom .toc-toggle-btn { font-size: 0.9091em; }
 
    
   html[data-gk-size] .print-zoom .part-head .part-kicker { font-size: 1em; }
@@ -1946,6 +1945,18 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
     background: #1F4E79; color: #fff;
   }
   .settings-close:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 2px; }
+   
+  .settings-reset {
+    flex: 0 0 auto; font: inherit; font-size: 12px; line-height: 1;
+    padding: 4px 11px; margin-right: 2px;
+    border: 1px solid #1F6FB2; border-radius: 4px;
+    background: #fff; color: #1F6FB2; cursor: pointer;
+    transition: background .18s ease, color .18s ease;
+  }
+  .settings-reset:hover, .settings-reset:focus-visible {
+    background: #1F6FB2; color: #fff;
+  }
+  .settings-reset:focus-visible { outline: 2px solid #1F6FB2; outline-offset: 2px; }
   .settings-group { margin-bottom: 10px; }
   .settings-group-label {
      
@@ -1962,7 +1973,10 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
   .settings-opt:hover { border-color: #1F6FB2; color: #1F6FB2; }
   .settings-opt.is-on {
     background: #1F4E79; border-color: #1F4E79; color: #fff;
+    font-weight: 700;
   }
+   
+  .settings-opt.is-on.font-ready { border-bottom-color: #1F4E79; }
    
   .settings-opt.font-ready {
      
