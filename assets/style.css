@@ -618,6 +618,7 @@ mark.stat {
   .prev-next-wrap, .pn-tip,
   .rh-fab, .rh-panel, .rh-catcher, .rh-fab-tip,
   .tts-fab, .tts-panel, .tts-fab-tip,
+  .tts-player,
   .gk-tts-title-btn,
   .read-history-mask,
   .search-progress { display: none !important; }
@@ -696,7 +697,9 @@ article.note > h1 { margin-top: 0; text-align: center; }
 }
 .fn-defs {
     margin-top: 16pt; padding: 10pt 12pt;
-    background: #F5F7F8; border-left: 3pt solid #C8D0D6;
+     
+    background: color-mix(in srgb, #F5F7F8 60%, transparent);
+    border-left: 3pt solid #C8D0D6;
     border-radius: 3pt; font-size: 9.5pt; line-height: 1.75;
     page-break-inside: auto;
 }
@@ -1808,7 +1811,7 @@ html[data-gk-theme] figcaption,
 html[data-gk-theme] .note-src,
 html[data-gk-theme] .qr-hint { color: var(--gk-mut); }
 html[data-gk-theme] .callout { background: var(--gk-surf2); border-left-color: var(--gk-head); }
-html[data-gk-theme] .fn-defs { background: var(--gk-surf); border-left-color: var(--gk-line); }
+html[data-gk-theme] .fn-defs { background: color-mix(in srgb, var(--gk-surf) 60%, transparent); border-left-color: var(--gk-line); }
 html[data-gk-theme] .fn-defs h3 { color: var(--gk-head2); }
 html[data-gk-theme] .fn-defs .fn-key { color: var(--gk-head); }
 html[data-gk-theme] .subgroup-head { color: var(--gk-head2); }
