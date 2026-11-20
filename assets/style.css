@@ -1541,6 +1541,24 @@ p, li, td, .callout {
     display: none;
   }
    
+  body.gk-fab-hide
+    :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
+        .share-fab, .share-fab-tip, .rh-fab, .rh-fab-tip,
+        .tts-fab, .tts-fab-tip) {
+    display: none;
+  }
+  body.gk-fab-hide-rh
+    :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
+        .share-fab, .share-fab-tip, .rh-fab-tip,
+        .tts-fab, .tts-fab-tip) {
+    display: none;
+  }
+  body.gk-fab-hide-tts
+    :is(.settings-fab, .settings-fab-tip, .search-fab, .search-fab-tip,
+        .share-fab, .share-fab-tip, .rh-fab, .rh-fab-tip) {
+    display: none;
+  }
+   
   .share-msg {
     display: block;
     position: fixed; left: 50%; bottom: 9vh; z-index: 10012;
