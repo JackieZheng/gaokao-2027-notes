@@ -1,0 +1,52 @@
+/* 水墨皮肤背景（2026-11-20 用户定）。
+   本文件由阅读设置 JS【按需注入】：未选「水墨」时既不加载本文件、
+   也不请求 ink.jpg（与 fonts.css 延迟注入同口径）；切离该皮肤即移除 <link>。
+   背景图 1240×1151 / 约 159 KB（源图 1620×1504 / 476 KB，压缩并下采样 4:2:0）。 */
+@media screen {
+  html[data-gk-theme="ink"] {
+    /* 正文区背景：宣纸米白（--gk-bg）。水墨山水**不铺 html 画布**，改用 body 伪元素做
+       「页首装饰带」——见下方 body::before。 */
+  }
+  /* ★ 版式（v2.0.32 定稿）：水墨山水只做「页首装饰带」，不铺满全屏。
+     不用 html 背景的原因（实测）：html/body 高度为 auto 时，html 背景会传播到画布，
+     画布层的 background-size / attachment:fixed 几何在长页里不可控 —— v2.0.30/31 两轮
+     截图都是全屏青灰水雾压进正文区，遮罩 .90 仍发灰发闷。
+     改由 body::before（position:fixed，几何确定）承载两层：
+       ① 宣纸渐变带 —— 顶部 .55 逐段压到 100%，带底化纯宣纸；
+       ② 水墨山水图 —— 顶对齐裁到 76vh，源图主体（山、竹枝、荷花、远山）都在上部，
+          正好落在标题/目录区，76vh 以下无图，正文是纯 --gk-bg 宣纸米白。
+     pointer-events:none → 不拦正文点击；z-index 取 0，正文内容（树序更靠后）压在其上。 */
+  html[data-gk-theme="ink"] body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 76vh;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(180deg,
+        rgba(242, 239, 231, .55) 0%,
+        rgba(242, 239, 231, .86) 34%,
+        rgba(242, 239, 231, .99) 68%,
+        rgba(242, 239, 231, 1) 100%),
+      url("ink.jpg");
+    background-size: 100% 100%, 100% 100%;
+    background-position: center top, center top;
+    background-repeat: no-repeat, no-repeat;
+  }
+  /* 小屏 / 矮视口：装饰带压缩到 56vh，把更多空间留给正文 */
+  @media screen and (max-height: 760px) {
+    html[data-gk-theme="ink"] body::before { height: 56vh; }
+  /* 页面固定背景水印：水墨底上再压水印会发闷，透明度降到近隐（对齐 night 的 .04 口径） */
+  html[data-gk-theme="ink"] .page-wm { --wm-opacity: .03; }
+  /* 高亮词：黄底高亮在宣纸上偏艳，改为焦茶半透明，与墨色统一 */
+  html[data-gk-theme="ink"] mark.kw,
+  html[data-gk-theme="ink"] mark.stat {
+    background: linear-gradient(180deg,
+      rgba(176, 116, 52, 0) 0%, rgba(176, 116, 52, 0) 50%,
+      rgba(176, 116, 52, .26) 50%, rgba(176, 116, 52, .26) 95%,
+      rgba(176, 116, 52, 0) 95%);
+    color: #2A2721;
+  }
+}

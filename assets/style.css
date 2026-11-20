@@ -1771,6 +1771,13 @@ html[data-gk-theme="porcelain"] {
   --gk-line:#AEC7BE; --gk-line2:#AEC7BE; --gk-mut:#5F716C; --gk-acc:#1F7264;
   --gk-tts:#14554A;
 }
+ 
+html[data-gk-theme="ink"] {
+  --gk-bg:#F2EFE7; --gk-fg:#2A2721; --gk-head:#2E4A57; --gk-head2:#3D6272;
+  --gk-thbg:#37515E; --gk-thfg:#F6F3EB; --gk-surf:#EAE5D8; --gk-surf2:#E0DACB;
+  --gk-line:#C6BEA9; --gk-line2:#C6BEA9; --gk-mut:#6E6759; --gk-acc:#4A6B7C;
+  --gk-tts:#2E4A57;
+}
 html[data-gk-theme] { background-color: var(--gk-bg); color: var(--gk-fg); }
 html[data-gk-theme] h1 { color: var(--gk-head); border-bottom-color: var(--gk-head); }
 html[data-gk-theme] h2 { color: var(--gk-head2); }
@@ -1993,7 +2000,8 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
    
    
   .settings-opt .settings-font-pv {
-    height: 12px; width: auto; display: block;
+     
+    height: 14px; width: auto; display: block;
   }
   .settings-opt:hover { border-color: #1F6FB2; color: #1F6FB2; }
   .settings-opt.is-on {
@@ -2103,8 +2111,9 @@ html[data-gk-size] article.note h3 { font-size: 1.0909em; }
     border-width: 5px 0 5px 6px; border-style: solid;
     border-color: transparent transparent transparent #1F6FB2;
   }
-  .tts-fab:hover + .tts-fab-tip,
-  .tts-fab:focus-visible + .tts-fab-tip,
+   
+  .tts-fab:not(:disabled):hover + .tts-fab-tip,
+  .tts-fab:not(:disabled):focus-visible + .tts-fab-tip,
   .tts-fab-tip.show {
     opacity: 1; visibility: visible; transform: translateX(0);
   }
