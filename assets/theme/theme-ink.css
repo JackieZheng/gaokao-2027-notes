@@ -13,11 +13,17 @@
      与墨色正文 #2A2721 对比约 9:1，无需再加宣纸遮罩。 */
   html[data-gk-theme="ink"] {
     background-color: var(--gk-bg);
-    background-image: url("ink.jpg");
-    background-repeat: no-repeat;
-    background-position: center top;
-    background-size: cover;
-    background-attachment: fixed;
+    /* 宣纸色半透明遮罩叠在背景图之上（2026-11-20 用户定「适当透明减淡」，
+       覆盖 v2.0.33「不加宣纸遮罩」口径）：正文墨字不再直接压山体，对比提升。
+       用实心 linear-gradient 作为背景图**上层**实现多层背景叠加，纯 CSS、
+       不新增伪元素、不破坏 cover+fixed 版式；遮罩半透明，保留水墨层次。 */
+    background-image:
+      linear-gradient(rgba(242, 239, 231, .5), rgba(242, 239, 231, .5)),
+      url("ink.jpg");
+    background-repeat: no-repeat, no-repeat;
+    background-position: center top, center top;
+    background-size: cover, cover;
+    background-attachment: fixed, fixed;
   }
   /* 页面固定背景水印：水墨底上再压水印会发闷，透明度降到近隐（对齐 night 的 .04 口径） */
   html[data-gk-theme="ink"] .page-wm { --wm-opacity: .03; }
