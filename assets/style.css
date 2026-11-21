@@ -2336,3 +2336,14 @@ html[data-gk-theme] ::highlight(tts-cur) { background: var(--gk-tts); color: #ff
   .tts-player.is-playing .tp-vol svg .w1,
   .tts-player.is-playing .tp-vol svg .w2 { animation: none; }
 }
+
+ 
+@media print {
+  table th { background: transparent !important; color: #1F4E79; }
+  table tr.zebra td { background: transparent !important; }
+  .callout { background: transparent !important; }
+  .qr-mini-wrap { background: transparent !important; }
+  .fn-defs { background: transparent !important; }
+  .bm-card { background: transparent !important; }
+  .online-qr-box { background: transparent !important; }
+}
