@@ -757,6 +757,17 @@ article.note > h1 { margin-top: 0; text-align: center; }
   }
   .bookmarks-panel .bm-sponsor:hover { background: #FFECC9; color: #6E460C; }
   .bookmarks-panel .bm-sponsor span { float: right; opacity: .55; }
+   
+  .bookmarks-panel .bm-wechat {
+    display: flex; justify-content: center;
+    margin: 6px 5px 14px; padding: 8px;
+    background: #FFFFFF; border-radius: 10px;
+  }
+  .bookmarks-panel .bm-wechat img {
+    display: block; width: 140px; height: 140px;
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.12);
+  }
   .bookmarks-panel ul ul {
       display: none; padding-left: 10px; margin-left: 8px;
       border-left: 1px solid #DCE5EE;
