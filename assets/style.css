@@ -2491,7 +2491,7 @@ html[data-gk-theme] ::highlight(tts-cur) { background: var(--gk-tts); color: #ff
 
  
 @media print {
-  table th { background: transparent !important; color: #1F4E79; }
+  table th { background: transparent !important; color: #1F4E79 !important; }
   table tr.zebra td { background: transparent !important; }
   .callout { background: transparent !important; }
   .qr-mini-wrap { background: transparent !important; }
