@@ -2324,6 +2324,7 @@ html[data-gk-theme] ::highlight(tts-cur) { background: var(--gk-tts); color: #ff
     width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%;
     background: transparent; color: #fff; cursor: pointer;
     transition: background .15s ease, opacity .15s ease;
+    flex-shrink: 0;  
   }
   .tp-btn:hover:not(:disabled) { background: rgba(255,255,255,.18); }
   .tp-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
@@ -2365,7 +2366,7 @@ html[data-gk-theme] ::highlight(tts-cur) { background: var(--gk-tts); color: #ff
   .tts-player.is-playing .tp-vol svg .w5.is-on { animation-delay: .56s; }
 
   .tp-progress {
-    position: relative; flex: 1 1 auto; min-width: 56px; max-width: 170px;
+    position: relative; flex: 1 1 auto; min-width: 40px; max-width: 170px;
     display: flex; align-items: center; height: 16px;
   }
    
@@ -2428,7 +2429,7 @@ html[data-gk-theme] ::highlight(tts-cur) { background: var(--gk-tts); color: #ff
    
   .tp-vol .tp-tip { left: 10px; }
 
-  .tp-vol { position: relative; display: inline-flex; align-items: center; gap: 4px; }
+  .tp-vol { position: relative; display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0;   }
 
    
   .tp-vol-bubble {
